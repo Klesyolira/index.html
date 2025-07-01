@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
+      margin: 0;
       background-color: #310579;
       font-family: Arial, sans-serif;
       color: white;
@@ -46,7 +47,7 @@
       const user = document.getElementById("username").value;
       const pass = document.getElementById("password").value;
       const server = document.getElementById("servidores").value;
-      if (typeof Android !== "undefined" && Android.startVPN) {
+      if (Android && Android.startVPN) {
         Android.startVPN(user, pass, server);
       }
     }
@@ -56,7 +57,7 @@
     }
 
     // Carregar config.json remoto
-    fetch("config.json")
+    fetch("https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/config.json")
       .then(resp => resp.json())
       .then(config => {
         document.getElementById("operadora-info").innerText = "Operadora: " + config.operadora;
