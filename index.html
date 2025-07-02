@@ -15,8 +15,6 @@
         #status { margin-top: 20px; font-weight: bold; color: #555; }
         #toggleXmlButton { background-color: #6c757d; margin-top: 20px; }
         #toggleXmlButton:hover { background-color: #5a6268; }
-        #disconnectButton { background-color: #dc3545; margin-top: 10px; } /* Novo estilo para desconectar */
-        #disconnectButton:hover { background-color: #c82333; }
         .server-option { display: flex; align-items: center; padding: 5px 0; }
         .server-option img { margin-right: 8px; border: 1px solid #eee; }
     </style>
@@ -38,32 +36,35 @@
         <input type="number" id="proxyPort" placeholder="Porta do Proxy (opcional)">
 
         <button onclick="connectVPN()">Conectar VPN</button>
-        <button id="disconnectButton" onclick="disconnectVPN()">Desconectar VPN</button> <div id="status">Status: Desconectado</div>
+
+        <div id="status">Status: Desconectado</div>
 
         <button id="toggleXmlButton">Mudar para Interface Nativa</button>
     </div>
 
     <script>
-        let availableProfiles = [];
+        let availableProfiles = []; // Armazena os perfis carregados do Android
 
         function updateServerList(profiles) {
             const select = document.getElementById('serverSelect');
-            select.innerHTML = '';
-            availableProfiles = profiles;
+            select.innerHTML = ''; // Limpa as opções existentes
+            availableProfiles = profiles; // Armazena os perfis globalmente
 
             if (profiles && profiles.length > 0) {
                 profiles.forEach((profile, index) => {
                     const option = document.createElement('option');
-                    option.value = index;
+                    option.value = index; // Armazena o índice para fácil acesso ao objeto
                     let displayText = profile.name + ' (' + profile.host + ')';
 
+                    // Se você quiser imagens no select, geralmente não funciona bem.
+                    // Para um select simples, adicionamos o código do país no texto.
                     if (profile.country_code) {
                         displayText = '[' + profile.country_code + '] ' + displayText;
                     }
                     option.textContent = displayText;
                     select.appendChild(option);
                 });
-                updateFieldsFromSelectedServer();
+                updateFieldsFromSelectedServer(); // Atualiza os campos com o primeiro perfil
             } else {
                 const option = document.createElement('option');
                 option.value = 'default';
@@ -84,7 +85,7 @@
 
             const selectedProfile = availableProfiles[selectedIndex];
             document.getElementById('username').value = selectedProfile.username || '';
-            document.getElementById('password').value = selectedProfile.password || '';
+            document.getElementById('password').value = selectedProfile.password || ''; // Cuidado!
             document.getElementById('sni').value = selectedProfile.sni || '';
             document.getElementById('payload').value = selectedProfile.payload || '';
             document.getElementById('proxyIp').value = selectedProfile.proxy_ip || '';
@@ -110,27 +111,20 @@
             }
 
             const selectedProfile = availableProfiles[selectedIndex];
-            const user = document.getElementById('username').value;
+            const user = document.getElementById('username').value; // Pega o que está no campo, mesmo que vazio
             const pass = document.getElementById('password').value;
             const sni = document.getElementById('sni').value;
             const payload = document.getElementById('payload').value;
             const proxyIp = document.getElementById('proxyIp').value;
             const proxyPort = parseInt(document.getElementById('proxyPort').value || '0', 10);
 
+            // Chama o método Java Android com todos os parâmetros
+            // Nota: O método Java (startVPN) precisa ter todos esses parâmetros definidos.
             if (typeof Android !== 'undefined' && typeof Android.startVPN === 'function') {
-                Android.startVPN(user, pass, selectedProfile.host, selectedProfile.port, sni, payload, proxyIp, proxyPort);
-                setStatus('Solicitando permissão e tentando conectar a ' + selectedProfile.host + '...');
+                Android.startVPN(user, pass, selectedProfile.host, sni, payload, proxyIp, proxyPort);
+                setStatus('Tentando conectar a ' + selectedProfile.host + '...');
             } else {
                 setStatus('Erro: Interface Android não disponível ou startVPN não encontrado.');
-            }
-        }
-
-        function disconnectVPN() { // NOVO MÉTODO JS
-            if (typeof Android !== 'undefined' && typeof Android.stopVPN === 'function') {
-                Android.stopVPN();
-                setStatus('Solicitando desconexão...');
-            } else {
-                setStatus('Erro: Interface Android não disponível ou stopVPN não encontrado.');
             }
         }
 
@@ -138,6 +132,7 @@
             document.getElementById('status').innerText = 'Status: ' + message;
         }
 
+        // Listener para o botão de toggle na interface HTML
         document.addEventListener('DOMContentLoaded', () => {
             const toggleBtn = document.getElementById('toggleXmlButton');
             if (toggleBtn) {
@@ -149,6 +144,7 @@
                     }
                 };
             }
+            // Solicita os perfis ao Android assim que a página HTML estiver pronta
             if (typeof Android !== 'undefined' && typeof Android.requestProfiles === 'function') {
                 Android.requestProfiles();
             } else {
