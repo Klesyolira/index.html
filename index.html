@@ -1,79 +1,156 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>VPN Yumeko</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      background-color: #310579;
-      font-family: Arial, sans-serif;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    input, select, button {
-      margin: 8px;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: none;
-    }
-    button {
-      background-color: #ffffff;
-      color: #310579;
-      cursor: pointer;
-    }
-    .status {
-      font-weight: bold;
-      margin: 12px 0;
-    }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VPN TunnelPro (HTML)</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; text-align: center; background-color: #f0f0f0; }
+        h1 { color: #333; }
+        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+        input[type="text"], input[type="password"], select, textarea { width: calc(100% - 20px); padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        textarea { resize: vertical; min-height: 60px; }
+        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #0056b3; }
+        #status { margin-top: 20px; font-weight: bold; color: #555; }
+        #toggleXmlButton { background-color: #6c757d; margin-top: 20px; }
+        #toggleXmlButton:hover { background-color: #5a6268; }
+        .server-option { display: flex; align-items: center; padding: 5px 0; }
+        .server-option img { margin-right: 8px; border: 1px solid #eee; }
+    </style>
 </head>
 <body>
-  <h2>Bem-vindo!</h2>
-  <div class="status" id="status">VOCÊ ESTÁ DESCONECTADO</div>
-  <div id="operadora-info">Operadora: carregando...</div>
-  <input type="text" id="username" placeholder="Usuário"><br>
-  <input type="password" id="password" placeholder="Senha"><br>
-  <select id="servidores">
-    <option>Carregando servidores...</option>
-  </select><br>
-  <button onclick="startVPN()">Iniciar VPN</button>
+    <div class="container">
+        <h1>VPN TunnelPro (HTML Interface)</h1>
 
-  <script>
-    function startVPN() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-      const server = document.getElementById("servidores").value;
-      if (Android && Android.startVPN) {
-        Android.startVPN(user, pass, server);
-      }
-    }
+        <label for="serverSelect">Escolha um Servidor:</label>
+        <select id="serverSelect" onchange="updateFieldsFromSelectedServer()">
+            <option value="default">Carregando servidores...</option>
+        </select>
 
-    function setStatus(text) {
-      document.getElementById("status").innerText = text;
-    }
+        <input type="text" id="username" placeholder="Usuário">
+        <input type="password" id="password" placeholder="Senha">
+        <input type="text" id="sni" placeholder="SNI (opcional)">
+        <textarea id="payload" placeholder="Payload (opcional)"></textarea>
+        <input type="text" id="proxyIp" placeholder="IP do Proxy (opcional)">
+        <input type="number" id="proxyPort" placeholder="Porta do Proxy (opcional)">
 
-    // Carregar config.json remoto
-    fetch("https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/config.json")
-      .then(resp => resp.json())
-      .then(config => {
-        document.getElementById("operadora-info").innerText = "Operadora: " + config.operadora;
-        const spinner = document.getElementById("servidores");
-        spinner.innerHTML = "";
-        config.servidores.forEach(server => {
-          let opt = document.createElement("option");
-          opt.text = server;
-          opt.value = server.toLowerCase();
-          spinner.add(opt);
+        <button onclick="connectVPN()">Conectar VPN</button>
+
+        <div id="status">Status: Desconectado</div>
+
+        <button id="toggleXmlButton">Mudar para Interface Nativa</button>
+    </div>
+
+    <script>
+        let availableProfiles = []; // Armazena os perfis carregados do Android
+
+        function updateServerList(profiles) {
+            const select = document.getElementById('serverSelect');
+            select.innerHTML = ''; // Limpa as opções existentes
+            availableProfiles = profiles; // Armazena os perfis globalmente
+
+            if (profiles && profiles.length > 0) {
+                profiles.forEach((profile, index) => {
+                    const option = document.createElement('option');
+                    option.value = index; // Armazena o índice para fácil acesso ao objeto
+                    let displayText = profile.name + ' (' + profile.host + ')';
+
+                    // Se você quiser imagens no select, geralmente não funciona bem.
+                    // Para um select simples, adicionamos o código do país no texto.
+                    if (profile.country_code) {
+                        displayText = '[' + profile.country_code + '] ' + displayText;
+                    }
+                    option.textContent = displayText;
+                    select.appendChild(option);
+                });
+                updateFieldsFromSelectedServer(); // Atualiza os campos com o primeiro perfil
+            } else {
+                const option = document.createElement('option');
+                option.value = 'default';
+                option.textContent = 'Nenhum servidor disponível';
+                select.appendChild(option);
+                clearInputFields();
+            }
+        }
+
+        function updateFieldsFromSelectedServer() {
+            const select = document.getElementById('serverSelect');
+            const selectedIndex = select.value;
+
+            if (selectedIndex === 'default' || availableProfiles.length === 0) {
+                clearInputFields();
+                return;
+            }
+
+            const selectedProfile = availableProfiles[selectedIndex];
+            document.getElementById('username').value = selectedProfile.username || '';
+            document.getElementById('password').value = selectedProfile.password || ''; // Cuidado!
+            document.getElementById('sni').value = selectedProfile.sni || '';
+            document.getElementById('payload').value = selectedProfile.payload || '';
+            document.getElementById('proxyIp').value = selectedProfile.proxy_ip || '';
+            document.getElementById('proxyPort').value = selectedProfile.proxy_port || '';
+        }
+
+        function clearInputFields() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('sni').value = '';
+            document.getElementById('payload').value = '';
+            document.getElementById('proxyIp').value = '';
+            document.getElementById('proxyPort').value = '';
+        }
+
+        function connectVPN() {
+            const select = document.getElementById('serverSelect');
+            const selectedIndex = select.value;
+
+            if (selectedIndex === 'default' || availableProfiles.length === 0) {
+                setStatus('Por favor, selecione um servidor válido.');
+                return;
+            }
+
+            const selectedProfile = availableProfiles[selectedIndex];
+            const user = document.getElementById('username').value; // Pega o que está no campo, mesmo que vazio
+            const pass = document.getElementById('password').value;
+            const sni = document.getElementById('sni').value;
+            const payload = document.getElementById('payload').value;
+            const proxyIp = document.getElementById('proxyIp').value;
+            const proxyPort = parseInt(document.getElementById('proxyPort').value || '0', 10);
+
+            // Chama o método Java Android com todos os parâmetros
+            // Nota: O método Java (startVPN) precisa ter todos esses parâmetros definidos.
+            if (typeof Android !== 'undefined' && typeof Android.startVPN === 'function') {
+                Android.startVPN(user, pass, selectedProfile.host, sni, payload, proxyIp, proxyPort);
+                setStatus('Tentando conectar a ' + selectedProfile.host + '...');
+            } else {
+                setStatus('Erro: Interface Android não disponível ou startVPN não encontrado.');
+            }
+        }
+
+        function setStatus(message) {
+            document.getElementById('status').innerText = 'Status: ' + message;
+        }
+
+        // Listener para o botão de toggle na interface HTML
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('toggleXmlButton');
+            if (toggleBtn) {
+                toggleBtn.onclick = function() {
+                    if (typeof Android !== 'undefined' && typeof Android.toggleInterface === 'function') {
+                        Android.toggleInterface();
+                    } else {
+                        setStatus('Erro: Função Android.toggleInterface não encontrada.');
+                    }
+                };
+            }
+            // Solicita os perfis ao Android assim que a página HTML estiver pronta
+            if (typeof Android !== 'undefined' && typeof Android.requestProfiles === 'function') {
+                Android.requestProfiles();
+            } else {
+                setStatus('Aguardando perfis do Android...');
+            }
         });
-      })
-      .catch(err => {
-        document.getElementById("operadora-info").innerText = "Operadora: (erro ao carregar)";
-        console.error("Erro ao carregar config.json", err);
-      });
-  </script>
+    </script>
 </body>
 </html>
