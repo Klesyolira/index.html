@@ -2,155 +2,133 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPN TunnelPro (HTML)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { font-family: sans-serif; margin: 20px; text-align: center; background-color: #f0f0f0; }
-        h1 { color: #333; }
-        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
-        input[type="text"], input[type="password"], select, textarea { width: calc(100% - 20px); padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        textarea { resize: vertical; min-height: 60px; }
-        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        button:hover { background-color: #0056b3; }
-        #status { margin-top: 20px; font-weight: bold; color: #555; }
-        #toggleXmlButton { background-color: #6c757d; margin-top: 20px; }
-        #toggleXmlButton:hover { background-color: #5a6268; }
-        .server-option { display: flex; align-items: center; padding: 5px 0; }
-        .server-option img { margin-right: 8px; border: 1px solid #eee; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 100%;
+        }
+        .status-card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .status-title {
+            font-size: 14px;
+            color: #9e9e9e;
+            margin-bottom: 5px;
+        }
+        .status-value {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn-danger {
+            background-color: #f44336;
+        }
+        .btn-danger:hover {
+            background-color: #d32f2f;
+        }
+        .btn-secondary {
+            background-color: #2196F3;
+        }
+        .btn-secondary:hover {
+            background-color: #0b7dda;
+        }
+        .connection-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .status-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .connected {
+            background-color: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+        .disconnected {
+            background-color: #f44336;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>VPN TunnelPro (HTML Interface)</h1>
+        <div class="connection-status">
+            <div id="statusIndicator" class="status-indicator disconnected"></div>
+            <div id="connectionText">Desconectado</div>
+        </div>
 
-        <label for="serverSelect">Escolha um Servidor:</label>
-        <select id="serverSelect" onchange="updateFieldsFromSelectedServer()">
-            <option value="default">Carregando servidores...</option>
-        </select>
+        <div class="status-card">
+            <div class="status-title">Usuário</div>
+            <div id="userInfo" class="status-value">Não definido</div>
+        </div>
 
-        <input type="text" id="username" placeholder="Usuário">
-        <input type="password" id="password" placeholder="Senha">
-        <input type="text" id="sni" placeholder="SNI (opcional)">
-        <textarea id="payload" placeholder="Payload (opcional)"></textarea>
-        <input type="text" id="proxyIp" placeholder="IP do Proxy (opcional)">
-        <input type="number" id="proxyPort" placeholder="Porta do Proxy (opcional)">
+        <div class="status-card">
+            <div class="status-title">Servidor</div>
+            <div id="serverInfo" class="status-value">Não selecionado</div>
+        </div>
 
-        <button onclick="connectVPN()">Conectar VPN</button>
+        <div class="status-card">
+            <div class="status-title">Operadora</div>
+            <div id="payloadInfo" class="status-value">Não selecionada</div>
+        </div>
 
-        <div id="status">Status: Desconectado</div>
-
-        <button id="toggleXmlButton">Mudar para Interface Nativa</button>
+        <button class="btn" onclick="Android.startStopVPN()" id="connectBtn">Conectar</button>
+        <button class="btn btn-secondary" onclick="Android.changeServer()">Trocar Servidor</button>
+        <button class="btn btn-secondary" onclick="Android.changePayload()">Trocar Operadora</button>
+        <button class="btn" onclick="Android.checkUser()">Verificar Usuário</button>
+        <button class="btn btn-secondary" onclick="Android.openSettings()">Configurações</button>
     </div>
 
     <script>
-        let availableProfiles = []; // Armazena os perfis carregados do Android
-
-        function updateServerList(profiles) {
-            const select = document.getElementById('serverSelect');
-            select.innerHTML = ''; // Limpa as opções existentes
-            availableProfiles = profiles; // Armazena os perfis globalmente
-
-            if (profiles && profiles.length > 0) {
-                profiles.forEach((profile, index) => {
-                    const option = document.createElement('option');
-                    option.value = index; // Armazena o índice para fácil acesso ao objeto
-                    let displayText = profile.name + ' (' + profile.host + ')';
-
-                    // Se você quiser imagens no select, geralmente não funciona bem.
-                    // Para um select simples, adicionamos o código do país no texto.
-                    if (profile.country_code) {
-                        displayText = '[' + profile.country_code + '] ' + displayText;
-                    }
-                    option.textContent = displayText;
-                    select.appendChild(option);
-                });
-                updateFieldsFromSelectedServer(); // Atualiza os campos com o primeiro perfil
+        function updateStatus(status, server, payload, user) {
+            document.getElementById('connectionText').innerText = status;
+            document.getElementById('serverInfo').innerText = server;
+            document.getElementById('payloadInfo').innerText = payload;
+            document.getElementById('userInfo').innerText = user || "Não definido";
+            
+            const indicator = document.getElementById('statusIndicator');
+            const connectBtn = document.getElementById('connectBtn');
+            
+            if (status === 'Conectado') {
+                indicator.className = 'status-indicator connected';
+                connectBtn.innerText = 'Desconectar';
+                connectBtn.className = 'btn btn-danger';
             } else {
-                const option = document.createElement('option');
-                option.value = 'default';
-                option.textContent = 'Nenhum servidor disponível';
-                select.appendChild(option);
-                clearInputFields();
+                indicator.className = 'status-indicator disconnected';
+                connectBtn.innerText = 'Conectar';
+                connectBtn.className = 'btn';
             }
         }
 
-        function updateFieldsFromSelectedServer() {
-            const select = document.getElementById('serverSelect');
-            const selectedIndex = select.value;
-
-            if (selectedIndex === 'default' || availableProfiles.length === 0) {
-                clearInputFields();
-                return;
-            }
-
-            const selectedProfile = availableProfiles[selectedIndex];
-            document.getElementById('username').value = selectedProfile.username || '';
-            document.getElementById('password').value = selectedProfile.password || ''; // Cuidado!
-            document.getElementById('sni').value = selectedProfile.sni || '';
-            document.getElementById('payload').value = selectedProfile.payload || '';
-            document.getElementById('proxyIp').value = selectedProfile.proxy_ip || '';
-            document.getElementById('proxyPort').value = selectedProfile.proxy_port || '';
-        }
-
-        function clearInputFields() {
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('sni').value = '';
-            document.getElementById('payload').value = '';
-            document.getElementById('proxyIp').value = '';
-            document.getElementById('proxyPort').value = '';
-        }
-
-        function connectVPN() {
-            const select = document.getElementById('serverSelect');
-            const selectedIndex = select.value;
-
-            if (selectedIndex === 'default' || availableProfiles.length === 0) {
-                setStatus('Por favor, selecione um servidor válido.');
-                return;
-            }
-
-            const selectedProfile = availableProfiles[selectedIndex];
-            const user = document.getElementById('username').value; // Pega o que está no campo, mesmo que vazio
-            const pass = document.getElementById('password').value;
-            const sni = document.getElementById('sni').value;
-            const payload = document.getElementById('payload').value;
-            const proxyIp = document.getElementById('proxyIp').value;
-            const proxyPort = parseInt(document.getElementById('proxyPort').value || '0', 10);
-
-            // Chama o método Java Android com todos os parâmetros
-            // Nota: O método Java (startVPN) precisa ter todos esses parâmetros definidos.
-            if (typeof Android !== 'undefined' && typeof Android.startVPN === 'function') {
-                Android.startVPN(user, pass, selectedProfile.host, sni, payload, proxyIp, proxyPort);
-                setStatus('Tentando conectar a ' + selectedProfile.host + '...');
-            } else {
-                setStatus('Erro: Interface Android não disponível ou startVPN não encontrado.');
-            }
-        }
-
-        function setStatus(message) {
-            document.getElementById('status').innerText = 'Status: ' + message;
-        }
-
-        // Listener para o botão de toggle na interface HTML
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.getElementById('toggleXmlButton');
-            if (toggleBtn) {
-                toggleBtn.onclick = function() {
-                    if (typeof Android !== 'undefined' && typeof Android.toggleInterface === 'function') {
-                        Android.toggleInterface();
-                    } else {
-                        setStatus('Erro: Função Android.toggleInterface não encontrada.');
-                    }
-                };
-            }
-            // Solicita os perfis ao Android assim que a página HTML estiver pronta
-            if (typeof Android !== 'undefined' && typeof Android.requestProfiles === 'function') {
-                Android.requestProfiles();
-            } else {
-                setStatus('Aguardando perfis do Android...');
-            }
-        });
+        // Carrega o status inicial
+        Android.getStatus();
     </script>
 </body>
 </html>
