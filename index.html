@@ -10,22 +10,30 @@
             text-align: center;
             padding: 20px;
             background-color: #f0f0f0;
-        }
-        h1 {
             color: #333;
         }
-        .status-box {
+        h1, h2 {
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
             background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .status-box, .info-box, .input-group, .selector-group {
+            background-color: #f9f9f9;
             border: 1px solid #ddd;
             padding: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
-        #vpnStatus, #serverInfo, #payloadInfo {
+        #vpnStatus {
             font-weight: bold;
             color: #007bff;
-            margin-bottom: 5px;
         }
         button {
             background-color: #007bff;
@@ -35,13 +43,28 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 20px;
+            margin-top: 10px;
             transition: background-color 0.3s ease;
+            width: fit-content; /* Ajuste o botão ao conteúdo */
         }
         button:hover {
             background-color: #0056b3;
         }
-        /* Estilos para o botão de voltar para nativo */
+        input[type="text"], input[type="password"], select {
+            width: calc(100% - 22px); /* Ajuste para padding e borda */
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-align: left;
+        }
         .native-mode-button {
             background-color: #28a745; /* Verde */
             margin-top: 30px;
@@ -49,35 +72,214 @@
         .native-mode-button:hover {
             background-color: #218838;
         }
+        .log-button {
+            background-color: #6c757d; /* Cinza */
+        }
+        .log-button:hover {
+            background-color: #5a6268;
+        }
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* Espaço entre os elementos flex */
+            margin-top: 10px;
+        }
+        .flex-container button {
+            flex-grow: 1; /* Faz os botões ocuparem o espaço disponível */
+            width: auto; /* Anula o width fixo para flex-grow funcionar */
+        }
+        select {
+            width: 100%;
+        }
+        .red { color: red; }
+        .green { color: green; }
+        .blue { color: blue; }
     </style>
 </head>
 <body>
 
-    <h1>Bem-vindo à UI Híbrida!</h1>
-    <p>Este é o layout carregado da WebView.</p>
+    <div class="container">
+        <h1>Socks Http Tunel PRO</h1>
+        <p>Interface Híbrida Ativa</p>
 
-    <div class="status-box">
-        <p>Status da VPN: <span id="vpnStatus">Desconectado</span></p>
-        <p>Servidor: <span id="serverInfo">N/A</span></p>
-        <p>Operadora (Payload): <span id="payloadInfo">N/A</span></p>
+        <div class="status-box">
+            <p>Status da VPN: <span id="vpnStatus">Carregando...</span></p>
+        </div>
+
+        <div class="info-box">
+            <h2>Informações da Configuração</h2>
+            <p>Versão Config: <span id="configVersion">N/A</span></p>
+        </div>
+
+        <div class="input-group">
+            <h2>Credenciais</h2>
+            <label for="usernameInput">Usuário:</label>
+            <input type="text" id="usernameInput" placeholder="Digite seu usuário">
+
+            <label for="passwordInput">Senha:</label>
+            <input type="password" id="passwordInput" placeholder="Digite sua senha">
+
+            <button onclick="saveCredentials()">Salvar Credenciais</button>
+        </div>
+
+        <div class="selector-group">
+            <h2>Servidor</h2>
+            <p>Servidor Selecionado: <span id="selectedServerName">N/A</span></p>
+            <p>IP: <span id="selectedServerIP">N/A</span></p>
+            <p>Porta: <span id="selectedServerPort">N/A</span></p>
+            <select id="serverSelector" onchange="changeServerFromHTML()">
+                <option value="">Carregando Servidores...</option>
+            </select>
+        </div>
+
+        <div class="selector-group">
+            <h2>Operadora (Payload)</h2>
+            <p>Payload Selecionada: <span id="selectedPayloadName">N/A</span></p>
+            <p>Tipo: <span id="selectedPayloadInfo">N/A</span></p>
+            <select id="payloadSelector" onchange="changePayloadFromHTML()">
+                <option value="">Carregando Operadoras...</option>
+            </select>
+        </div>
+
+        <div class="flex-container">
+            <button onclick="Android.startStopVPN()">Conectar/Desconectar VPN</button>
+            <button onclick="Android.checkUser()">Verificar Usuário</button>
+        </div>
+
+        <div class="flex-container">
+            <button class="log-button" onclick="Android.openLogs()">Ver Logs</button>
+            <button class="native-mode-button" onclick="Android.switchToNativeMode()">Voltar para a UI Nativa</button>
+        </div>
+
     </div>
 
-    <button onclick="Android.startStopVPN()">Conectar/Desconectar VPN</button>
-    <button onclick="Android.checkUser()">Verificar Usuário</button>
-    <button onclick="Android.changeServer()">Mudar Servidor</button>
-    <button onclick="Android.changePayload()">Mudar Operadora</button>
-
-    <br>
-
-    <button class="native-mode-button" onclick="Android.switchToNativeMode()">Voltar para a UI Nativa</button>
-
     <script>
-        // Função para ser chamada pelo Android para atualizar o status
-        function updateStatus(status, server, payload) {
-            document.getElementById('vpnStatus').innerText = status;
-            document.getElementById('serverInfo').innerText = server;
-            document.getElementById('payloadInfo').innerText = payload;
+        let allServersData = [];
+        let allPayloadsData = [];
+
+        // Função para ser chamada pelo Android para carregar os dados iniciais
+        function loadInitialData(jsonString) {
+            try {
+                const data = JSON.parse(jsonString);
+
+                // Preenche a versão do config
+                document.getElementById('configVersion').innerText = data.configVersion || 'N/A';
+
+                // Preenche usuário e senha
+                document.getElementById('usernameInput').value = data.username || '';
+                document.getElementById('passwordInput').value = data.password || '';
+
+                // Carrega e exibe os servidores
+                allServersData = JSON.parse(data.allServers || '[]');
+                populateServerSelector(allServersData);
+                if (data.selectedServerPos !== undefined && data.selectedServerPos !== -1) {
+                    document.getElementById('serverSelector').value = data.selectedServerPos;
+                    updateSelectedServerInfo(JSON.parse(data.selectedServer));
+                }
+
+                // Carrega e exibe as payloads
+                allPayloadsData = JSON.parse(data.allPayloads || '[]');
+                populatePayloadSelector(allPayloadsData);
+                if (data.selectedPayloadPos !== undefined && data.selectedPayloadPos !== -1) {
+                    document.getElementById('payloadSelector').value = data.selectedPayloadPos;
+                    updateSelectedPayloadInfo(JSON.parse(data.selectedPayload));
+                }
+
+                // Atualiza o status da VPN (já existia)
+                updateStatus(Android.isTunnelActive() ? "Conectado" : "Desconectado", "", "");
+
+            } catch (e) {
+                console.error("Erro ao carregar dados iniciais do Android:", e);
+                // Você pode adicionar uma mensagem de erro na UI aqui se quiser
+            }
         }
+
+        // Função para ser chamada pelo Android para atualizar o status da VPN
+        function updateStatus(status, serverName, payloadName) {
+            const statusElement = document.getElementById('vpnStatus');
+            statusElement.innerText = status;
+            if (status === "Conectado") {
+                statusElement.className = 'green';
+            } else if (status === "Desconectado") {
+                statusElement.className = 'red';
+            } else {
+                statusElement.className = 'blue'; // Para "Autenticando", "Reconectando", etc.
+            }
+        }
+
+        // Função para popular o seletor de servidores
+        function populateServerSelector(servers) {
+            const selector = document.getElementById('serverSelector');
+            selector.innerHTML = ''; // Limpa opções antigas
+            servers.forEach((server, index) => {
+                const option = document.createElement('option');
+                option.value = index; // Armazena o índice para fácil seleção via Android
+                option.innerText = server.Name;
+                selector.appendChild(option);
+            });
+        }
+
+        // Função para popular o seletor de payloads
+        function populatePayloadSelector(payloads) {
+            const selector = document.getElementById('payloadSelector');
+            selector.innerHTML = ''; // Limpa opções antigas
+            payloads.forEach((payload, index) => {
+                const option = document.createElement('option');
+                option.value = index; // Armazena o índice para fácil seleção via Android
+                option.innerText = payload.Name;
+                selector.appendChild(option);
+            });
+        }
+
+        // Função para atualizar as informações do servidor selecionado no HTML
+        function updateSelectedServerInfo(server) {
+            document.getElementById('selectedServerName').innerText = server.Name || 'N/A';
+            document.getElementById('selectedServerIP').innerText = server.ServerIP || 'N/A';
+            document.getElementById('selectedServerPort').innerText = server.ServerPort || 'N/A';
+        }
+
+        // Função para atualizar as informações da payload selecionada no HTML
+        function updateSelectedPayloadInfo(payload) {
+            document.getElementById('selectedPayloadName').innerText = payload.Name || 'N/A';
+            document.getElementById('selectedPayloadInfo').innerText = payload.Info || 'N/A';
+        }
+
+        // Chamado quando o usuário seleciona um servidor no HTML
+        function changeServerFromHTML() {
+            const selectedIndex = parseInt(document.getElementById('serverSelector').value);
+            if (!isNaN(selectedIndex) && allServersData[selectedIndex]) {
+                Android.selectServerByIndex(selectedIndex); // Notifica o Android da mudança
+                updateSelectedServerInfo(allServersData[selectedIndex]); // Atualiza o HTML imediatamente
+            }
+        }
+
+        // Chamado quando o usuário seleciona uma payload no HTML
+        function changePayloadFromHTML() {
+            const selectedIndex = parseInt(document.getElementById('payloadSelector').value);
+            if (!isNaN(selectedIndex) && allPayloadsData[selectedIndex]) {
+                Android.selectPayloadByIndex(selectedIndex); // Notifica o Android da mudança
+                updateSelectedPayloadInfo(allPayloadsData[selectedIndex]); // Atualiza o HTML imediatamente
+            }
+        }
+
+        // Função para salvar usuário e senha do HTML para o Android
+        function saveCredentials() {
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+            Android.setUsername(username);
+            Android.setPassword(password);
+            alert('Credenciais salvas!'); // Feedback simples
+        }
+
+        // Chame isso para carregar os dados iniciais quando a página for carregada pela primeira vez
+        // A função loadInitialData já é chamada pelo Android, mas ter um fallback é bom.
+        document.addEventListener('DOMContentLoaded', () => {
+             // Você pode chamar getUsername/getPassword aqui para um carregamento inicial rápido,
+             // mas loadInitialData é mais completo.
+             // document.getElementById('usernameInput').value = Android.getUsername() || '';
+             // document.getElementById('passwordInput').value = Android.getPassword() || '';
+        });
+
     </script>
 
 </body>
