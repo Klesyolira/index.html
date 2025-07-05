@@ -696,14 +696,32 @@
         }
 
         // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            // Solicita os dados ao Android
-            addLog('Carregando configurações...');
-            
-            // Configura listeners para salvar automaticamente
-            document.getElementById('username').addEventListener('change', function() {
-                Android.onLogin(this.value, document.getElementById('password').value);
-            });
+        
+document.addEventListener('DOMContentLoaded', function() {
+    addLog('Carregando configurações...');
+
+    if (typeof Android !== 'undefined' && Android !== null) {
+        try {
+            Android.requisitarConfig(); // Método que deve chamar carregarDados(JSON)
+        } catch (e) {
+            addLog('Erro ao requisitar config: ' + e.message, 'error');
+        }
+
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+
+        usernameInput.addEventListener('blur', function() {
+            Android.onLogin(usernameInput.value, passwordInput.value);
+        });
+
+        passwordInput.addEventListener('blur', function() {
+            Android.onLogin(usernameInput.value, passwordInput.value);
+        });
+    } else {
+        addLog('Interface Android não disponível', 'error');
+    }
+});
+
             
             document.getElementById('password').addEventListener('change', function() {
                 Android.onLogin(document.getElementById('username').value, this.value);
