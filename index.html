@@ -336,15 +336,15 @@
                 width: 100%;
                 margin-bottom: 10px;
             }
-            
+
             .status-bar {
                 flex-direction: column;
             }
-            
+
             .stats {
                 flex-direction: column;
             }
-            
+
             .stat-item {
                 margin-bottom: 10px;
             }
@@ -403,7 +403,7 @@
 
         <div class="server-card" onclick="openPayloadModal()">
             <img id="payload-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Payload" class="server-icon">
-            <div class="server-info">
+            <div class="payload-info">
                 <div class="payload-name" id="payload-name">Selecione uma operadora</div>
                 <div class="payload-desc">Toque para alterar</div>
             </div>
@@ -443,8 +443,6 @@
             <div class="log-entry">Aguardando conexão...</div>
         </div>
 
-        <button class="action-btn secondary" onclick="Android.checkUser()">Verificar Usuário</button>
-
         <div class="footer">
             <p id="app-footer">Yumeko 6G Pro &copy; 2023 | Todos os direitos reservados</p>
         </div>
@@ -472,17 +470,20 @@
         // Variáveis globais
         let isPasswordVisible = false;
         let connectionStatus = "disconnected";
-        let serverData = []; // Armazenará os dados dos servidores
-        let payloadData = []; // Armazenará os dados das operadoras (Networks)
+        let serverData = [];    // Armazenará os dados completos dos servidores
+        let payloadData = [];   // Armazenará os dados completos das operadoras (Networks)
+        let selectedServerIndex = 0; // Para manter o controle do servidor selecionado
+        let selectedPayloadIndex = 0; // Para manter o controle da payload selecionada
 
-        // SVG Placeholder (base64 encoded)
+
+        // SVG Placeholder (base64 encoded) para quando não houver imagem
         const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><rect width="24" height="24" fill="%236a11cb"/></svg>';
 
         // Função para alternar a visibilidade da senha
         function togglePassword() {
             const passwordField = document.getElementById('password');
             const toggleIcon = document.querySelector('.toggle-password');
-            
+
             isPasswordVisible = !isPasswordVisible;
             passwordField.type = isPasswordVisible ? 'text' : 'password';
             toggleIcon.textContent = isPasswordVisible ? '🙈' : '👁️';
@@ -516,14 +517,14 @@
             const logsContainer = document.getElementById('logs-container');
             const logEntry = document.createElement('div');
             logEntry.className = `log-entry ${type}`;
-            
+
             // Adiciona timestamp
             const now = new Date();
             const timestamp = now.toLocaleTimeString();
-            
+
             logEntry.textContent = `[${timestamp}] ${message}`;
             logsContainer.insertBefore(logEntry, logsContainer.firstChild);
-            
+
             // Mantém apenas os últimos 50 logs
             if (logsContainer.children.length > 50) {
                 logsContainer.removeChild(logsContainer.lastChild);
@@ -536,7 +537,7 @@
         function loadServers() {
             const serverList = document.getElementById('server-list');
             serverList.innerHTML = ''; // Limpa a lista existente
-            
+
             if (serverData.length === 0) {
                 serverList.innerHTML = '<div class="log-entry info">Nenhum servidor disponível.</div>';
                 return;
@@ -546,17 +547,29 @@
                 const serverItem = document.createElement('div');
                 serverItem.className = 'server-item';
                 serverItem.innerHTML = `
-                    <img src="${server.FlagUrl || SVG_PLACEHOLDER}" alt="${server.Name || 'Servidor'}">
-                    <div>${server.Name || 'Servidor Desconhecido'}</div>
+                    <img src="${server.FlagUrl || SVG_PLACEHOLDER}" alt="${server.Name}">
+                    <div>
+                        <div>${server.Name}</div>
+                        <div style="font-size: 10px; opacity: 0.7;">IP: ${server.ServerIP || 'N/A'} | Porta: ${server.ServerPort || 'N/A'}</div>
+                    </div>
                 `;
                 serverItem.onclick = () => {
-                    // Chama a função Android com o índice, nome e IP do servidor
                     if (typeof Android !== 'undefined' && Android !== null) {
-                        Android.onServidorSelecionado(index, server.Name || '', server.ServerIP || '');
+                        // Passa todos os dados do servidor selecionado para o Android
+                        Android.onServidorSelecionado(
+                            index,
+                            server.Name,
+                            server.ServerIP,
+                            server.ServerPort,
+                            server.SSLPort,
+                            server.CheckUser,
+                            server.PServerIP
+                        );
                     } else {
                         addLog('Interface Android não disponível para selecionar servidor.', 'error');
                     }
-                    document.getElementById('server-name').textContent = server.Name || 'Servidor Selecionado';
+                    selectedServerIndex = index; // Atualiza o índice selecionado no JS
+                    document.getElementById('server-name').textContent = server.Name;
                     document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
                     closeModal('server-modal');
                 };
@@ -568,7 +581,7 @@
         function loadPayloads() {
             const payloadList = document.getElementById('payload-list');
             payloadList.innerHTML = ''; // Limpa a lista existente
-            
+
             if (payloadData.length === 0) {
                 payloadList.innerHTML = '<div class="log-entry info">Nenhuma operadora disponível.</div>';
                 return;
@@ -578,20 +591,30 @@
                 const payloadItem = document.createElement('div');
                 payloadItem.className = 'server-item';
                 payloadItem.innerHTML = `
-                    <img src="${payload.FlagUrl || SVG_PLACEHOLDER}" alt="${payload.Name || 'Operadora'}">
-                    <div>${payload.Name || 'Operadora Desconhecida'}</div>
+                    <img src="${payload.FlagUrl || SVG_PLACEHOLDER}" alt="${payload.Name}">
+                    <div>
+                        <div>${payload.Name}</div>
+                        <div style="font-size: 10px; opacity: 0.7;">Tipo: ${payload.Info || 'N/A'} | SNI: ${payload.SNI || 'N/A'}</div>
+                    </div>
                 `;
                 payloadItem.onclick = () => {
-                    // Aqui, você pode chamar uma função Android para notificar a mudança de payload
-                    // Como a lógica de payload é mais complexa (pode mudar SNI, etc.),
-                    // você deve ter uma função no Android para lidar com isso.
                     if (typeof Android !== 'undefined' && Android !== null) {
-                        // Você pode passar o índice, nome ou outros dados do payload
-                        Android.changePayload(index, payload.Name || ''); 
+                        // Passa todos os dados da payload selecionada para o Android
+                        Android.changePayload(
+                            index,
+                            payload.Name,
+                            payload.Payload,
+                            payload.SNI,
+                            payload.TlsIP,
+                            payload.ProxyIP,
+                            payload.ProxyPort,
+                            payload.Info
+                        );
                     } else {
                         addLog('Interface Android não disponível para mudar operadora.', 'error');
                     }
-                    document.getElementById('payload-name').textContent = payload.Name || 'Operadora Selecionada';
+                    selectedPayloadIndex = index; // Atualiza o índice selecionado no JS
+                    document.getElementById('payload-name').textContent = payload.Name;
                     document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
                     closeModal('payload-modal');
                 };
@@ -600,19 +623,19 @@
         }
 
         // Função para atualizar o status da conexão (chamada pelo Android)
-        function updateStatus(status, server, payload, username, password) {
+        function updateStatus(status, serverName, payloadName, username, password) {
             const statusElement = document.getElementById('connection-status');
             const connectBtn = document.getElementById('connect-btn');
-            
+
             // Atualiza campos de texto se os valores forem fornecidos
             if (username !== null && username !== 'null' && username !== '') document.getElementById('username').value = username;
             if (password !== null && password !== 'null' && password !== '') document.getElementById('password').value = password;
-            if (server !== null && server !== 'null' && server !== '') document.getElementById('server-name').textContent = server;
-            if (payload !== null && payload !== 'null' && payload !== '') document.getElementById('payload-name').textContent = payload;
-            
+            if (serverName !== null && serverName !== 'null' && serverName !== '') document.getElementById('server-name').textContent = serverName;
+            if (payloadName !== null && payloadName !== 'null' && payloadName !== '') document.getElementById('payload-name').textContent = payloadName;
+
             // Atualiza status da conexão
             connectionStatus = status.toLowerCase();
-            
+
             switch(connectionStatus) {
                 case 'connected':
                     statusElement.textContent = 'Conectado';
@@ -653,6 +676,7 @@
                     break;
                 default:
                     statusElement.textContent = status;
+                    statusElement.className = 'info'; // Default class
             }
         }
 
@@ -666,7 +690,7 @@
         function updateOnlineStatus(count) {
             const onlineElement = document.getElementById('online-status');
             onlineElement.textContent = count;
-            
+
             // Muda a cor baseado no número de usuários
             if (count <= 29) {
                 onlineElement.style.color = '#228b22'; // Verde
@@ -680,41 +704,38 @@
         // Função para carregar dados do JSON (chamada pelo Android)
         function carregarDados(jsonString) {
             try {
-                const data = JSON.parse(jsonString); 
-                
+                const data = JSON.parse(jsonString);
+
                 // Atualiza versão
                 if (data.Version) {
                     document.getElementById('version-stat').textContent = `v${data.Version}`;
                 }
-                
+
                 // Processa servidores
                 if (data.Servers && Array.isArray(data.Servers)) {
                     serverData = data.Servers.map(server => ({
-                        Name: server.Name,
-                        ServerIP: server.ServerIP,
-                        // Usar server.FLAG (que deve ser a URL completa ou base64)
-                        FlagUrl: server.FLAG || SVG_PLACEHOLDER 
+                        Name: server.Name || 'Servidor Desconhecido',
+                        ServerIP: server.ServerIP || '',
+                        FlagUrl: server.FLAG || SVG_PLACEHOLDER,
+                        ServerPort: server.ServerPort || '',
+                        SSLPort: server.SSLPort || '',
+                        CheckUser: server.CheckUser || '',
+                        PServerIP: server.PServerIP || ''
                     }));
                 }
-                
+
                 // Processa payloads (Networks)
                 if (data.Networks && Array.isArray(data.Networks)) {
                     payloadData = data.Networks.map(network => ({
-                        Name: network.Name,
-                        // Usar network.FLAG (que deve ser a URL completa ou base64)
-                        FlagUrl: network.FLAG || SVG_PLACEHOLDER 
+                        Name: network.Name || 'Operadora Desconhecida',
+                        FlagUrl: network.FLAG || SVG_PLACEHOLDER,
+                        Payload: network.Payload || '',
+                        SNI: network.SNI || '',
+                        TlsIP: network.TlsIP || '',
+                        ProxyIP: network.ProxyIP || '',
+                        ProxyPort: network.ProxyPort || '',
+                        Info: network.Info || ''
                     }));
-                }
-                
-                // Popula seleções iniciais se os dados estiverem disponíveis
-                if (serverData.length > 0) {
-                    document.getElementById('server-name').textContent = serverData[0].Name;
-                    document.getElementById('server-icon').src = serverData[0].FlagUrl;
-                }
-                
-                if (payloadData.length > 0) {
-                    document.getElementById('payload-name').textContent = payloadData[0].Name;
-                    document.getElementById('payload-icon').src = payloadData[0].FlagUrl;
                 }
 
                 // Define usuário e senha iniciais se disponíveis na configuração
@@ -732,8 +753,44 @@
                 if (data.Rodape) {
                     document.getElementById('app-footer').textContent = data.Rodape;
                 }
-                
+
+                // Define o servidor e payload selecionados com base nos índices recebidos do Android
+                selectedServerIndex = data.ServerPos !== undefined ? data.ServerPos : 0;
+                selectedPayloadIndex = data.PayloadPos !== undefined ? data.PayloadPos : 0;
+
+                // Popula seleções iniciais na interface com base nos índices
+                if (serverData.length > selectedServerIndex) {
+                    const currentServer = serverData[selectedServerIndex];
+                    document.getElementById('server-name').textContent = currentServer.Name;
+                    document.getElementById('server-icon').src = currentServer.FlagUrl;
+                } else if (serverData.length > 0) {
+                    // Fallback para o primeiro se o índice salvo for inválido
+                    selectedServerIndex = 0;
+                    const currentServer = serverData[selectedServerIndex];
+                    document.getElementById('server-name').textContent = currentServer.Name;
+                    document.getElementById('server-icon').src = currentServer.FlagUrl;
+                } else {
+                    document.getElementById('server-name').textContent = 'Selecione um servidor';
+                    document.getElementById('server-icon').src = SVG_PLACEHOLDER;
+                }
+
+                if (payloadData.length > selectedPayloadIndex) {
+                    const currentPayload = payloadData[selectedPayloadIndex];
+                    document.getElementById('payload-name').textContent = currentPayload.Name;
+                    document.getElementById('payload-icon').src = currentPayload.FlagUrl;
+                } else if (payloadData.length > 0) {
+                    // Fallback para o primeiro se o índice salvo for inválido
+                    selectedPayloadIndex = 0;
+                    const currentPayload = payloadData[selectedPayloadIndex];
+                    document.getElementById('payload-name').textContent = currentPayload.Name;
+                    document.getElementById('payload-icon').src = currentPayload.FlagUrl;
+                } else {
+                    document.getElementById('payload-name').textContent = 'Selecione uma operadora';
+                    document.getElementById('payload-icon').src = SVG_PLACEHOLDER;
+                }
+
                 addLog('Configurações carregadas com sucesso', 'success');
+
             } catch (e) {
                 addLog('Erro ao carregar configurações: ' + e.message, 'error');
                 console.error("Erro ao carregar configurações:", e); // Para depuração no console
@@ -747,7 +804,7 @@
             if (typeof Android !== 'undefined' && Android !== null) {
                 try {
                     // Solicita a configuração do Android quando o conteúdo HTML é carregado
-                    Android.requisitarConfig(); 
+                    Android.requisitarConfig();
                 } catch (e) {
                     addLog('Erro ao requisitar config: ' + e.message + '. Verifique a interface Android.', 'error');
                 }
@@ -756,12 +813,13 @@
                 const passwordInput = document.getElementById('password');
 
                 // Envia usuário/senha para o Android sempre que perdem o foco
+                // Ambos os campos precisam ser lidos e enviados para onLogin
                 usernameInput.addEventListener('blur', function() {
                     Android.onLogin(usernameInput.value, passwordInput.value);
                 });
 
                 passwordInput.addEventListener('blur', function() {
-                    Android.onLogin(passwordInput.value); // Updated to send only password on password field blur
+                    Android.onLogin(usernameInput.value, passwordInput.value);
                 });
             } else {
                 addLog('Interface Android não disponível. (Executando fora do WebView)', 'error');
