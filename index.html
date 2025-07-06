@@ -377,7 +377,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img id="app-logo" src="https://via.placeholder.com/80" alt="Logo" class="logo">
+            <img id="app-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Logo" class="logo">
             <button class="menu-btn" onclick="Android.switchToNativeMode()">☰</button>
         </div>
 
@@ -393,7 +393,7 @@
         </div>
 
         <div class="server-card" onclick="openServerModal()">
-            <img id="server-icon" src="https://via.placeholder.com/40" alt="Server" class="server-icon">
+            <img id="server-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Server" class="server-icon">
             <div class="server-info">
                 <div class="server-name" id="server-name">Selecione um servidor</div>
                 <div class="server-desc">Toque para alterar</div>
@@ -402,10 +402,10 @@
         </div>
 
         <div class="server-card" onclick="openPayloadModal()">
-            <img id="payload-icon" src="https://via.placeholder.com/40" alt="Payload" class="server-icon">
+            <img id="payload-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Payload" class="server-icon">
             <div class="server-info">
-                <div class="server-name" id="payload-name">Selecione uma operadora</div>
-                <div class="server-desc">Toque para alterar</div>
+                <div class="payload-name" id="payload-name">Selecione uma operadora</div>
+                <div class="payload-desc">Toque para alterar</div>
             </div>
             <div>></div>
         </div>
@@ -475,6 +475,9 @@
         let serverData = []; // Armazenará os dados dos servidores
         let payloadData = []; // Armazenará os dados das operadoras (Networks)
 
+        // SVG Placeholder (base64 encoded)
+        const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><rect width="24" height="24" fill="%236a11cb"/></svg>';
+
         // Função para alternar a visibilidade da senha
         function togglePassword() {
             const passwordField = document.getElementById('password');
@@ -525,6 +528,8 @@
             if (logsContainer.children.length > 50) {
                 logsContainer.removeChild(logsContainer.lastChild);
             }
+            // Role para o topo para ver o log mais recente
+            logsContainer.scrollTop = 0;
         }
 
         // Função para carregar servidores na lista do modal
@@ -541,7 +546,7 @@
                 const serverItem = document.createElement('div');
                 serverItem.className = 'server-item';
                 serverItem.innerHTML = `
-                    <img src="${server.FlagUrl || 'https://via.placeholder.com/30'}" alt="${server.Name || 'Servidor'}">
+                    <img src="${server.FlagUrl || SVG_PLACEHOLDER}" alt="${server.Name || 'Servidor'}">
                     <div>${server.Name || 'Servidor Desconhecido'}</div>
                 `;
                 serverItem.onclick = () => {
@@ -552,7 +557,7 @@
                         addLog('Interface Android não disponível para selecionar servidor.', 'error');
                     }
                     document.getElementById('server-name').textContent = server.Name || 'Servidor Selecionado';
-                    document.getElementById('server-icon').src = server.FlagUrl || 'https://via.placeholder.com/40';
+                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
                     closeModal('server-modal');
                 };
                 serverList.appendChild(serverItem);
@@ -573,7 +578,7 @@
                 const payloadItem = document.createElement('div');
                 payloadItem.className = 'server-item';
                 payloadItem.innerHTML = `
-                    <img src="${payload.FlagUrl || 'https://via.placeholder.com/30'}" alt="${payload.Name || 'Operadora'}">
+                    <img src="${payload.FlagUrl || SVG_PLACEHOLDER}" alt="${payload.Name || 'Operadora'}">
                     <div>${payload.Name || 'Operadora Desconhecida'}</div>
                 `;
                 payloadItem.onclick = () => {
@@ -587,7 +592,7 @@
                         addLog('Interface Android não disponível para mudar operadora.', 'error');
                     }
                     document.getElementById('payload-name').textContent = payload.Name || 'Operadora Selecionada';
-                    document.getElementById('payload-icon').src = payload.FlagUrl || 'https://via.placeholder.com/40';
+                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
                     closeModal('payload-modal');
                 };
                 payloadList.appendChild(payloadItem);
@@ -675,8 +680,6 @@
         // Função para carregar dados do JSON (chamada pelo Android)
         function carregarDados(jsonString) {
             try {
-                // Tenta analisar a string JSON. Se o Android passar diretamente um objeto, isso pode falhar.
-                // Mas, como estamos escapando e passando como string, JSON.parse é necessário.
                 const data = JSON.parse(jsonString); 
                 
                 // Atualiza versão
@@ -689,8 +692,8 @@
                     serverData = data.Servers.map(server => ({
                         Name: server.Name,
                         ServerIP: server.ServerIP,
-                        // Usa server.FLAG para a URL da bandeira, fallback para placeholder
-                        FlagUrl: server.FLAG ? `https://flagcdn.com/w80/${server.FLAG.toLowerCase()}.png` : 'https://via.placeholder.com/30'
+                        // Usar server.FLAG (que deve ser a URL completa ou base64)
+                        FlagUrl: server.FLAG || SVG_PLACEHOLDER 
                     }));
                 }
                 
@@ -698,8 +701,8 @@
                 if (data.Networks && Array.isArray(data.Networks)) {
                     payloadData = data.Networks.map(network => ({
                         Name: network.Name,
-                        // Usa network.FLAG para a URL da bandeira, fallback para placeholder
-                        FlagUrl: network.FLAG ? `https://flagcdn.com/w80/${network.FLAG.toLowerCase()}.png` : 'https://via.placeholder.com/30'
+                        // Usar network.FLAG (que deve ser a URL completa ou base64)
+                        FlagUrl: network.FLAG || SVG_PLACEHOLDER 
                     }));
                 }
                 
@@ -758,7 +761,7 @@
                 });
 
                 passwordInput.addEventListener('blur', function() {
-                    Android.onLogin(usernameInput.value, passwordInput.value);
+                    Android.onLogin(passwordInput.value); // Updated to send only password on password field blur
                 });
             } else {
                 addLog('Interface Android não disponível. (Executando fora do WebView)', 'error');
