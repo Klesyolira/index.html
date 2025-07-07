@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yumeko 6G Pro</title>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yumeko 6G Pro</title>
+<style>
         :root {
             --primary-color: #6a11cb;
             --secondary-color: #2575fc;
@@ -126,6 +127,15 @@
             opacity: 0.8;
         }
 
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px; /* Increased border-radius for the main card */
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
         .selection-section {
             margin-bottom: 20px;
         }
@@ -143,16 +153,15 @@
 
         .selection-cards {
             display: flex;
+            flex-direction: column; /* Stacks server and payload vertically */
             gap: 10px;
             margin-bottom: 20px;
         }
 
         .selection-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05); /* Slightly darker card background inside main card */
             border-radius: 10px;
             padding: 15px;
-            flex: 1;
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -187,55 +196,28 @@
             opacity: 0.7;
         }
 
-        .action-btn {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 16px 0;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 20px 0;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
-            transition: var(--transition);
-            outline: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .action-btn:focus {
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
-        }
-
-        .action-btn.stop {
-            background: linear-gradient(to right, var(--danger-color), #e53935);
-        }
-
-        .action-btn .btn-icon {
-            font-size: 20px;
-        }
-
         .login-form {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 20px;
+            /* Removed background and backdrop-filter as it's now inside .main-card */
+            padding: 0; /* Adjust padding as needed inside main-card */
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
             margin-bottom: 15px;
         }
+        
+        /* New flexbox for username and password */
+        .form-row {
+            display: flex;
+            gap: 15px; /* Space between username and password */
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1; /* Each form group takes equal width */
+            margin-bottom: 0; /* Remove bottom margin from individual groups in a row */
+        }
+
 
         .form-group label {
             display: block;
@@ -277,6 +259,43 @@
             background: none;
             border: none;
             font-size: 18px;
+        }
+
+        .action-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 16px 0;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 20px 0 0; /* Adjusted margin-top to separate from form, no bottom margin */
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+            transition: var(--transition);
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:focus {
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
+        }
+
+        .action-btn.stop {
+            background: linear-gradient(to right, var(--danger-color), #e53935);
+        }
+
+        .action-btn .btn-icon {
+            font-size: 20px;
         }
 
         .stats {
@@ -544,6 +563,11 @@
             .status-container {
                 flex-wrap: wrap;
             }
+
+            .form-row {
+                flex-direction: column; /* Stack username/password vertically on small screens */
+                gap: 0;
+            }
         }
 
         @media (min-width: 768px) {
@@ -554,144 +578,122 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="top-bar">
-            <button class="back-button" onclick="goBack()" aria-label="Voltar">
-                &#x2190; </button>
-
-            <div class="status-container">
-                <div class="status-pill">
-                    <span class="stat-label">Download:</span>
-                    <span class="stat-value" id="download-stat">0 KB</span>
-                </div>
-                <div class="status-pill">
-                    <span class="stat-label">Upload:</span>
-                    <span class="stat-value" id="upload-stat">0 KB</span>
-                </div>
-            </div>
-            
-            <div class="status-container">
-                <div class="status-pill disconnected" id="connection-status-pill">
-                    <span class="status-dot disconnected"></span>
-                    <span id="connection-status-text">Desconectado</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="header">
-            <img id="app-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Logo" class="logo">
-            
-            <div class="header-info">
-                <div class="app-name">Yumeko 6G Pro</div>
-                <div class="app-version" id="app-version">Versão: v1.0</div>
-            </div>
-        </div>
-
-        <div class="selection-section">
-            <div class="selection-cards">
-                <div class="selection-card" id="server-card" onclick="openServerModal()">
-                    <img id="server-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Server" class="selection-icon">
-                    <div class="selection-info">
-                        <div class="selection-name" id="server-name">Selecione um servidor</div>
-                        <div class="selection-desc">Toque para alterar</div>
-                    </div>
-                </div>
-                
-                <div class="selection-card" id="payload-card" onclick="openPayloadModal()">
-                    <img id="payload-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Payload" class="selection-icon">
-                    <div class="selection-info">
-                        <div class="selection-name" id="payload-name">Selecione uma operadora</div>
-                        <div class="selection-desc">Toque para alterar</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="login-form">
-            <div class="form-group">
-                <label for="username">Usuário</label>
-                <input type="text" id="username" class="form-control" 
-                       placeholder="Digite seu usuário"
-                       aria-required="true">
-            </div>
-            <div class="form-group password-field">
-                <label for="password">Senha</label>
-                <input type="password" id="password" class="form-control" 
-                       placeholder="Digite sua senha"
-                       aria-required="true">
-                <button class="toggle-password" aria-label="Mostrar senha" onclick="togglePassword()">
-                    👁️
-                </button>
-            </div>
-            <button class="action-btn" id="connect-btn" onclick="handleConnectClick()">
-                <span class="btn-icon">🔒</span>
-                <span id="connect-btn-text">Conectar</span>
+<div class="container">
+<div class="top-bar">
+<button aria-label="Voltar" class="back-button" onclick="Android.switchToNativeMode()">
+                ←
             </button>
-        </div>
-
-        <button class="logs-button" onclick="openLogsModal()">
-            <span class="btn-icon">📝</span>
+<div class="status-container">
+<div class="status-pill">
+<span class="stat-label">Download:</span>
+<span class="stat-value" id="download-stat">0 KB</span>
+</div>
+<div class="status-pill">
+<span class="stat-label">Upload:</span>
+<span class="stat-value" id="upload-stat">0 KB</span>
+</div>
+</div>
+</div>
+<div class="header">
+<img alt="Logo" class="logo" id="app-logo" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'&gt;&lt;rect width='24' height='24' fill='%236a11cb'/&gt;&lt;/svg&gt;"/>
+<div class="header-info">
+<div class="app-name">Yumeko 6G Pro</div>
+<div class="app-version" id="app-version">Versão: v1.0</div>
+</div>
+</div>
+<div class="main-card"> <div class="selection-section">
+<div class="selection-cards">
+<div class="selection-card" id="server-card" onclick="openServerModal()">
+<img alt="Server" class="selection-icon" id="server-icon" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'&gt;&lt;rect width='24' height='24' fill='%236a11cb'/&gt;&lt;/svg&gt;"/>
+<div class="selection-info">
+<div class="selection-name" id="server-name">Selecione um servidor</div>
+<div class="selection-desc">Toque para alterar</div>
+</div>
+</div>
+<div class="selection-card" id="payload-card" onclick="openPayloadModal()">
+<img alt="Payload" class="selection-icon" id="payload-icon" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'&gt;&lt;rect width='24' height='24' fill='%236a11cb'/&gt;&lt;/svg&gt;"/>
+<div class="selection-info">
+<div class="selection-name" id="payload-name">Selecione uma operadora</div>
+<div class="selection-desc">Toque para alterar</div>
+</div>
+</div>
+</div>
+</div>
+<div class="login-form">
+<div class="form-row"> <div class="form-group">
+<label for="username">Usuário</label>
+<input aria-required="true" class="form-control" id="username" placeholder="Digite seu usuário" type="text"/>
+</div>
+<div class="form-group password-field">
+<label for="password">Senha</label>
+<input aria-required="true" class="form-control" id="password" placeholder="Digite sua senha" type="password"/>
+<button aria-label="Mostrar senha" class="toggle-password" onclick="togglePassword()">
+                            👁️
+                        </button>
+</div>
+</div>
+<button class="action-btn" id="connect-btn" onclick="handleConnectClick()">
+<span class="btn-icon">🔒</span>
+<span id="connect-btn-text">Conectar</span>
+</button>
+</div>
+</div> <button class="logs-button" onclick="openLogsModal()">
+<span class="btn-icon">📝</span>
             Ver Logs de Conexão
         </button>
-
-        <div class="footer">
-            <p id="app-footer">Yumeko 6G Pro &copy; 2023 | Todos os direitos reservados</p>
-        </div>
-    </div>
-
-    <div id="server-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('server-modal')">&times;</button>
-            <div class="modal-title">
-                <span>🌐</span>
-                <h2>Selecione um Servidor</h2>
-            </div>
-            
-            <div class="server-list" id="server-list">
-                </div>
-            
-            <div class="version-info">
-                <span id="server-version">Versão do Config: v1.0</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="payload-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('payload-modal')">&times;</button>
-            <div class="modal-title">
-                <span>📶</span>
-                <h2>Selecione uma Operadora</h2>
-            </div>
-            
-            <div class="payload-list" id="payload-list">
-                </div>
-            
-            <div class="version-info">
-                <span id="payload-version">Versão do Config: v1.0</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="logs-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('logs-modal')">&times;</button>
-            <div class="modal-title">
-                <span>📋</span>
-                <h2>Logs de Conexão</h2>
-            </div>
-            
-            <div class="connection-time">
-                <span>Tempo de Conexão:</span>
-                <span id="connection-time">00:00:00</span>
-            </div>
-            
-            <div class="logs-container" id="modal-logs-container">
-                </div>
-        </div>
-    </div>
-
-    <script>
+<div class="status-container" style="justify-content: center; margin-top: 20px;"> <div class="status-pill disconnected" id="connection-status-pill">
+<span class="status-dot disconnected"></span>
+<span id="connection-status-text">Desconectado</span>
+</div>
+</div>
+<div class="footer">
+<p id="app-footer">Yumeko 6G Pro © 2023 | Todos os direitos reservados</p>
+</div>
+</div>
+<div class="modal" id="server-modal">
+<div class="modal-content">
+<button class="close-modal" onclick="closeModal('server-modal')">×</button>
+<div class="modal-title">
+<span>🌐</span>
+<h2>Selecione um Servidor</h2>
+</div>
+<div class="server-list" id="server-list">
+</div>
+<div class="version-info">
+<span id="server-version">Versão do Config: v1.0</span>
+</div>
+</div>
+</div>
+<div class="modal" id="payload-modal">
+<div class="modal-content">
+<button class="close-modal" onclick="closeModal('payload-modal')">×</button>
+<div class="modal-title">
+<span>📶</span>
+<h2>Selecione uma Operadora</h2>
+</div>
+<div class="payload-list" id="payload-list">
+</div>
+<div class="version-info">
+<span id="payload-version">Versão do Config: v1.0</span>
+</div>
+</div>
+</div>
+<div class="modal" id="logs-modal">
+<div class="modal-content">
+<button class="close-modal" onclick="closeModal('logs-modal')">×</button>
+<div class="modal-title">
+<span>📋</span>
+<h2>Logs de Conexão</h2>
+</div>
+<div class="connection-time">
+<span>Tempo de Conexão:</span>
+<span id="connection-time">00:00:00</span>
+</div>
+<div class="logs-container" id="modal-logs-container">
+</div>
+</div>
+</div>
+<script>
         // Variáveis globais
         let isPasswordVisible = false;
         let connectionStatus = "disconnected";
@@ -1167,16 +1169,16 @@
                 carregarDados({
                     "Version": "1.1",
                     "Servers": [
-                        { "Name": "Servidor Brasil 01", "FLAG": "", "ServerIP": "192.168.1.1", "ServerPort": "8080", "SSLPort": "443", "CheckUser": "check.example.com", "PServerIP": "1.1.1.1" },
-                        { "Name": "Servidor EUA 02", "FLAG": "", "ServerIP": "192.168.1.2", "ServerPort": "80", "SSLPort": "22", "CheckUser": "check.example.com", "PServerIP": "8.8.8.8" }
+                        { "Name": "Servidor Brasil 01", "FLAG": "https://flagsapi.com/BR/flat/64.png", "ServerIP": "192.168.1.1", "ServerPort": "8080", "SSLPort": "443", "CheckUser": "check.example.com", "PServerIP": "1.1.1.1" },
+                        { "Name": "Servidor EUA 02", "FLAG": "https://flagsapi.com/US/flat/64.png", "ServerIP": "192.168.1.2", "ServerPort": "80", "SSLPort": "22", "CheckUser": "check.example.com", "PServerIP": "8.8.8.8" }
                     ],
                     "Networks": [
-                        { "Name": "Claro Net", "FLAG": "", "Payload": "GET http://google.com/", "SNI": "example.com", "TlsIP": "1.1.1.1", "ProxyIP": "proxy.example.com", "ProxyPort": "80", "Info": "Direta" },
-                        { "Name": "Vivo Fibra", "FLAG": "", "Payload": "CONNECT [host_port]", "SNI": "vivo.com", "TlsIP": "8.8.8.8", "ProxyIP": "proxy2.example.com", "ProxyPort": "443", "Info": "Proxy" }
+                        { "Name": "Claro Net", "FLAG": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Claro_Brasil_logo.svg/langpt-220px-Claro_Brasil_logo.svg.png", "Payload": "GET http://google.com/", "SNI": "example.com", "TlsIP": "1.1.1.1", "ProxyIP": "proxy.example.com", "ProxyPort": "80", "Info": "Direta" },
+                        { "Name": "Vivo Fibra", "FLAG": "https://logospng.org/download/vivo/logo-vivo-4096.png", "Payload": "CONNECT [host_port]", "SNI": "vivo.com", "TlsIP": "8.8.8.8", "ProxyIP": "proxy2.example.com", "ProxyPort": "443", "Info": "Proxy" }
                     ],
                     "USER": "teste_user",
                     "PASS": "12345",
-                    "LogoLink": "",
+                    "LogoLink": "https://static.wikia.nocookie.net/kakegurui/images/b/b3/Yumeko_Jabami_icon.png/revision/latest?cb=20180226190437",
                     "Rodape": "Yumeko 6G Pro &copy; 2024 | Versão Teste",
                     "ServerPos": 0,
                     "PayloadPos": 0,
@@ -1185,5 +1187,5 @@
             }
         });
     </script>
-</body>
+<script src="carregarDados.js"></script></body>
 </html>
