@@ -17,6 +17,7 @@
             --text-color: #ffffff;
             --card-bg: rgba(255, 255, 255, 0.1);
             --transition: all 0.3s ease;
+            --selected-border: 3px solid #4CAF50;
         }
 
         * {
@@ -41,6 +42,67 @@
             padding: 10px;
         }
 
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-pill {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-pill.connected {
+            background: rgba(76, 175, 80, 0.3);
+        }
+
+        .status-pill.disconnected {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        .status-pill.connecting {
+            background: rgba(255, 152, 0, 0.3);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.connected {
+            background: var(--success-color);
+        }
+
+        .status-dot.disconnected {
+            background: var(--danger-color);
+        }
+
+        .status-dot.connecting {
+            background: var(--warning-color);
+            animation: pulse 1.5s infinite;
+        }
+
+        .logo {
+            width: 50px;
+            height: auto;
+            border-radius: 50%;
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -48,62 +110,62 @@
             margin-bottom: 20px;
         }
 
-        .logo {
-            width: 80px;
-            height: auto;
-            border-radius: 50%;
-        }
-
-        .status-bar {
+        .header-info {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: flex-end;
         }
 
-        .status-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 15px;
-            width: 48%;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-        }
-
-        .status-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .status-card h3 {
-            font-size: 14px;
-            margin-bottom: 5px;
-            opacity: 0.8;
-        }
-
-        .status-card p {
+        .app-name {
             font-size: 18px;
             font-weight: bold;
         }
 
-        .server-card {
+        .app-version {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .selection-section {
+            margin-bottom: 20px;
+        }
+
+        .selection-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .selection-title i {
+            margin-right: 8px;
+        }
+
+        .selection-cards {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .selection-card {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 10px;
             padding: 15px;
-            margin-bottom: 15px;
+            flex: 1;
             display: flex;
             align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: var(--transition);
+            min-height: 80px;
         }
 
-        .server-card:hover {
+        .selection-card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .server-icon {
+        .selection-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -111,16 +173,16 @@
             object-fit: cover;
         }
 
-        .server-info {
+        .selection-info {
             flex: 1;
         }
 
-        .server-name {
-            font-weight: bold;
+        .selection-name {
+            font-weight: 500;
             margin-bottom: 3px;
         }
 
-        .server-desc {
+        .selection-desc {
             font-size: 12px;
             opacity: 0.7;
         }
@@ -130,7 +192,7 @@
             color: white;
             border: none;
             border-radius: 30px;
-            padding: 15px 0;
+            padding: 16px 0;
             width: 100%;
             font-size: 16px;
             font-weight: bold;
@@ -138,6 +200,15 @@
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
             transition: var(--transition);
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:focus {
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
         }
 
         .action-btn:hover {
@@ -147,6 +218,10 @@
 
         .action-btn.stop {
             background: linear-gradient(to right, var(--danger-color), #e53935);
+        }
+
+        .action-btn .btn-icon {
+            font-size: 20px;
         }
 
         .login-form {
@@ -184,6 +259,7 @@
             outline: none;
             border-color: var(--secondary-color);
             background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.3);
         }
 
         .password-field {
@@ -198,17 +274,25 @@
             cursor: pointer;
             color: var(--text-color);
             opacity: 0.7;
+            background: none;
+            border: none;
+            font-size: 18px;
         }
 
         .stats {
             display: flex;
             justify-content: space-between;
             margin-bottom: 15px;
+            gap: 8px;
         }
 
         .stat-item {
             text-align: center;
             flex: 1;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 10px 5px;
         }
 
         .stat-value {
@@ -222,24 +306,158 @@
             opacity: 0.7;
         }
 
-        .logs-container {
+        .logs-button {
+            width: 100%;
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 10px;
-            padding: 15px;
-            max-height: 200px;
+            border: none;
+            color: var(--text-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .logs-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--dark-color);
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-title i {
+            font-size: 24px;
+        }
+
+        .server-list, .payload-list {
+            max-height: 300px;
             overflow-y: auto;
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .server-item, .payload-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .server-item:hover, .payload-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .server-item.selected, .payload-item.selected {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .server-icon, .payload-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .server-info, .payload-info {
+            flex: 1;
+        }
+
+        .server-name, .payload-name {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .server-details, .payload-details {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .logs-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
         }
 
         .log-entry {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
             margin-bottom: 5px;
             padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             word-break: break-word;
+            line-height: 1.4;
         }
 
         .log-entry.info {
@@ -258,211 +476,202 @@
             color: var(--warning-color);
         }
 
-        .footer {
+        .connection-time {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
             text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            opacity: 0.7;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
         }
 
-        .menu-btn {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: var(--dark-color);
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .server-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .server-item {
-            display: flex;
-            align-items: center;
+        .version-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
             padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .server-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .server-item img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            margin-right: 15px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 480px) {
-            .status-card {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .status-bar {
-                flex-direction: column;
-            }
-
-            .stats {
-                flex-direction: column;
-            }
-
-            .stat-item {
-                margin-bottom: 10px;
-            }
+            text-align: center;
+            font-size: 13px;
+            margin-top: 15px;
         }
 
         /* Animation classes */
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
         @keyframes pulse {
             0% { opacity: 0.6; }
             50% { opacity: 1; }
             100% { opacity: 0.6; }
         }
 
-        .connected {
-            color: var(--success-color) !important;
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
-        .disconnected {
-            color: var(--danger-color) !important;
+        /* Responsividade */
+        @media (max-width: 480px) {
+            .selection-cards {
+                flex-direction: column;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                margin-bottom: 8px;
+            }
         }
 
-        .connecting {
-            color: var(--warning-color) !important;
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Top Bar - KB e Status -->
+        <div class="top-bar">
+            <div class="status-container">
+                <div class="status-pill">
+                    <span class="stat-label">Download:</span>
+                    <span class="stat-value" id="download-stat">0 KB</span>
+                </div>
+                <div class="status-pill">
+                    <span class="stat-label">Upload:</span>
+                    <span class="stat-value" id="upload-stat">0 KB</span>
+                </div>
+            </div>
+            
+            <div class="status-container">
+                <div class="status-pill disconnected" id="connection-status-pill">
+                    <span class="status-dot disconnected"></span>
+                    <span id="connection-status-text">Desconectado</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header com logo e versão -->
         <div class="header">
-            <img id="app-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Logo" class="logo">
-            <button class="menu-btn" onclick="Android.switchToNativeMode()">☰</button>
-        </div>
-
-        <div class="status-bar">
-            <div class="status-card">
-                <h3>Status</h3>
-                <p id="connection-status" class="disconnected">Desconectado</p>
-            </div>
-            <div class="status-card">
-                <h3>Online</h3>
-                <p id="online-status">0</p>
+            <img id="app-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Logo" class="logo">
+            
+            <div class="header-info">
+                <div class="app-name">Yumeko 6G Pro</div>
+                <div class="app-version" id="app-version">Versão: v1.0</div>
             </div>
         </div>
 
-        <div class="server-card" onclick="openServerModal()">
-            <img id="server-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Server" class="server-icon">
-            <div class="server-info">
-                <div class="server-name" id="server-name">Selecione um servidor</div>
-                <div class="server-desc">Toque para alterar</div>
+        <!-- Cards de seleção -->
+        <div class="selection-section">
+            <div class="selection-cards">
+                <div class="selection-card" id="server-card" onclick="openServerModal()">
+                    <img id="server-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Server" class="selection-icon">
+                    <div class="selection-info">
+                        <div class="selection-name" id="server-name">Selecione um servidor</div>
+                        <div class="selection-desc">Toque para alterar</div>
+                    </div>
+                </div>
+                
+                <div class="selection-card" id="payload-card" onclick="openPayloadModal()">
+                    <img id="payload-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Payload" class="selection-icon">
+                    <div class="selection-info">
+                        <div class="selection-name" id="payload-name">Selecione uma operadora</div>
+                        <div class="selection-desc">Toque para alterar</div>
+                    </div>
+                </div>
             </div>
-            <div>></div>
         </div>
 
-        <div class="server-card" onclick="openPayloadModal()">
-            <img id="payload-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Payload" class="server-icon">
-            <div class="payload-info">
-                <div class="payload-name" id="payload-name">Selecione uma operadora</div>
-                <div class="payload-desc">Toque para alterar</div>
-            </div>
-            <div>></div>
-        </div>
-
+        <!-- Formulário de credenciais -->
         <div class="login-form">
             <div class="form-group">
                 <label for="username">Usuário</label>
-                <input type="text" id="username" class="form-control" placeholder="Digite seu usuário">
+                <input type="text" id="username" class="form-control" 
+                       placeholder="Digite seu usuário"
+                       aria-required="true">
             </div>
             <div class="form-group password-field">
                 <label for="password">Senha</label>
-                <input type="password" id="password" class="form-control" placeholder="Digite sua senha">
-                <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                <input type="password" id="password" class="form-control" 
+                       placeholder="Digite sua senha"
+                       aria-required="true">
+                <button class="toggle-password" aria-label="Mostrar senha" onclick="togglePassword()">
+                    👁️
+                </button>
             </div>
-            <button class="action-btn" id="connect-btn" onclick="handleConnectClick()">Conectar</button>
+            <button class="action-btn" id="connect-btn" onclick="handleConnectClick()">
+                <span class="btn-icon">🔒</span>
+                <span id="connect-btn-text">Conectar</span>
+            </button>
         </div>
 
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-value" id="download-stat">0 KB</div>
-                <div class="stat-label">Download</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="upload-stat">0 KB</div>
-                <div class="stat-label">Upload</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="version-stat">v1.2</div>
-                <div class="stat-label">Versão</div>
-            </div>
-        </div>
+        <!-- Botão de Logs -->
+        <button class="logs-button" onclick="openLogsModal()">
+            <span class="btn-icon">📝</span>
+            Ver Logs de Conexão
+        </button>
 
-        <div class="logs-container" id="logs-container">
-            <div class="log-entry info">Sistema inicializado</div>
-            <div class="log-entry">Aguardando conexão...</div>
-        </div>
-
+        <!-- Footer -->
         <div class="footer">
             <p id="app-footer">Yumeko 6G Pro &copy; 2023 | Todos os direitos reservados</p>
         </div>
     </div>
 
+    <!-- Modal Servidor -->
     <div id="server-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('server-modal')">&times;</span>
-            <h2>Selecione um Servidor</h2>
+            <button class="close-modal" onclick="closeModal('server-modal')">&times;</button>
+            <div class="modal-title">
+                <span>🌐</span>
+                <h2>Selecione um Servidor</h2>
+            </div>
+            
             <div class="server-list" id="server-list">
-                </div>
+                <!-- Servidores serão carregados aqui -->
+            </div>
+            
+            <div class="version-info">
+                <span id="server-version">Versão do Config: v1.0</span>
+            </div>
         </div>
     </div>
 
+    <!-- Modal Operadora -->
     <div id="payload-modal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('payload-modal')">&times;</span>
-            <h2>Selecione uma Operadora</h2>
-            <div class="server-list" id="payload-list">
-                </div>
+            <button class="close-modal" onclick="closeModal('payload-modal')">&times;</button>
+            <div class="modal-title">
+                <span>📶</span>
+                <h2>Selecione uma Operadora</h2>
+            </div>
+            
+            <div class="payload-list" id="payload-list">
+                <!-- Operadoras serão carregadas aqui -->
+            </div>
+            
+            <div class="version-info">
+                <span id="payload-version">Versão do Config: v1.0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Logs -->
+    <div id="logs-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('logs-modal')">&times;</button>
+            <div class="modal-title">
+                <span>📋</span>
+                <h2>Logs de Conexão</h2>
+            </div>
+            
+            <div class="connection-time">
+                <span>Tempo de Conexão:</span>
+                <span id="connection-time">00:00:00</span>
+            </div>
+            
+            <div class="logs-container" id="modal-logs-container">
+                <!-- Logs serão carregados aqui -->
+            </div>
         </div>
     </div>
 
@@ -470,15 +679,17 @@
         // Variáveis globais
         let isPasswordVisible = false;
         let connectionStatus = "disconnected";
-        let serverData = [];    // Armazenará os dados completos dos servidores
-        let payloadData = [];   // Armazenará os dados completos das operadoras (Networks)
-        let selectedServerIndex = 0; // Para manter o controle do servidor selecionado
-        let selectedPayloadIndex = 0; // Para manter o controle da payload selecionada
+        let serverData = [];
+        let payloadData = [];
+        let selectedServerIndex = 0;
+        let selectedPayloadIndex = 0;
+        let connectionTimer = null;
+        let connectionSeconds = 0;
+        let logsContainer = null;
+        let modalLogsContainer = null;
 
-        // SVG Placeholder (base64 encoded) para quando não houver imagem
-        const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><rect width="24' +
-            '' +
-            '" height="24" fill="%236a11cb"/></svg>';
+        // SVG Placeholder
+        const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><rect width="24" height="24" fill="%236a11cb"/></svg>';
 
         // Função para alternar a visibilidade da senha
         function togglePassword() {
@@ -488,34 +699,38 @@
             isPasswordVisible = !isPasswordVisible;
             passwordField.type = isPasswordVisible ? 'text' : 'password';
             toggleIcon.textContent = isPasswordVisible ? '🙈' : '👁️';
+            toggleIcon.setAttribute('aria-label', isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha');
         }
 
-        // Funções para abrir/fechar modais
+        // Função para abrir modais
         function openServerModal() {
-            if (connectionStatus !== 'connected') {
-                document.getElementById('server-modal').style.display = 'block';
-                loadServers(); // Carrega os servidores quando o modal é aberto
-            } else {
-                addLog('Você precisa desconectar antes de mudar o servidor', 'warning');
-            }
+            document.getElementById('server-modal').style.display = 'block';
+            loadServers();
         }
 
         function openPayloadModal() {
-            if (connectionStatus !== 'connected') {
-                document.getElementById('payload-modal').style.display = 'block';
-                loadPayloads(); // Carrega os payloads quando o modal é aberto
-            } else {
-                addLog('Você precisa desconectar antes de mudar a operadora', 'warning');
-            }
+            document.getElementById('payload-modal').style.display = 'block';
+            loadPayloads();
         }
 
+        function openLogsModal() {
+            document.getElementById('logs-modal').style.display = 'block';
+            // Copia logs para o modal
+            modalLogsContainer.innerHTML = logsContainer.innerHTML;
+        }
+
+        // Função para fechar modais
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
 
         // Função para adicionar entradas de log
         function addLog(message, type = 'info') {
-            const logsContainer = document.getElementById('logs-container');
+            if (!logsContainer) {
+                logsContainer = document.getElementById('logs-container');
+                modalLogsContainer = document.getElementById('modal-logs-container');
+            }
+            
             const logEntry = document.createElement('div');
             logEntry.className = `log-entry ${type}`;
 
@@ -524,20 +739,26 @@
             const timestamp = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
             logEntry.textContent = `[${timestamp}] ${message}`;
-            logsContainer.insertBefore(logEntry, logsContainer.firstChild);
-
-            // Mantém apenas os últimos 50 logs
-            if (logsContainer.children.length > 50) {
-                logsContainer.removeChild(logsContainer.lastChild);
+            
+            // Adiciona ao container principal
+            logsContainer.appendChild(logEntry);
+            
+            // Se o modal de logs estiver aberto, adiciona lá também
+            if (document.getElementById('logs-modal').style.display === 'block') {
+                modalLogsContainer.appendChild(logEntry.cloneNode(true));
             }
-            // Role para o topo para ver o log mais recente
-            logsContainer.scrollTop = 0;
+            
+            // Scroll para o final
+            logsContainer.scrollTop = logsContainer.scrollHeight;
+            if (modalLogsContainer) {
+                modalLogsContainer.scrollTop = modalLogsContainer.scrollHeight;
+            }
         }
 
-        // Função para carregar servidores na lista do modal
+        // Função para carregar servidores no modal
         function loadServers() {
             const serverList = document.getElementById('server-list');
-            serverList.innerHTML = ''; // Limpa a lista existente
+            serverList.innerHTML = '';
 
             if (serverData.length === 0) {
                 serverList.innerHTML = '<div class="log-entry info">Nenhum servidor disponível.</div>';
@@ -546,15 +767,24 @@
 
             serverData.forEach((server, index) => {
                 const serverItem = document.createElement('div');
-                serverItem.className = 'server-item';
+                serverItem.className = `server-item ${index === selectedServerIndex ? 'selected' : ''}`;
                 serverItem.innerHTML = `
-                    <img src="${server.FlagUrl || SVG_PLACEHOLDER}" alt="${server.Name}">
-                    <div>
-                        <div>${server.Name}</div>
-                        <div style="font-size: 10px; opacity: 0.7;">IP: ${server.ServerIP || 'N/A'} | Porta: ${server.ServerPort || 'N/A'}</div>
+                    <img src="${server.FlagUrl || SVG_PLACEHOLDER}" 
+                         alt="${server.Name}" 
+                         class="server-icon">
+                    <div class="server-info">
+                        <div class="server-name">${server.Name}</div>
+                        <div class="server-details">
+                            ${server.ServerIP || 'IP não disponível'}:${server.ServerPort || '?'}
+                        </div>
                     </div>
                 `;
                 serverItem.onclick = () => {
+                    selectedServerIndex = index;
+                    document.getElementById('server-name').textContent = server.Name;
+                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
+                    
+                    // Notifica Android
                     if (typeof Android !== 'undefined' && Android !== null && typeof Android.onServidorSelecionado === 'function') {
                         Android.onServidorSelecionado(
                             index,
@@ -565,22 +795,19 @@
                             server.CheckUser,
                             server.PServerIP
                         );
-                    } else {
-                        addLog('Interface Android ou onServidorSelecionado não disponível.', 'error');
                     }
-                    selectedServerIndex = index;
-                    document.getElementById('server-name').textContent = server.Name;
-                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
+                    
                     closeModal('server-modal');
+                    addLog(`Servidor selecionado: ${server.Name}`, 'info');
                 };
                 serverList.appendChild(serverItem);
             });
         }
 
-        // Função para carregar payloads (operadoras) na lista do modal
+        // Função para carregar operadoras no modal
         function loadPayloads() {
             const payloadList = document.getElementById('payload-list');
-            payloadList.innerHTML = ''; // Limpa a lista existente
+            payloadList.innerHTML = '';
 
             if (payloadData.length === 0) {
                 payloadList.innerHTML = '<div class="log-entry info">Nenhuma operadora disponível.</div>';
@@ -589,15 +816,22 @@
 
             payloadData.forEach((payload, index) => {
                 const payloadItem = document.createElement('div');
-                payloadItem.className = 'server-item';
+                payloadItem.className = `payload-item ${index === selectedPayloadIndex ? 'selected' : ''}`;
                 payloadItem.innerHTML = `
-                    <img src="${payload.FlagUrl || SVG_PLACEHOLDER}" alt="${payload.Name}">
-                    <div>
-                        <div>${payload.Name}</div>
-                        <div style="font-size: 10px; opacity: 0.7;">Tipo: ${payload.Info || 'N/A'} | SNI: ${payload.SNI || 'N/A'}</div>
+                    <img src="${payload.FlagUrl || SVG_PLACEHOLDER}" 
+                         alt="${payload.Name}" 
+                         class="payload-icon">
+                    <div class="payload-info">
+                        <div class="payload-name">${payload.Name}</div>
+                        <div class="payload-details">Tipo: ${payload.Info || 'N/A'}</div>
                     </div>
                 `;
                 payloadItem.onclick = () => {
+                    selectedPayloadIndex = index;
+                    document.getElementById('payload-name').textContent = payload.Name;
+                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
+                    
+                    // Notifica Android
                     if (typeof Android !== 'undefined' && Android !== null && typeof Android.changePayload === 'function') {
                         Android.changePayload(
                             index,
@@ -609,13 +843,10 @@
                             payload.ProxyPort,
                             payload.Info
                         );
-                    } else {
-                        addLog('Interface Android ou changePayload não disponível.', 'error');
                     }
-                    selectedPayloadIndex = index;
-                    document.getElementById('payload-name').textContent = payload.Name;
-                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
+                    
                     closeModal('payload-modal');
+                    addLog(`Operadora selecionada: ${payload.Name}`, 'info');
                 };
                 payloadList.appendChild(payloadItem);
             });
@@ -627,115 +858,128 @@
                 const usernameInput = document.getElementById('username');
                 const passwordInput = document.getElementById('password');
 
+                // Validação básica
+                if (!usernameInput.value || !passwordInput.value) {
+                    addLog('Por favor, preencha usuário e senha', 'warning');
+                    return;
+                }
+
+                // Envia credenciais
                 if (typeof Android.onLogin === 'function') {
                     Android.onLogin(usernameInput.value, passwordInput.value);
                 }
 
+                // Inicia/para VPN
                 if (typeof Android.startStopVPN === 'function') {
                     Android.startStopVPN();
-                } else {
-                    addLog('Erro: Função Android.startStopVPN não disponível.', 'error');
                 }
-            } else {
-                addLog('Interface Android não disponível.', 'error');
             }
         }
 
-        // Função para atualizar o status da conexão (chamada pelo Android)
-        function updateStatus(status, serverName, payloadName, username, password) {
-            const statusElement = document.getElementById('connection-status');
+        // Função para atualizar o status da conexão
+        function updateStatus(status) {
+            const statusPill = document.getElementById('connection-status-pill');
+            const statusText = document.getElementById('connection-status-text');
+            const statusDot = statusPill.querySelector('.status-dot');
             const connectBtn = document.getElementById('connect-btn');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const serverNameDisplay = document.getElementById('server-name');
-            const payloadNameDisplay = document.getElementById('payload-name');
-
-            if (username && username !== 'null') usernameInput.value = username;
-            if (password && password !== 'null') passwordInput.value = password;
-            if (serverName && serverName !== 'null') serverNameDisplay.textContent = serverName;
-            if (payloadName && payloadName !== 'null') payloadNameDisplay.textContent = payloadName;
-
+            const connectBtnText = document.getElementById('connect-btn-text');
+            
             connectionStatus = status.toLowerCase();
-            statusElement.classList.remove('connected', 'disconnected', 'connecting', 'pulse');
+            
+            // Remove todas as classes de status
+            statusPill.className = 'status-pill';
+            statusDot.className = 'status-dot';
+            statusPill.classList.add(connectionStatus);
+            statusDot.classList.add(connectionStatus);
+            
+            // Para o temporizador se existir
+            if (connectionTimer) {
+                clearInterval(connectionTimer);
+                connectionSeconds = 0;
+                updateTimeDisplay();
+            }
 
             switch(connectionStatus) {
                 case 'connected':
-                    statusElement.textContent = 'Conectado';
-                    statusElement.classList.add('connected');
-                    connectBtn.textContent = 'Desconectar';
+                    statusText.textContent = 'Conectado';
+                    connectBtnText.textContent = 'Desconectar';
                     connectBtn.classList.add('stop');
-                    connectBtn.disabled = false;
                     addLog('Conexão estabelecida com sucesso', 'success');
+                    
+                    // Inicia o temporizador
+                    connectionTimer = setInterval(() => {
+                        connectionSeconds++;
+                        updateTimeDisplay();
+                    }, 1000);
                     break;
+                    
                 case 'connecting':
-                    statusElement.textContent = 'Conectando...';
-                    statusElement.classList.add('connecting', 'pulse');
-                    connectBtn.textContent = 'Conectando...';
+                    statusText.textContent = 'Conectando...';
+                    connectBtnText.textContent = 'Conectando...';
                     connectBtn.disabled = true;
                     addLog('Estabelecendo conexão...', 'info');
                     break;
+                    
                 case 'disconnected':
-                    statusElement.textContent = 'Desconectado';
-                    statusElement.classList.add('disconnected');
-                    connectBtn.textContent = 'Conectar';
+                    statusText.textContent = 'Desconectado';
+                    connectBtnText.textContent = 'Conectar';
                     connectBtn.classList.remove('stop');
                     connectBtn.disabled = false;
                     addLog('Desconectado', 'info');
                     break;
+                    
                 case 'autenticando':
-                    statusElement.textContent = 'Autenticando...';
-                    statusElement.classList.add('connecting', 'pulse');
+                    statusText.textContent = 'Autenticando...';
                     connectBtn.disabled = true;
                     addLog('Autenticando usuário...', 'info');
                     break;
+                    
                 case 'falha na autenticação':
-                    statusElement.textContent = 'Falha na autenticação';
-                    statusElement.classList.add('disconnected');
-                    connectBtn.textContent = 'Conectar';
+                    statusText.textContent = 'Falha na autenticação';
+                    connectBtnText.textContent = 'Conectar';
                     connectBtn.classList.remove('stop');
                     connectBtn.disabled = false;
                     addLog('Falha na autenticação - Verifique usuário e senha', 'error');
                     break;
+                    
                 default:
-                    statusElement.textContent = status;
-                    statusElement.classList.add('info');
+                    statusText.textContent = status;
             }
         }
 
-        // Função para atualizar estatísticas (chamada pelo Android)
+        // Atualiza a exibição do tempo de conexão
+        function updateTimeDisplay() {
+            const hours = Math.floor(connectionSeconds / 3600);
+            const minutes = Math.floor((connectionSeconds % 3600) / 60);
+            const seconds = connectionSeconds % 60;
+            
+            const formattedTime = 
+                hours.toString().padStart(2, '0') + ':' +
+                minutes.toString().padStart(2, '0') + ':' +
+                seconds.toString().padStart(2, '0');
+                
+            document.getElementById('connection-time').textContent = formattedTime;
+        }
+
+        // Função para atualizar estatísticas
         function updateStats(download, upload) {
             document.getElementById('download-stat').textContent = download;
             document.getElementById('upload-stat').textContent = upload;
         }
 
-        // Função para atualizar contagem de usuários online (chamada pelo Android)
-        function updateOnlineStatus(count) {
-            const onlineElement = document.getElementById('online-status');
-            onlineElement.textContent = count;
-
-            if (count <= 29) {
-                onlineElement.style.color = '#228b22';
-            } else if (count <= 69) {
-                onlineElement.style.color = '#ffbc40';
-            } else {
-                onlineElement.style.color = '#FF0000';
-            }
-        }
-
-        // *** AQUI ESTÁ A MUDANÇA NO JAVASCRIPT: AGORA RECEBE UM OBJETO DIRETAMENTE! ***
-        function carregarDados(data) { // O parâmetro 'data' agora é o objeto JavaScript
-            addLog('Recebendo dados de configuração do Android...', 'info');
+        // Função principal para carregar dados
+        function carregarDados(data) {
             try {
-                // Não precisa de JSON.parse() aqui, 'data' já é um objeto
-                const config = data; // Apenas atribua diretamente!
+                const config = data;
 
-                console.log("Recebi o OBJETO no JavaScript:", config); // Para depuração
-                console.log("Tipo da variável recebida:", typeof config); // Deve ser 'object' agora
-
+                // Versão
                 if (config.Version) {
-                    document.getElementById('version-stat').textContent = `v${config.Version}`;
+                    document.getElementById('app-version').textContent = `Versão: v${config.Version}`;
+                    document.getElementById('server-version').textContent = `Versão do Config: v${config.Version}`;
+                    document.getElementById('payload-version').textContent = `Versão do Config: v${config.Version}`;
                 }
 
+                // Servidores
                 if (config.Servers && Array.isArray(config.Servers)) {
                     serverData = config.Servers.map(server => ({
                         Name: server.Name || 'Servidor Desconhecido',
@@ -751,6 +995,7 @@
                     addLog('Nenhum servidor encontrado na configuração.', 'warning');
                 }
 
+                // Operadoras (Payloads)
                 if (config.Networks && Array.isArray(config.Networks)) {
                     payloadData = config.Networks.map(network => ({
                         Name: network.Name || 'Operadora Desconhecida',
@@ -764,79 +1009,83 @@
                     }));
                 } else {
                     payloadData = [];
-                    addLog('Nenhuma operadora (payload) encontrada na configuração.', 'warning');
+                    addLog('Nenhuma operadora encontrada na configuração.', 'warning');
                 }
 
+                // Credenciais
                 const usernameInput = document.getElementById('username');
                 const passwordInput = document.getElementById('password');
-                if (config.USER) {
-                    usernameInput.value = config.USER;
-                }
-                if (config.PASS) {
-                    passwordInput.value = config.PASS;
-                }
+                if (config.USER) usernameInput.value = config.USER;
+                if (config.PASS) passwordInput.value = config.PASS;
 
-                if (config.LogoLink) {
-                    document.getElementById('app-logo').src = config.LogoLink;
-                }
-                if (config.Rodape) {
-                    document.getElementById('app-footer').textContent = config.Rodape;
-                }
+                // Logo e rodapé
+                if (config.LogoLink) document.getElementById('app-logo').src = config.LogoLink;
+                if (config.Rodape) document.getElementById('app-footer').textContent = config.Rodape;
 
-                selectedServerIndex = (config.ServerPos !== undefined && config.ServerPos < serverData.length) ? config.ServerPos : 0;
-                selectedPayloadIndex = (config.PayloadPos !== undefined && config.PayloadPos < payloadData.length) ? config.PayloadPos : 0;
+                // Índices selecionados
+                selectedServerIndex = config.ServerPos || 0;
+                selectedPayloadIndex = config.PayloadPos || 0;
 
+                // Atualiza seleções na UI
                 if (serverData.length > 0) {
-                    const currentServer = serverData[selectedServerIndex];
-                    document.getElementById('server-name').textContent = currentServer.Name;
-                    document.getElementById('server-icon').src = currentServer.FlagUrl;
-                } else {
-                    document.getElementById('server-name').textContent = 'Nenhum servidor disponível';
-                    document.getElementById('server-icon').src = SVG_PLACEHOLDER;
+                    const server = serverData[selectedServerIndex];
+                    document.getElementById('server-name').textContent = server.Name;
+                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
                 }
 
                 if (payloadData.length > 0) {
-                    const currentPayload = payloadData[selectedPayloadIndex];
-                    document.getElementById('payload-name').textContent = currentPayload.Name;
-                    document.getElementById('payload-icon').src = currentPayload.FlagUrl;
-                } else {
-                    document.getElementById('payload-name').textContent = 'Nenhuma operadora disponível';
-                    document.getElementById('payload-icon').src = SVG_PLACEHOLDER;
+                    const payload = payloadData[selectedPayloadIndex];
+                    document.getElementById('payload-name').textContent = payload.Name;
+                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
+                }
+
+                // Status da conexão
+                if (config.status) {
+                    updateStatus(config.status);
                 }
 
                 addLog('Configurações carregadas com sucesso', 'success');
 
             } catch (e) {
                 addLog('Erro ao carregar configurações: ' + e.message, 'error');
-                console.error("Erro ao carregar configurações (JS - nova lógica):", e); // Para depuração no console
             }
         }
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            addLog('Inicializando interface...');
+            addLog('Sistema inicializado');
+            addLog('Aguardando configuração...', 'info');
 
+            // Foco no primeiro campo ao carregar
+            document.getElementById('username').focus();
+
+            // Eventos para campos de credenciais
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
-
+            
             usernameInput.addEventListener('blur', function() {
                 if (typeof Android !== 'undefined' && typeof Android.onLogin === 'function') {
                     Android.onLogin(usernameInput.value, passwordInput.value);
                 }
             });
-
+            
             passwordInput.addEventListener('blur', function() {
                 if (typeof Android !== 'undefined' && typeof Android.onLogin === 'function') {
                     Android.onLogin(usernameInput.value, passwordInput.value);
                 }
             });
-
-            const connectButton = document.getElementById('connect-btn');
-            if (connectButton) {
-                connectButton.addEventListener('click', handleConnectClick);
+            
+            // Tecla Enter no campo de senha
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    handleConnectClick();
+                }
+            });
+            
+            // Solicita configurações imediatamente
+            if (typeof Android !== 'undefined' && typeof Android.requisitarConfig === 'function') {
+                Android.requisitarConfig();
             }
-
-            addLog('Aguardando dados de configuração do Android...', 'info');
         });
     </script>
 </body>
