@@ -476,7 +476,9 @@
         let selectedPayloadIndex = 0; // Para manter o controle da payload selecionada
 
         // SVG Placeholder (base64 encoded) para quando não houver imagem
-        const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><rect width="24" height="24" fill="%236a11cb"/></svg>';
+        const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><rect width="24' +
+            '' +
+            '" height="24" fill="%236a11cb"/></svg>';
 
         // Função para alternar a visibilidade da senha
         function togglePassword() {
@@ -519,7 +521,7 @@
 
             // Adiciona timestamp
             const now = new Date();
-            const timestamp = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); // Formato hh:mm:ss
+            const timestamp = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
             logEntry.textContent = `[${timestamp}] ${message}`;
             logsContainer.insertBefore(logEntry, logsContainer.firstChild);
@@ -529,7 +531,7 @@
                 logsContainer.removeChild(logsContainer.lastChild);
             }
             // Role para o topo para ver o log mais recente
-            logsContainer.scrollTop = 0; // Sempre rola para o topo para mostrar o log mais novo
+            logsContainer.scrollTop = 0;
         }
 
         // Função para carregar servidores na lista do modal
@@ -554,7 +556,6 @@
                 `;
                 serverItem.onclick = () => {
                     if (typeof Android !== 'undefined' && Android !== null && typeof Android.onServidorSelecionado === 'function') {
-                        // Passa o índice do servidor e os dados completos
                         Android.onServidorSelecionado(
                             index,
                             server.Name,
@@ -567,7 +568,7 @@
                     } else {
                         addLog('Interface Android ou onServidorSelecionado não disponível.', 'error');
                     }
-                    selectedServerIndex = index; // Atualiza o índice selecionado no JS
+                    selectedServerIndex = index;
                     document.getElementById('server-name').textContent = server.Name;
                     document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
                     closeModal('server-modal');
@@ -598,7 +599,6 @@
                 `;
                 payloadItem.onclick = () => {
                     if (typeof Android !== 'undefined' && Android !== null && typeof Android.changePayload === 'function') {
-                        // Passa o índice do payload e os dados completos
                         Android.changePayload(
                             index,
                             payload.Name,
@@ -612,7 +612,7 @@
                     } else {
                         addLog('Interface Android ou changePayload não disponível.', 'error');
                     }
-                    selectedPayloadIndex = index; // Atualiza o índice selecionado no JS
+                    selectedPayloadIndex = index;
                     document.getElementById('payload-name').textContent = payload.Name;
                     document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
                     closeModal('payload-modal');
@@ -627,7 +627,6 @@
                 const usernameInput = document.getElementById('username');
                 const passwordInput = document.getElementById('password');
 
-                // Garante que o usuário e a senha são enviados para o Android antes de iniciar/parar a VPN
                 if (typeof Android.onLogin === 'function') {
                     Android.onLogin(usernameInput.value, passwordInput.value);
                 }
@@ -642,7 +641,6 @@
             }
         }
 
-
         // Função para atualizar o status da conexão (chamada pelo Android)
         function updateStatus(status, serverName, payloadName, username, password) {
             const statusElement = document.getElementById('connection-status');
@@ -652,15 +650,13 @@
             const serverNameDisplay = document.getElementById('server-name');
             const payloadNameDisplay = document.getElementById('payload-name');
 
-            // Atualiza campos de texto se os valores forem fornecidos e não forem "null" string
             if (username && username !== 'null') usernameInput.value = username;
             if (password && password !== 'null') passwordInput.value = password;
             if (serverName && serverName !== 'null') serverNameDisplay.textContent = serverName;
             if (payloadName && payloadName !== 'null') payloadNameDisplay.textContent = payloadName;
 
-            // Atualiza status da conexão
             connectionStatus = status.toLowerCase();
-            statusElement.classList.remove('connected', 'disconnected', 'connecting', 'pulse'); // Limpa classes anteriores
+            statusElement.classList.remove('connected', 'disconnected', 'connecting', 'pulse');
 
             switch(connectionStatus) {
                 case 'connected':
@@ -668,14 +664,14 @@
                     statusElement.classList.add('connected');
                     connectBtn.textContent = 'Desconectar';
                     connectBtn.classList.add('stop');
-                    connectBtn.disabled = false; // Habilita o botão para desconectar
+                    connectBtn.disabled = false;
                     addLog('Conexão estabelecida com sucesso', 'success');
                     break;
                 case 'connecting':
                     statusElement.textContent = 'Conectando...';
                     statusElement.classList.add('connecting', 'pulse');
                     connectBtn.textContent = 'Conectando...';
-                    connectBtn.disabled = true; // Desabilita o botão durante a conexão
+                    connectBtn.disabled = true;
                     addLog('Estabelecendo conexão...', 'info');
                     break;
                 case 'disconnected':
@@ -683,7 +679,7 @@
                     statusElement.classList.add('disconnected');
                     connectBtn.textContent = 'Conectar';
                     connectBtn.classList.remove('stop');
-                    connectBtn.disabled = false; // Habilita o botão para conectar
+                    connectBtn.disabled = false;
                     addLog('Desconectado', 'info');
                     break;
                 case 'autenticando':
@@ -702,7 +698,7 @@
                     break;
                 default:
                     statusElement.textContent = status;
-                    statusElement.classList.add('info'); // Default class
+                    statusElement.classList.add('info');
             }
         }
 
@@ -717,31 +713,31 @@
             const onlineElement = document.getElementById('online-status');
             onlineElement.textContent = count;
 
-            // Muda a cor baseado no número de usuários
             if (count <= 29) {
-                onlineElement.style.color = '#228b22'; // Verde
+                onlineElement.style.color = '#228b22';
             } else if (count <= 69) {
-                onlineElement.style.color = '#ffbc40'; // Laranja
+                onlineElement.style.color = '#ffbc40';
             } else {
-                onlineElement.style.color = '#FF0000'; // Vermelho
+                onlineElement.style.color = '#FF0000';
             }
         }
 
-        // Função para carregar dados do JSON (chamada pelo Android)
-        // ESSA FUNÇÃO É CHAMADA PELO ANDROID. Ela NÃO CHAMA Android.requisitarConfig()
-        function carregarDados(jsonString) {
+        // *** AQUI ESTÁ A MUDANÇA NO JAVASCRIPT: AGORA RECEBE UM OBJETO DIRETAMENTE! ***
+        function carregarDados(data) { // O parâmetro 'data' agora é o objeto JavaScript
             addLog('Recebendo dados de configuração do Android...', 'info');
             try {
-                const data = JSON.parse(jsonString);
+                // Não precisa de JSON.parse() aqui, 'data' já é um objeto
+                const config = data; // Apenas atribua diretamente!
 
-                // Atualiza versão
-                if (data.Version) {
-                    document.getElementById('version-stat').textContent = `v${data.Version}`;
+                console.log("Recebi o OBJETO no JavaScript:", config); // Para depuração
+                console.log("Tipo da variável recebida:", typeof config); // Deve ser 'object' agora
+
+                if (config.Version) {
+                    document.getElementById('version-stat').textContent = `v${config.Version}`;
                 }
 
-                // Processa servidores
-                if (data.Servers && Array.isArray(data.Servers)) {
-                    serverData = data.Servers.map(server => ({
+                if (config.Servers && Array.isArray(config.Servers)) {
+                    serverData = config.Servers.map(server => ({
                         Name: server.Name || 'Servidor Desconhecido',
                         ServerIP: server.ServerIP || '',
                         FlagUrl: server.FLAG || SVG_PLACEHOLDER,
@@ -755,9 +751,8 @@
                     addLog('Nenhum servidor encontrado na configuração.', 'warning');
                 }
 
-                // Processa payloads (Networks)
-                if (data.Networks && Array.isArray(data.Networks)) {
-                    payloadData = data.Networks.map(network => ({
+                if (config.Networks && Array.isArray(config.Networks)) {
+                    payloadData = config.Networks.map(network => ({
                         Name: network.Name || 'Operadora Desconhecida',
                         FlagUrl: network.FLAG || SVG_PLACEHOLDER,
                         Payload: network.Payload || '',
@@ -772,30 +767,25 @@
                     addLog('Nenhuma operadora (payload) encontrada na configuração.', 'warning');
                 }
 
-                // Define usuário e senha iniciais se disponíveis na configuração
                 const usernameInput = document.getElementById('username');
                 const passwordInput = document.getElementById('password');
-                if (data.USER) {
-                    usernameInput.value = data.USER;
+                if (config.USER) {
+                    usernameInput.value = config.USER;
                 }
-                if (data.PASS) {
-                    passwordInput.value = data.PASS;
-                }
-
-                // Atualiza a logo e o rodapé se as URLs estiverem no JSON
-                if (data.LogoLink) {
-                    document.getElementById('app-logo').src = data.LogoLink;
-                }
-                if (data.Rodape) {
-                    document.getElementById('app-footer').textContent = data.Rodape;
+                if (config.PASS) {
+                    passwordInput.value = config.PASS;
                 }
 
-                // Define o servidor e payload selecionados com base nos índices recebidos do Android
-                // Garante que o índice não exceda o tamanho do array
-                selectedServerIndex = (data.ServerPos !== undefined && data.ServerPos < serverData.length) ? data.ServerPos : 0;
-                selectedPayloadIndex = (data.PayloadPos !== undefined && data.PayloadPos < payloadData.length) ? data.PayloadPos : 0;
+                if (config.LogoLink) {
+                    document.getElementById('app-logo').src = config.LogoLink;
+                }
+                if (config.Rodape) {
+                    document.getElementById('app-footer').textContent = config.Rodape;
+                }
 
-                // Popula seleções iniciais na interface com base nos índices
+                selectedServerIndex = (config.ServerPos !== undefined && config.ServerPos < serverData.length) ? config.ServerPos : 0;
+                selectedPayloadIndex = (config.PayloadPos !== undefined && config.PayloadPos < payloadData.length) ? config.PayloadPos : 0;
+
                 if (serverData.length > 0) {
                     const currentServer = serverData[selectedServerIndex];
                     document.getElementById('server-name').textContent = currentServer.Name;
@@ -818,7 +808,7 @@
 
             } catch (e) {
                 addLog('Erro ao carregar configurações: ' + e.message, 'error');
-                console.error("Erro ao carregar configurações:", e); // Para depuração no console
+                console.error("Erro ao carregar configurações (JS - nova lógica):", e); // Para depuração no console
             }
         }
 
@@ -829,7 +819,6 @@
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
 
-            // Envia usuário/senha para o Android sempre que perdem o foco
             usernameInput.addEventListener('blur', function() {
                 if (typeof Android !== 'undefined' && typeof Android.onLogin === 'function') {
                     Android.onLogin(usernameInput.value, passwordInput.value);
@@ -842,15 +831,11 @@
                 }
             });
 
-            // Adicionar um listener ao botão de conectar para garantir que as credenciais sejam enviadas
             const connectButton = document.getElementById('connect-btn');
             if (connectButton) {
                 connectButton.addEventListener('click', handleConnectClick);
             }
 
-            // Você não precisa chamar Android.requisitarConfig() aqui.
-            // O Android, em seu lado nativo, deve chamar a função `carregarDados`
-            // logo após a WebView ser carregada e estar pronta para receber dados.
             addLog('Aguardando dados de configuração do Android...', 'info');
         });
     </script>
