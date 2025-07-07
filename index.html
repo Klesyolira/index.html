@@ -506,6 +506,21 @@
             animation: pulse 2s infinite;
         }
 
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         /* Responsividade */
         @media (max-width: 480px) {
             .selection-cards {
@@ -519,6 +534,16 @@
             .stat-item {
                 margin-bottom: 8px;
             }
+
+            .top-bar {
+                flex-direction: column-reverse; /* Put stats below back button/connection */
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .status-container {
+                flex-wrap: wrap;
+            }
         }
 
         @media (min-width: 768px) {
@@ -530,8 +555,10 @@
 </head>
 <body>
     <div class="container">
-        <!-- Top Bar - KB e Status -->
         <div class="top-bar">
+            <button class="back-button" onclick="goBack()" aria-label="Voltar">
+                &#x2190; </button>
+
             <div class="status-container">
                 <div class="status-pill">
                     <span class="stat-label">Download:</span>
@@ -551,7 +578,6 @@
             </div>
         </div>
 
-        <!-- Header com logo e versão -->
         <div class="header">
             <img id="app-logo" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'><rect width='24' height='24' fill='%236a11cb'/></svg>" alt="Logo" class="logo">
             
@@ -561,7 +587,6 @@
             </div>
         </div>
 
-        <!-- Cards de seleção -->
         <div class="selection-section">
             <div class="selection-cards">
                 <div class="selection-card" id="server-card" onclick="openServerModal()">
@@ -582,7 +607,6 @@
             </div>
         </div>
 
-        <!-- Formulário de credenciais -->
         <div class="login-form">
             <div class="form-group">
                 <label for="username">Usuário</label>
@@ -605,19 +629,16 @@
             </button>
         </div>
 
-        <!-- Botão de Logs -->
         <button class="logs-button" onclick="openLogsModal()">
             <span class="btn-icon">📝</span>
             Ver Logs de Conexão
         </button>
 
-        <!-- Footer -->
         <div class="footer">
             <p id="app-footer">Yumeko 6G Pro &copy; 2023 | Todos os direitos reservados</p>
         </div>
     </div>
 
-    <!-- Modal Servidor -->
     <div id="server-modal" class="modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal('server-modal')">&times;</button>
@@ -627,8 +648,7 @@
             </div>
             
             <div class="server-list" id="server-list">
-                <!-- Servidores serão carregados aqui -->
-            </div>
+                </div>
             
             <div class="version-info">
                 <span id="server-version">Versão do Config: v1.0</span>
@@ -636,7 +656,6 @@
         </div>
     </div>
 
-    <!-- Modal Operadora -->
     <div id="payload-modal" class="modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal('payload-modal')">&times;</button>
@@ -646,8 +665,7 @@
             </div>
             
             <div class="payload-list" id="payload-list">
-                <!-- Operadoras serão carregadas aqui -->
-            </div>
+                </div>
             
             <div class="version-info">
                 <span id="payload-version">Versão do Config: v1.0</span>
@@ -655,7 +673,6 @@
         </div>
     </div>
 
-    <!-- Modal Logs -->
     <div id="logs-modal" class="modal">
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal('logs-modal')">&times;</button>
@@ -670,8 +687,7 @@
             </div>
             
             <div class="logs-container" id="modal-logs-container">
-                <!-- Logs serão carregados aqui -->
-            </div>
+                </div>
         </div>
     </div>
 
@@ -705,12 +721,12 @@
         // Função para abrir modais
         function openServerModal() {
             document.getElementById('server-modal').style.display = 'block';
-            loadServers();
+            loadServers(); // Ensure servers are loaded and selection is visible
         }
 
         function openPayloadModal() {
             document.getElementById('payload-modal').style.display = 'block';
-            loadPayloads();
+            loadPayloads(); // Ensure payloads are loaded and selection is visible
         }
 
         function openLogsModal() {
@@ -724,11 +740,24 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
+        // --- Back Button Functionality ---
+        function goBack() {
+            if (typeof Android !== 'undefined' && Android !== null && typeof Android.onBackPressed === 'function') {
+                Android.onBackPressed();
+            } else {
+                // Fallback for browser testing or if Android bridge is not available
+                console.log("Back button pressed - no Android bridge found or onBackPressed not implemented.");
+                // You might want to add a browser-specific back behavior here if needed
+                // window.history.back(); 
+            }
+        }
+        // --- End Back Button Functionality ---
+
         // Função para adicionar entradas de log
         function addLog(message, type = 'info') {
             if (!logsContainer) {
-                logsContainer = document.getElementById('logs-container');
-                modalLogsContainer = document.getElementById('modal-logs-container');
+                logsContainer = document.getElementById('modal-logs-container'); // Changed to use modal-logs-container for consistency
+                modalLogsContainer = document.getElementById('modal-logs-container'); // Reference to the same element
             }
             
             const logEntry = document.createElement('div');
@@ -740,19 +769,11 @@
 
             logEntry.textContent = `[${timestamp}] ${message}`;
             
-            // Adiciona ao container principal
+            // Adiciona ao container principal (which is the modal's container)
             logsContainer.appendChild(logEntry);
-            
-            // Se o modal de logs estiver aberto, adiciona lá também
-            if (document.getElementById('logs-modal').style.display === 'block') {
-                modalLogsContainer.appendChild(logEntry.cloneNode(true));
-            }
             
             // Scroll para o final
             logsContainer.scrollTop = logsContainer.scrollHeight;
-            if (modalLogsContainer) {
-                modalLogsContainer.scrollTop = modalLogsContainer.scrollHeight;
-            }
         }
 
         // Função para carregar servidores no modal
@@ -784,6 +805,15 @@
                     document.getElementById('server-name').textContent = server.Name;
                     document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
                     
+                    // Update selection state in the modal list
+                    document.querySelectorAll('.server-item').forEach((item, i) => {
+                        if (i === selectedServerIndex) {
+                            item.classList.add('selected');
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+
                     // Notifica Android
                     if (typeof Android !== 'undefined' && Android !== null && typeof Android.onServidorSelecionado === 'function') {
                         Android.onServidorSelecionado(
@@ -831,6 +861,15 @@
                     document.getElementById('payload-name').textContent = payload.Name;
                     document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
                     
+                    // Update selection state in the modal list
+                    document.querySelectorAll('.payload-item').forEach((item, i) => {
+                        if (i === selectedPayloadIndex) {
+                            item.classList.add('selected');
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+
                     // Notifica Android
                     if (typeof Android !== 'undefined' && Android !== null && typeof Android.changePayload === 'function') {
                         Android.changePayload(
@@ -864,7 +903,8 @@
                     return;
                 }
 
-                // Envia credenciais
+                // Envia credenciais (should ideally be sent once when changed, not on every connect)
+                // However, keeping it here for consistency with original code's intent.
                 if (typeof Android.onLogin === 'function') {
                     Android.onLogin(usernameInput.value, passwordInput.value);
                 }
@@ -873,6 +913,8 @@
                 if (typeof Android.startStopVPN === 'function') {
                     Android.startStopVPN();
                 }
+            } else {
+                addLog('Android bridge não encontrado. Não é possível conectar/desconectar.', 'error');
             }
         }
 
@@ -895,6 +937,7 @@
             // Para o temporizador se existir
             if (connectionTimer) {
                 clearInterval(connectionTimer);
+                connectionTimer = null; // Reset the timer ID
                 connectionSeconds = 0;
                 updateTimeDisplay();
             }
@@ -904,6 +947,7 @@
                     statusText.textContent = 'Conectado';
                     connectBtnText.textContent = 'Desconectar';
                     connectBtn.classList.add('stop');
+                    connectBtn.disabled = false; // Enable button after successful connection
                     addLog('Conexão estabelecida com sucesso', 'success');
                     
                     // Inicia o temporizador
@@ -940,6 +984,14 @@
                     connectBtn.classList.remove('stop');
                     connectBtn.disabled = false;
                     addLog('Falha na autenticação - Verifique usuário e senha', 'error');
+                    break;
+                    
+                case 'error': // Added an explicit error case
+                    statusText.textContent = 'Erro';
+                    connectBtnText.textContent = 'Conectar';
+                    connectBtn.classList.remove('stop');
+                    connectBtn.disabled = false;
+                    addLog('Erro na conexão. Tente novamente.', 'error');
                     break;
                     
                 default:
@@ -1027,17 +1079,38 @@
                 selectedPayloadIndex = config.PayloadPos || 0;
 
                 // Atualiza seleções na UI
-                if (serverData.length > 0) {
+                // Only update if there's data to avoid errors
+                if (serverData.length > selectedServerIndex) {
                     const server = serverData[selectedServerIndex];
                     document.getElementById('server-name').textContent = server.Name;
                     document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
+                } else if (serverData.length > 0) { // If default index is out of bounds, select first
+                    selectedServerIndex = 0;
+                    const server = serverData[selectedServerIndex];
+                    document.getElementById('server-name').textContent = server.Name;
+                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
+                } else {
+                    document.getElementById('server-name').textContent = 'Nenhum servidor';
+                    document.getElementById('server-icon').src = SVG_PLACEHOLDER;
                 }
 
-                if (payloadData.length > 0) {
+                if (payloadData.length > selectedPayloadIndex) {
                     const payload = payloadData[selectedPayloadIndex];
                     document.getElementById('payload-name').textContent = payload.Name;
                     document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
+                } else if (payloadData.length > 0) { // If default index is out of bounds, select first
+                    selectedPayloadIndex = 0;
+                    const payload = payloadData[selectedPayloadIndex];
+                    document.getElementById('payload-name').textContent = payload.Name;
+                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
+                } else {
+                    document.getElementById('payload-name').textContent = 'Nenhuma operadora';
+                    document.getElementById('payload-icon').src = SVG_PLACEHOLDER;
                 }
+
+                // Update server and payload lists in modals to reflect selection
+                loadServers();
+                loadPayloads();
 
                 // Status da conexão
                 if (config.status) {
@@ -1053,6 +1126,9 @@
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
+            logsContainer = document.getElementById('modal-logs-container');
+            modalLogsContainer = document.getElementById('modal-logs-container'); // Ensure both point to the same element for simplified logging
+            
             addLog('Sistema inicializado');
             addLog('Aguardando configuração...', 'info');
 
@@ -1085,6 +1161,27 @@
             // Solicita configurações imediatamente
             if (typeof Android !== 'undefined' && typeof Android.requisitarConfig === 'function') {
                 Android.requisitarConfig();
+            } else {
+                addLog('Android bridge não encontrado. Carregando dados de exemplo (apenas para teste).', 'warning');
+                // Example data for testing in a browser without Android bridge
+                carregarDados({
+                    "Version": "1.1",
+                    "Servers": [
+                        { "Name": "Servidor Brasil 01", "FLAG": "", "ServerIP": "192.168.1.1", "ServerPort": "8080", "SSLPort": "443", "CheckUser": "check.example.com", "PServerIP": "1.1.1.1" },
+                        { "Name": "Servidor EUA 02", "FLAG": "", "ServerIP": "192.168.1.2", "ServerPort": "80", "SSLPort": "22", "CheckUser": "check.example.com", "PServerIP": "8.8.8.8" }
+                    ],
+                    "Networks": [
+                        { "Name": "Claro Net", "FLAG": "", "Payload": "GET http://google.com/", "SNI": "example.com", "TlsIP": "1.1.1.1", "ProxyIP": "proxy.example.com", "ProxyPort": "80", "Info": "Direta" },
+                        { "Name": "Vivo Fibra", "FLAG": "", "Payload": "CONNECT [host_port]", "SNI": "vivo.com", "TlsIP": "8.8.8.8", "ProxyIP": "proxy2.example.com", "ProxyPort": "443", "Info": "Proxy" }
+                    ],
+                    "USER": "teste_user",
+                    "PASS": "12345",
+                    "LogoLink": "",
+                    "Rodape": "Yumeko 6G Pro &copy; 2024 | Versão Teste",
+                    "ServerPos": 0,
+                    "PayloadPos": 0,
+                    "status": "disconnected"
+                });
             }
         });
     </script>
