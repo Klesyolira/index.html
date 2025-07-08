@@ -9,11 +9,9 @@
       --primary: #4a6cf7;
       --text: #fff;
     }
-
     [data-theme='light'] {
       --text: #111;
     }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -22,7 +20,6 @@
       background-attachment: fixed;
       color: var(--text);
     }
-
     .overlay {
       background: rgba(0, 0, 0, 0.5);
       min-height: 100vh;
@@ -31,36 +28,30 @@
       align-items: center;
       padding: 1rem;
     }
-
     header {
       margin: 1rem 0 0.5rem;
     }
-
     header img {
       max-height: 80px;
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
-
     .card {
-      background: rgba(0, 0, 0, 0.6); /* semi-transparente preta */
+      background: rgba(0, 0, 0, 0.6);
       border-radius: 16px;
       padding: 1rem;
       width: 100%;
       max-width: 420px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
-
     .section {
       margin-bottom: 0.8rem;
     }
-
     .section h2 {
       font-size: 1rem;
       margin-bottom: 0.3rem;
       color: var(--text);
     }
-
     select, input[type="text"], input[type="password"] {
       width: 100%;
       padding: 0.6rem;
@@ -69,16 +60,13 @@
       border: 1px solid #ccc;
       font-size: 0.95rem;
     }
-
     .row {
       display: flex;
       gap: 0.5rem;
     }
-
     .row input {
       flex: 1;
     }
-
     button {
       width: 100%;
       padding: 0.8rem;
@@ -90,7 +78,6 @@
       margin-top: 0.4rem;
       font-size: 1rem;
     }
-
     #logsModal {
       display: none;
       position: fixed;
@@ -101,7 +88,6 @@
       font-family: monospace;
       padding: 2rem;
     }
-
     #logsModal pre {
       background: #000;
       padding: 1rem;
@@ -109,17 +95,14 @@
       overflow-y: auto;
       border-radius: 10px;
     }
-
     #logsModal button {
       margin-top: 1rem;
       background: #f00;
     }
-
     .theme-toggle {
       text-align: center;
       margin-top: 0.8rem;
     }
-
     .theme-toggle button {
       background: transparent;
       border: 1px solid var(--text);
@@ -169,7 +152,6 @@
     </div>
   </div>
 
-  <!-- Modal de Logs -->
   <div id="logsModal">
     <h2>📄 Logs:</h2>
     <pre id="logsContent">Conectando...</pre>
@@ -198,9 +180,9 @@
     }
 
     function abrirLogs() {
-      if (Android?.openLogs) Android.openLogs();
       document.getElementById('logsModal').style.display = 'block';
-      document.getElementById('logsContent').textContent = "Conectando à VPN...\nAguardando resposta...";
+      document.getElementById('logsContent').textContent = "Conectando à VPN...
+Aguardando resposta...";
     }
 
     function fecharLogs() {
@@ -215,18 +197,29 @@
 
     function selecionarServidor(sel) {
       const option = sel.options[sel.selectedIndex];
-      Android?.onServidorSelecionado(option.dataset.id, option.textContent, option.dataset.ip);
+      Android?.onServidorSelecionado(
+        parseInt(option.dataset.id),
+        option.textContent,
+        option.dataset.ip
+      );
     }
 
     function selecionarPayload(sel) {
       const option = sel.options[sel.selectedIndex];
-      Android?.onPayloadSelecionada(option.dataset.id, option.textContent);
+      Android?.onPayloadSelecionada(
+        parseInt(option.dataset.id),
+        option.textContent,
+        option.dataset.payload,
+        option.dataset.sni,
+        option.dataset.info,
+        option.dataset.proxyip,
+        option.dataset.proxyport
+      );
     }
 
     function carregarDados(json) {
       const data = typeof json === "string" ? JSON.parse(json) : json;
 
-      // fundo e logo
       if (data.BackgroundLink) {
         document.body.style.backgroundImage = `url('${data.BackgroundLink}')`;
       }
@@ -239,22 +232,28 @@
 
       const servidorSelect = document.getElementById('servidorSelect');
       servidorSelect.innerHTML = '';
-      data.servers.forEach(s => {
+      (data.Servers || []).forEach((s, index) => {
         const opt = document.createElement('option');
-        opt.textContent = s.name;
-        opt.dataset.id = s.id;
-        opt.dataset.ip = s.serverIP;
-        if (data.ServerPos == s.id) opt.selected = true;
+        opt.textContent = s.Name || s.name;
+        opt.dataset.id = index;
+        opt.dataset.ip = s.ServerIP || s.serverIP;
+        if (data.ServerPos == index) opt.selected = true;
         servidorSelect.appendChild(opt);
       });
 
       const payloadSelect = document.getElementById('payloadSelect');
       payloadSelect.innerHTML = '';
-      data.payloads.forEach(p => {
+      (data.Networks || data.Payloads || []).forEach((p, index) => {
         const opt = document.createElement('option');
-        opt.textContent = p.name;
-        opt.dataset.id = p.id;
-        if (data.PayloadPos == p.id) opt.selected = true;
+        opt.textContent = p.Name || p.name;
+        opt.dataset.id = index;
+        opt.dataset.payload = p.Payload || '';
+        opt.dataset.sni = p.SNI || '';
+        opt.dataset.info = p.Info || '';
+        opt.dataset.proxyip = p.ProxyIP || '';
+        opt.dataset.proxyport = p.ProxyPort || '';
+        opt.dataset.color = p.Color || '';
+        if (data.PayloadPos == index) opt.selected = true;
         payloadSelect.appendChild(opt);
       });
     }
