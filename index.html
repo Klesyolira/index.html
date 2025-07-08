@@ -1,1191 +1,261 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Yumeko 6G Pro</title>
-<style>
-        :root {
-            --primary-color: #6a11cb;
-            --secondary-color: #2575fc;
-            --success-color: #4CAF50;
-            --danger-color: #f44336;
-            --warning-color: #FF9800;
-            --info-color: #2196F3;
-            --dark-color: #121212;
-            --light-color: #f5f5f5;
-            --text-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.1);
-            --transition: all 0.3s ease;
-            --selected-border: 3px solid #4CAF50;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-color);
-            min-height: 100vh;
-            padding: 20px;
-            background-attachment: fixed;
-            background-size: cover;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 10px;
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .status-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-pill {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .status-pill.connected {
-            background: rgba(76, 175, 80, 0.3);
-        }
-
-        .status-pill.disconnected {
-            background: rgba(244, 67, 54, 0.3);
-        }
-
-        .status-pill.connecting {
-            background: rgba(255, 152, 0, 0.3);
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .status-dot.connected {
-            background: var(--success-color);
-        }
-
-        .status-dot.disconnected {
-            background: var(--danger-color);
-        }
-
-        .status-dot.connecting {
-            background: var(--warning-color);
-            animation: pulse 1.5s infinite;
-        }
-
-        .logo {
-            width: 50px;
-            height: auto;
-            border-radius: 50%;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .app-name {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .app-version {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        .main-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 15px; /* Increased border-radius for the main card */
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .selection-section {
-            margin-bottom: 20px;
-        }
-
-        .selection-title {
-            font-size: 16px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .selection-title i {
-            margin-right: 8px;
-        }
-
-        .selection-cards {
-            display: flex;
-            flex-direction: column; /* Stacks server and payload vertically */
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .selection-card {
-            background: rgba(255, 255, 255, 0.05); /* Slightly darker card background inside main card */
-            border-radius: 10px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: var(--transition);
-            min-height: 80px;
-        }
-
-        .selection-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .selection-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 15px;
-            object-fit: cover;
-        }
-
-        .selection-info {
-            flex: 1;
-        }
-
-        .selection-name {
-            font-weight: 500;
-            margin-bottom: 3px;
-        }
-
-        .selection-desc {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .login-form {
-            /* Removed background and backdrop-filter as it's now inside .main-card */
-            padding: 0; /* Adjust padding as needed inside main-card */
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        /* New flexbox for username and password */
-        .form-row {
-            display: flex;
-            gap: 15px; /* Space between username and password */
-            margin-bottom: 15px;
-        }
-
-        .form-row .form-group {
-            flex: 1; /* Each form group takes equal width */
-            margin-bottom: 0; /* Remove bottom margin from individual groups in a row */
-        }
-
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.3);
-        }
-
-        .password-field {
-            position: relative;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--text-color);
-            opacity: 0.7;
-            background: none;
-            border: none;
-            font-size: 18px;
-        }
-
-        .action-btn {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 16px 0;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 20px 0 0; /* Adjusted margin-top to separate from form, no bottom margin */
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
-            transition: var(--transition);
-            outline: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .action-btn:focus {
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
-        }
-
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.6);
-        }
-
-        .action-btn.stop {
-            background: linear-gradient(to right, var(--danger-color), #e53935);
-        }
-
-        .action-btn .btn-icon {
-            font-size: 20px;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            gap: 8px;
-        }
-
-        .stat-item {
-            text-align: center;
-            flex: 1;
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 8px;
-            padding: 10px 5px;
-        }
-
-        .stat-value {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .logs-button {
-            width: 100%;
-            background: var(--card-bg);
-            border: none;
-            color: var(--text-color);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: var(--transition);
-        }
-
-        .logs-button:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            overflow-y: auto;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: var(--dark-color);
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
-            background: none;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-title {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-title i {
-            font-size: 24px;
-        }
-
-        .server-list, .payload-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-
-        .server-item, .payload-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .server-item:hover, .payload-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .server-item.selected, .payload-item.selected {
-            background: rgba(76, 175, 80, 0.2);
-            border-left: 4px solid var(--success-color);
-        }
-
-        .server-icon, .payload-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 15px;
-            object-fit: cover;
-        }
-
-        .server-info, .payload-info {
-            flex: 1;
-        }
-
-        .server-name, .payload-name {
-            font-weight: 500;
-            margin-bottom: 3px;
-        }
-
-        .server-details, .payload-details {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .logs-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 15px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
-        }
-
-        .log-entry {
-            margin-bottom: 5px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            word-break: break-word;
-            line-height: 1.4;
-        }
-
-        .log-entry.info {
-            color: var(--info-color);
-        }
-
-        .log-entry.error {
-            color: var(--danger-color);
-        }
-
-        .log-entry.success {
-            color: var(--success-color);
-        }
-
-        .log-entry.warning {
-            color: var(--warning-color);
-        }
-
-        .connection-time {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 12px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-
-        .version-info {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            font-size: 13px;
-            margin-top: 15px;
-        }
-
-        /* Animation classes */
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .back-button:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Responsividade */
-        @media (max-width: 480px) {
-            .selection-cards {
-                flex-direction: column;
-            }
-            
-            .stats {
-                flex-direction: column;
-            }
-            
-            .stat-item {
-                margin-bottom: 8px;
-            }
-
-            .top-bar {
-                flex-direction: column-reverse; /* Put stats below back button/connection */
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .status-container {
-                flex-wrap: wrap;
-            }
-
-            .form-row {
-                flex-direction: column; /* Stack username/password vertically on small screens */
-                gap: 0;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .container {
-                max-width: 600px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Socks Injector</title>
+  <style>
+    :root {
+      --primary: #4a6cf7;
+      --bg: #f9f9f9;
+      --text: #222;
+    }
+    [data-theme='dark'] {
+      --bg: #121212;
+      --text: #f0f0f0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text);
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.5);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem;
+    }
+
+    header {
+      margin: 1rem 0 0.5rem;
+    }
+
+    header img {
+      max-height: 90px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 1rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .section {
+      margin-bottom: 1rem;
+    }
+
+    .section h2 {
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: var(--primary);
+    }
+
+    select, input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 0.95rem;
+    }
+
+    .row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .row input {
+      flex: 1;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-top: 0.4rem;
+      font-size: 1rem;
+    }
+
+    button:hover {
+      background: #3953c7;
+    }
+
+    #logs {
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      padding: 1rem;
+      display: none;
+      border-radius: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+
+    .theme-toggle {
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .theme-toggle button {
+      background: transparent;
+      border: 1px solid var(--text);
+      color: var(--text);
+      padding: 0.3rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<div class="top-bar">
-<button aria-label="Voltar" class="back-button" onclick="Android.switchToNativeMode()">
-                ←
-            </button>
-<div class="status-container">
-<div class="status-pill">
-<span class="stat-label">Download:</span>
-<span class="stat-value" id="download-stat">0 KB</span>
-</div>
-<div class="status-pill">
-<span class="stat-label">Upload:</span>
-<span class="stat-value" id="upload-stat">0 KB</span>
-</div>
-</div>
-</div>
-<div class="header">
-<img alt="Logo" class="logo" id="app-logo" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'&gt;&lt;rect width='24' height='24' fill='%236a11cb'/&gt;&lt;/svg&gt;"/>
-<div class="header-info">
-<div class="app-name">Yumeko 6G Pro</div>
-<div class="app-version" id="app-version">Versão: v1.0</div>
-</div>
-</div>
-<div class="main-card"> <div class="selection-section">
-<div class="selection-cards">
-<div class="selection-card" id="server-card" onclick="openServerModal()">
-<img alt="Server" class="selection-icon" id="server-icon" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'&gt;&lt;rect width='24' height='24' fill='%236a11cb'/&gt;&lt;/svg&gt;"/>
-<div class="selection-info">
-<div class="selection-name" id="server-name">Selecione um servidor</div>
-<div class="selection-desc">Toque para alterar</div>
-</div>
-</div>
-<div class="selection-card" id="payload-card" onclick="openPayloadModal()">
-<img alt="Payload" class="selection-icon" id="payload-icon" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24'&gt;&lt;rect width='24' height='24' fill='%236a11cb'/&gt;&lt;/svg&gt;"/>
-<div class="selection-info">
-<div class="selection-name" id="payload-name">Selecione uma operadora</div>
-<div class="selection-desc">Toque para alterar</div>
-</div>
-</div>
-</div>
-</div>
-<div class="login-form">
-<div class="form-row"> <div class="form-group">
-<label for="username">Usuário</label>
-<input aria-required="true" class="form-control" id="username" placeholder="Digite seu usuário" type="text"/>
-</div>
-<div class="form-group password-field">
-<label for="password">Senha</label>
-<input aria-required="true" class="form-control" id="password" placeholder="Digite sua senha" type="password"/>
-<button aria-label="Mostrar senha" class="toggle-password" onclick="togglePassword()">
-                            👁️
-                        </button>
-</div>
-</div>
-<button class="action-btn" id="connect-btn" onclick="handleConnectClick()">
-<span class="btn-icon">🔒</span>
-<span id="connect-btn-text">Conectar</span>
-</button>
-</div>
-</div> <button class="logs-button" onclick="openLogsModal()">
-<span class="btn-icon">📝</span>
-            Ver Logs de Conexão
-        </button>
-<div class="status-container" style="justify-content: center; margin-top: 20px;"> <div class="status-pill disconnected" id="connection-status-pill">
-<span class="status-dot disconnected"></span>
-<span id="connection-status-text">Desconectado</span>
-</div>
-</div>
-<div class="footer">
-<p id="app-footer">Yumeko 6G Pro © 2023 | Todos os direitos reservados</p>
-</div>
-</div>
-<div class="modal" id="server-modal">
-<div class="modal-content">
-<button class="close-modal" onclick="closeModal('server-modal')">×</button>
-<div class="modal-title">
-<span>🌐</span>
-<h2>Selecione um Servidor</h2>
-</div>
-<div class="server-list" id="server-list">
-</div>
-<div class="version-info">
-<span id="server-version">Versão do Config: v1.0</span>
-</div>
-</div>
-</div>
-<div class="modal" id="payload-modal">
-<div class="modal-content">
-<button class="close-modal" onclick="closeModal('payload-modal')">×</button>
-<div class="modal-title">
-<span>📶</span>
-<h2>Selecione uma Operadora</h2>
-</div>
-<div class="payload-list" id="payload-list">
-</div>
-<div class="version-info">
-<span id="payload-version">Versão do Config: v1.0</span>
-</div>
-</div>
-</div>
-<div class="modal" id="logs-modal">
-<div class="modal-content">
-<button class="close-modal" onclick="closeModal('logs-modal')">×</button>
-<div class="modal-title">
-<span>📋</span>
-<h2>Logs de Conexão</h2>
-</div>
-<div class="connection-time">
-<span>Tempo de Conexão:</span>
-<span id="connection-time">00:00:00</span>
-</div>
-<div class="logs-container" id="modal-logs-container">
-</div>
-</div>
-</div>
-<script>
-        // Variáveis globais
-        let isPasswordVisible = false;
-        let connectionStatus = "disconnected";
-        let serverData = [];
-        let payloadData = [];
-        let selectedServerIndex = 0;
-        let selectedPayloadIndex = 0;
-        let connectionTimer = null;
-        let connectionSeconds = 0;
-        let logsContainer = null;
-        let modalLogsContainer = null;
+  <div class="overlay">
+    <header>
+      <img id="logoOnline" src="" alt="Logo" />
+    </header>
 
-        // SVG Placeholder
-        const SVG_PLACEHOLDER = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><rect width="24" height="24" fill="%236a11cb"/></svg>';
+    <div class="card">
+      <div class="section">
+        <h2>Servidor</h2>
+        <select id="servidorSelect" onchange="selecionarServidor(this)">
+          <option>Carregando...</option>
+        </select>
+      </div>
 
-        // Função para alternar a visibilidade da senha
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.querySelector('.toggle-password');
+      <div class="section">
+        <h2>Operadora</h2>
+        <select id="payloadSelect" onchange="selecionarPayload(this)">
+          <option>Carregando...</option>
+        </select>
+      </div>
 
-            isPasswordVisible = !isPasswordVisible;
-            passwordField.type = isPasswordVisible ? 'text' : 'password';
-            toggleIcon.textContent = isPasswordVisible ? '🙈' : '👁️';
-            toggleIcon.setAttribute('aria-label', isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha');
+      <div class="section">
+        <h2>Login</h2>
+        <div class="row">
+          <input type="text" id="user" placeholder="Usuário" />
+          <input type="password" id="pass" placeholder="Senha" />
+        </div>
+      </div>
+
+      <button onclick="conectar()">🔌 Conectar</button>
+      <button onclick="abrirLogs()">📜 Ver Logs</button>
+      <div id="logs"></div>
+
+      <div class="theme-toggle">
+        <button onclick="toggleTheme()">🌗 Alternar Tema</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+
+    function toggleTheme() {
+      theme = theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', theme);
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function conectar() {
+      const u = document.getElementById('user').value;
+      const p = document.getElementById('pass').value;
+      if (u && p && Android && Android.onLogin) {
+        Android.onLogin(u, p);
+        Android.startStopVPN();
+      } else {
+        alert("Preencha usuário e senha.");
+      }
+    }
+
+    function abrirLogs() {
+      if (Android && Android.openLogs) {
+        Android.openLogs();
+      }
+    }
+
+    function selecionarServidor(sel) {
+      const option = sel.options[sel.selectedIndex];
+      const id = option.dataset.id;
+      const nome = option.textContent;
+      const ip = option.dataset.ip;
+      if (Android.onServidorSelecionado) {
+        Android.onServidorSelecionado(id, nome, ip);
+      }
+    }
+
+    function selecionarPayload(sel) {
+      const option = sel.options[sel.selectedIndex];
+      const id = option.dataset.id;
+      const nome = option.textContent;
+      if (Android.onPayloadSelecionada) {
+        Android.onPayloadSelecionada(id, nome);
+      }
+    }
+
+    function carregarDados(json) {
+      try {
+        const data = typeof json === "string" ? JSON.parse(json) : json;
+
+        // Fundo e logo online
+        if (data.BackgroundLink) {
+          document.body.style.backgroundImage = `url('${data.BackgroundLink}')`;
+        }
+        if (data.LogoLink) {
+          document.getElementById('logoOnline').src = data.LogoLink;
         }
 
-        // Função para abrir modais
-        function openServerModal() {
-            document.getElementById('server-modal').style.display = 'block';
-            loadServers(); // Ensure servers are loaded and selection is visible
-        }
+        document.getElementById('user').value = data.USER || '';
+        document.getElementById('pass').value = data.PASS || '';
 
-        function openPayloadModal() {
-            document.getElementById('payload-modal').style.display = 'block';
-            loadPayloads(); // Ensure payloads are loaded and selection is visible
-        }
-
-        function openLogsModal() {
-            document.getElementById('logs-modal').style.display = 'block';
-            // Copia logs para o modal
-            modalLogsContainer.innerHTML = logsContainer.innerHTML;
-        }
-
-        // Função para fechar modais
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // --- Back Button Functionality ---
-        function goBack() {
-            if (typeof Android !== 'undefined' && Android !== null && typeof Android.onBackPressed === 'function') {
-                Android.onBackPressed();
-            } else {
-                // Fallback for browser testing or if Android bridge is not available
-                console.log("Back button pressed - no Android bridge found or onBackPressed not implemented.");
-                // You might want to add a browser-specific back behavior here if needed
-                // window.history.back(); 
-            }
-        }
-        // --- End Back Button Functionality ---
-
-        // Função para adicionar entradas de log
-        function addLog(message, type = 'info') {
-            if (!logsContainer) {
-                logsContainer = document.getElementById('modal-logs-container'); // Changed to use modal-logs-container for consistency
-                modalLogsContainer = document.getElementById('modal-logs-container'); // Reference to the same element
-            }
-            
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-entry ${type}`;
-
-            // Adiciona timestamp
-            const now = new Date();
-            const timestamp = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-
-            logEntry.textContent = `[${timestamp}] ${message}`;
-            
-            // Adiciona ao container principal (which is the modal's container)
-            logsContainer.appendChild(logEntry);
-            
-            // Scroll para o final
-            logsContainer.scrollTop = logsContainer.scrollHeight;
-        }
-
-        // Função para carregar servidores no modal
-        function loadServers() {
-            const serverList = document.getElementById('server-list');
-            serverList.innerHTML = '';
-
-            if (serverData.length === 0) {
-                serverList.innerHTML = '<div class="log-entry info">Nenhum servidor disponível.</div>';
-                return;
-            }
-
-            serverData.forEach((server, index) => {
-                const serverItem = document.createElement('div');
-                serverItem.className = `server-item ${index === selectedServerIndex ? 'selected' : ''}`;
-                serverItem.innerHTML = `
-                    <img src="${server.FlagUrl || SVG_PLACEHOLDER}" 
-                         alt="${server.Name}" 
-                         class="server-icon">
-                    <div class="server-info">
-                        <div class="server-name">${server.Name}</div>
-                        <div class="server-details">
-                            ${server.ServerIP || 'IP não disponível'}:${server.ServerPort || '?'}
-                        </div>
-                    </div>
-                `;
-                serverItem.onclick = () => {
-                    selectedServerIndex = index;
-                    document.getElementById('server-name').textContent = server.Name;
-                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
-                    
-                    // Update selection state in the modal list
-                    document.querySelectorAll('.server-item').forEach((item, i) => {
-                        if (i === selectedServerIndex) {
-                            item.classList.add('selected');
-                        } else {
-                            item.classList.remove('selected');
-                        }
-                    });
-
-                    // Notifica Android
-                    if (typeof Android !== 'undefined' && Android !== null && typeof Android.onServidorSelecionado === 'function') {
-                        Android.onServidorSelecionado(
-                            index,
-                            server.Name,
-                            server.ServerIP,
-                            server.ServerPort,
-                            server.SSLPort,
-                            server.CheckUser,
-                            server.PServerIP
-                        );
-                    }
-                    
-                    closeModal('server-modal');
-                    addLog(`Servidor selecionado: ${server.Name}`, 'info');
-                };
-                serverList.appendChild(serverItem);
-            });
-        }
-
-        // Função para carregar operadoras no modal
-        function loadPayloads() {
-            const payloadList = document.getElementById('payload-list');
-            payloadList.innerHTML = '';
-
-            if (payloadData.length === 0) {
-                payloadList.innerHTML = '<div class="log-entry info">Nenhuma operadora disponível.</div>';
-                return;
-            }
-
-            payloadData.forEach((payload, index) => {
-                const payloadItem = document.createElement('div');
-                payloadItem.className = `payload-item ${index === selectedPayloadIndex ? 'selected' : ''}`;
-                payloadItem.innerHTML = `
-                    <img src="${payload.FlagUrl || SVG_PLACEHOLDER}" 
-                         alt="${payload.Name}" 
-                         class="payload-icon">
-                    <div class="payload-info">
-                        <div class="payload-name">${payload.Name}</div>
-                        <div class="payload-details">Tipo: ${payload.Info || 'N/A'}</div>
-                    </div>
-                `;
-                payloadItem.onclick = () => {
-                    selectedPayloadIndex = index;
-                    document.getElementById('payload-name').textContent = payload.Name;
-                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
-                    
-                    // Update selection state in the modal list
-                    document.querySelectorAll('.payload-item').forEach((item, i) => {
-                        if (i === selectedPayloadIndex) {
-                            item.classList.add('selected');
-                        } else {
-                            item.classList.remove('selected');
-                        }
-                    });
-
-                    // Notifica Android
-                    if (typeof Android !== 'undefined' && Android !== null && typeof Android.changePayload === 'function') {
-                        Android.changePayload(
-                            index,
-                            payload.Name,
-                            payload.Payload,
-                            payload.SNI,
-                            payload.TlsIP,
-                            payload.ProxyIP,
-                            payload.ProxyPort,
-                            payload.Info
-                        );
-                    }
-                    
-                    closeModal('payload-modal');
-                    addLog(`Operadora selecionada: ${payload.Name}`, 'info');
-                };
-                payloadList.appendChild(payloadItem);
-            });
-        }
-
-        // Função principal para o botão de Conectar/Desconectar
-        function handleConnectClick() {
-            if (typeof Android !== 'undefined' && Android !== null) {
-                const usernameInput = document.getElementById('username');
-                const passwordInput = document.getElementById('password');
-
-                // Validação básica
-                if (!usernameInput.value || !passwordInput.value) {
-                    addLog('Por favor, preencha usuário e senha', 'warning');
-                    return;
-                }
-
-                // Envia credenciais (should ideally be sent once when changed, not on every connect)
-                // However, keeping it here for consistency with original code's intent.
-                if (typeof Android.onLogin === 'function') {
-                    Android.onLogin(usernameInput.value, passwordInput.value);
-                }
-
-                // Inicia/para VPN
-                if (typeof Android.startStopVPN === 'function') {
-                    Android.startStopVPN();
-                }
-            } else {
-                addLog('Android bridge não encontrado. Não é possível conectar/desconectar.', 'error');
-            }
-        }
-
-        // Função para atualizar o status da conexão
-        function updateStatus(status) {
-            const statusPill = document.getElementById('connection-status-pill');
-            const statusText = document.getElementById('connection-status-text');
-            const statusDot = statusPill.querySelector('.status-dot');
-            const connectBtn = document.getElementById('connect-btn');
-            const connectBtnText = document.getElementById('connect-btn-text');
-            
-            connectionStatus = status.toLowerCase();
-            
-            // Remove todas as classes de status
-            statusPill.className = 'status-pill';
-            statusDot.className = 'status-dot';
-            statusPill.classList.add(connectionStatus);
-            statusDot.classList.add(connectionStatus);
-            
-            // Para o temporizador se existir
-            if (connectionTimer) {
-                clearInterval(connectionTimer);
-                connectionTimer = null; // Reset the timer ID
-                connectionSeconds = 0;
-                updateTimeDisplay();
-            }
-
-            switch(connectionStatus) {
-                case 'connected':
-                    statusText.textContent = 'Conectado';
-                    connectBtnText.textContent = 'Desconectar';
-                    connectBtn.classList.add('stop');
-                    connectBtn.disabled = false; // Enable button after successful connection
-                    addLog('Conexão estabelecida com sucesso', 'success');
-                    
-                    // Inicia o temporizador
-                    connectionTimer = setInterval(() => {
-                        connectionSeconds++;
-                        updateTimeDisplay();
-                    }, 1000);
-                    break;
-                    
-                case 'connecting':
-                    statusText.textContent = 'Conectando...';
-                    connectBtnText.textContent = 'Conectando...';
-                    connectBtn.disabled = true;
-                    addLog('Estabelecendo conexão...', 'info');
-                    break;
-                    
-                case 'disconnected':
-                    statusText.textContent = 'Desconectado';
-                    connectBtnText.textContent = 'Conectar';
-                    connectBtn.classList.remove('stop');
-                    connectBtn.disabled = false;
-                    addLog('Desconectado', 'info');
-                    break;
-                    
-                case 'autenticando':
-                    statusText.textContent = 'Autenticando...';
-                    connectBtn.disabled = true;
-                    addLog('Autenticando usuário...', 'info');
-                    break;
-                    
-                case 'falha na autenticação':
-                    statusText.textContent = 'Falha na autenticação';
-                    connectBtnText.textContent = 'Conectar';
-                    connectBtn.classList.remove('stop');
-                    connectBtn.disabled = false;
-                    addLog('Falha na autenticação - Verifique usuário e senha', 'error');
-                    break;
-                    
-                case 'error': // Added an explicit error case
-                    statusText.textContent = 'Erro';
-                    connectBtnText.textContent = 'Conectar';
-                    connectBtn.classList.remove('stop');
-                    connectBtn.disabled = false;
-                    addLog('Erro na conexão. Tente novamente.', 'error');
-                    break;
-                    
-                default:
-                    statusText.textContent = status;
-            }
-        }
-
-        // Atualiza a exibição do tempo de conexão
-        function updateTimeDisplay() {
-            const hours = Math.floor(connectionSeconds / 3600);
-            const minutes = Math.floor((connectionSeconds % 3600) / 60);
-            const seconds = connectionSeconds % 60;
-            
-            const formattedTime = 
-                hours.toString().padStart(2, '0') + ':' +
-                minutes.toString().padStart(2, '0') + ':' +
-                seconds.toString().padStart(2, '0');
-                
-            document.getElementById('connection-time').textContent = formattedTime;
-        }
-
-        // Função para atualizar estatísticas
-        function updateStats(download, upload) {
-            document.getElementById('download-stat').textContent = download;
-            document.getElementById('upload-stat').textContent = upload;
-        }
-
-        // Função principal para carregar dados
-        function carregarDados(data) {
-            try {
-                const config = data;
-
-                // Versão
-                if (config.Version) {
-                    document.getElementById('app-version').textContent = `Versão: v${config.Version}`;
-                    document.getElementById('server-version').textContent = `Versão do Config: v${config.Version}`;
-                    document.getElementById('payload-version').textContent = `Versão do Config: v${config.Version}`;
-                }
-
-                // Servidores
-                if (config.Servers && Array.isArray(config.Servers)) {
-                    serverData = config.Servers.map(server => ({
-                        Name: server.Name || 'Servidor Desconhecido',
-                        ServerIP: server.ServerIP || '',
-                        FlagUrl: server.FLAG || SVG_PLACEHOLDER,
-                        ServerPort: server.ServerPort || '',
-                        SSLPort: server.SSLPort || '',
-                        CheckUser: server.CheckUser || '',
-                        PServerIP: server.PServerIP || ''
-                    }));
-                } else {
-                    serverData = [];
-                    addLog('Nenhum servidor encontrado na configuração.', 'warning');
-                }
-
-                // Operadoras (Payloads)
-                if (config.Networks && Array.isArray(config.Networks)) {
-                    payloadData = config.Networks.map(network => ({
-                        Name: network.Name || 'Operadora Desconhecida',
-                        FlagUrl: network.FLAG || SVG_PLACEHOLDER,
-                        Payload: network.Payload || '',
-                        SNI: network.SNI || '',
-                        TlsIP: network.TlsIP || '',
-                        ProxyIP: network.ProxyIP || '',
-                        ProxyPort: network.ProxyPort || '',
-                        Info: network.Info || ''
-                    }));
-                } else {
-                    payloadData = [];
-                    addLog('Nenhuma operadora encontrada na configuração.', 'warning');
-                }
-
-                // Credenciais
-                const usernameInput = document.getElementById('username');
-                const passwordInput = document.getElementById('password');
-                if (config.USER) usernameInput.value = config.USER;
-                if (config.PASS) passwordInput.value = config.PASS;
-
-                // Logo e rodapé
-                if (config.LogoLink) document.getElementById('app-logo').src = config.LogoLink;
-                if (config.Rodape) document.getElementById('app-footer').textContent = config.Rodape;
-
-                // Índices selecionados
-                selectedServerIndex = config.ServerPos || 0;
-                selectedPayloadIndex = config.PayloadPos || 0;
-
-                // Atualiza seleções na UI
-                // Only update if there's data to avoid errors
-                if (serverData.length > selectedServerIndex) {
-                    const server = serverData[selectedServerIndex];
-                    document.getElementById('server-name').textContent = server.Name;
-                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
-                } else if (serverData.length > 0) { // If default index is out of bounds, select first
-                    selectedServerIndex = 0;
-                    const server = serverData[selectedServerIndex];
-                    document.getElementById('server-name').textContent = server.Name;
-                    document.getElementById('server-icon').src = server.FlagUrl || SVG_PLACEHOLDER;
-                } else {
-                    document.getElementById('server-name').textContent = 'Nenhum servidor';
-                    document.getElementById('server-icon').src = SVG_PLACEHOLDER;
-                }
-
-                if (payloadData.length > selectedPayloadIndex) {
-                    const payload = payloadData[selectedPayloadIndex];
-                    document.getElementById('payload-name').textContent = payload.Name;
-                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
-                } else if (payloadData.length > 0) { // If default index is out of bounds, select first
-                    selectedPayloadIndex = 0;
-                    const payload = payloadData[selectedPayloadIndex];
-                    document.getElementById('payload-name').textContent = payload.Name;
-                    document.getElementById('payload-icon').src = payload.FlagUrl || SVG_PLACEHOLDER;
-                } else {
-                    document.getElementById('payload-name').textContent = 'Nenhuma operadora';
-                    document.getElementById('payload-icon').src = SVG_PLACEHOLDER;
-                }
-
-                // Update server and payload lists in modals to reflect selection
-                loadServers();
-                loadPayloads();
-
-                // Status da conexão
-                if (config.status) {
-                    updateStatus(config.status);
-                }
-
-                addLog('Configurações carregadas com sucesso', 'success');
-
-            } catch (e) {
-                addLog('Erro ao carregar configurações: ' + e.message, 'error');
-            }
-        }
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            logsContainer = document.getElementById('modal-logs-container');
-            modalLogsContainer = document.getElementById('modal-logs-container'); // Ensure both point to the same element for simplified logging
-            
-            addLog('Sistema inicializado');
-            addLog('Aguardando configuração...', 'info');
-
-            // Foco no primeiro campo ao carregar
-            document.getElementById('username').focus();
-
-            // Eventos para campos de credenciais
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            
-            usernameInput.addEventListener('blur', function() {
-                if (typeof Android !== 'undefined' && typeof Android.onLogin === 'function') {
-                    Android.onLogin(usernameInput.value, passwordInput.value);
-                }
-            });
-            
-            passwordInput.addEventListener('blur', function() {
-                if (typeof Android !== 'undefined' && typeof Android.onLogin === 'function') {
-                    Android.onLogin(usernameInput.value, passwordInput.value);
-                }
-            });
-            
-            // Tecla Enter no campo de senha
-            passwordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    handleConnectClick();
-                }
-            });
-            
-            // Solicita configurações imediatamente
-            if (typeof Android !== 'undefined' && typeof Android.requisitarConfig === 'function') {
-                Android.requisitarConfig();
-            } else {
-                addLog('Android bridge não encontrado. Carregando dados de exemplo (apenas para teste).', 'warning');
-                // Example data for testing in a browser without Android bridge
-                carregarDados({
-                    "Version": "1.1",
-                    "Servers": [
-                        { "Name": "Servidor Brasil 01", "FLAG": "https://flagsapi.com/BR/flat/64.png", "ServerIP": "192.168.1.1", "ServerPort": "8080", "SSLPort": "443", "CheckUser": "check.example.com", "PServerIP": "1.1.1.1" },
-                        { "Name": "Servidor EUA 02", "FLAG": "https://flagsapi.com/US/flat/64.png", "ServerIP": "192.168.1.2", "ServerPort": "80", "SSLPort": "22", "CheckUser": "check.example.com", "PServerIP": "8.8.8.8" }
-                    ],
-                    "Networks": [
-                        { "Name": "Claro Net", "FLAG": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Claro_Brasil_logo.svg/langpt-220px-Claro_Brasil_logo.svg.png", "Payload": "GET http://google.com/", "SNI": "example.com", "TlsIP": "1.1.1.1", "ProxyIP": "proxy.example.com", "ProxyPort": "80", "Info": "Direta" },
-                        { "Name": "Vivo Fibra", "FLAG": "https://logospng.org/download/vivo/logo-vivo-4096.png", "Payload": "CONNECT [host_port]", "SNI": "vivo.com", "TlsIP": "8.8.8.8", "ProxyIP": "proxy2.example.com", "ProxyPort": "443", "Info": "Proxy" }
-                    ],
-                    "USER": "teste_user",
-                    "PASS": "12345",
-                    "LogoLink": "https://static.wikia.nocookie.net/kakegurui/images/b/b3/Yumeko_Jabami_icon.png/revision/latest?cb=20180226190437",
-                    "Rodape": "Yumeko 6G Pro &copy; 2024 | Versão Teste",
-                    "ServerPos": 0,
-                    "PayloadPos": 0,
-                    "status": "disconnected"
-                });
-            }
+        const servidorSelect = document.getElementById('servidorSelect');
+        servidorSelect.innerHTML = '';
+        data.servers.forEach(s => {
+          const opt = document.createElement('option');
+          opt.textContent = s.name;
+          opt.dataset.id = s.id;
+          opt.dataset.ip = s.serverIP;
+          if (data.ServerPos == s.id) opt.selected = true;
+          servidorSelect.appendChild(opt);
         });
-    </script>
-<script src="carregarDados.js"></script></body>
+
+        const payloadSelect = document.getElementById('payloadSelect');
+        payloadSelect.innerHTML = '';
+        data.payloads.forEach(p => {
+          const opt = document.createElement('option');
+          opt.textContent = p.name;
+          opt.dataset.id = p.id;
+          if (data.PayloadPos == p.id) opt.selected = true;
+          payloadSelect.appendChild(opt);
+        });
+      } catch (e) {
+        alert("Erro ao carregar dados");
+        console.error(e);
+      }
+    }
+
+    window.onload = () => {
+      if (Android && Android.requisitarConfig) {
+        Android.requisitarConfig();
+      }
+    }
+  </script>
+</body>
 </html>
