@@ -7,18 +7,16 @@
   <style>
     :root {
       --primary: #4a6cf7;
-      --bg: #f9f9f9;
-      --text: #222;
+      --text: #fff;
     }
-    [data-theme='dark'] {
-      --bg: #121212;
-      --text: #f0f0f0;
+
+    [data-theme='light'] {
+      --text: #111;
     }
 
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: var(--bg);
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -31,7 +29,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
       padding: 1rem;
     }
 
@@ -40,34 +37,34 @@
     }
 
     header img {
-      max-height: 90px;
+      max-height: 80px;
       border-radius: 12px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(0, 0, 0, 0.6); /* semi-transparente preta */
       border-radius: 16px;
       padding: 1rem;
       width: 100%;
       max-width: 420px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
 
     .section {
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .section h2 {
       font-size: 1rem;
       margin-bottom: 0.3rem;
-      color: var(--primary);
+      color: var(--text);
     }
 
     select, input[type="text"], input[type="password"] {
       width: 100%;
       padding: 0.6rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 0.95rem;
@@ -94,25 +91,33 @@
       font-size: 1rem;
     }
 
-    button:hover {
-      background: #3953c7;
-    }
-
-    #logs {
-      background: #000;
+    #logsModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 999;
       color: #0f0;
       font-family: monospace;
+      padding: 2rem;
+    }
+
+    #logsModal pre {
+      background: #000;
       padding: 1rem;
-      display: none;
-      border-radius: 10px;
-      max-height: 200px;
+      max-height: 70vh;
       overflow-y: auto;
+      border-radius: 10px;
+    }
+
+    #logsModal button {
       margin-top: 1rem;
+      background: #f00;
     }
 
     .theme-toggle {
       text-align: center;
-      margin-top: 0.5rem;
+      margin-top: 0.8rem;
     }
 
     .theme-toggle button {
@@ -156,7 +161,7 @@
 
       <button onclick="conectar()">🔌 Conectar</button>
       <button onclick="abrirLogs()">📜 Ver Logs</button>
-      <div id="logs"></div>
+      <button onclick="voltarNativo()">🔁 Voltar UI Nativa</button>
 
       <div class="theme-toggle">
         <button onclick="toggleTheme()">🌗 Alternar Tema</button>
@@ -164,12 +169,19 @@
     </div>
   </div>
 
+  <!-- Modal de Logs -->
+  <div id="logsModal">
+    <h2>📄 Logs:</h2>
+    <pre id="logsContent">Conectando...</pre>
+    <button onclick="fecharLogs()">Fechar</button>
+  </div>
+
   <script>
-    let theme = localStorage.getItem('theme') || 'light';
+    let theme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', theme);
 
     function toggleTheme() {
-      theme = theme === 'light' ? 'dark' : 'light';
+      theme = (theme === 'light') ? 'dark' : 'light';
       localStorage.setItem('theme', theme);
       document.documentElement.setAttribute('data-theme', theme);
     }
@@ -177,7 +189,7 @@
     function conectar() {
       const u = document.getElementById('user').value;
       const p = document.getElementById('pass').value;
-      if (u && p && Android && Android.onLogin) {
+      if (u && p && Android?.onLogin) {
         Android.onLogin(u, p);
         Android.startStopVPN();
       } else {
@@ -186,75 +198,69 @@
     }
 
     function abrirLogs() {
-      if (Android && Android.openLogs) {
-        Android.openLogs();
+      if (Android?.openLogs) Android.openLogs();
+      document.getElementById('logsModal').style.display = 'block';
+      document.getElementById('logsContent').textContent = "Conectando à VPN...\nAguardando resposta...";
+    }
+
+    function fecharLogs() {
+      document.getElementById('logsModal').style.display = 'none';
+    }
+
+    function voltarNativo() {
+      if (Android?.switchToNativeMode) {
+        Android.switchToNativeMode();
       }
     }
 
     function selecionarServidor(sel) {
       const option = sel.options[sel.selectedIndex];
-      const id = option.dataset.id;
-      const nome = option.textContent;
-      const ip = option.dataset.ip;
-      if (Android.onServidorSelecionado) {
-        Android.onServidorSelecionado(id, nome, ip);
-      }
+      Android?.onServidorSelecionado(option.dataset.id, option.textContent, option.dataset.ip);
     }
 
     function selecionarPayload(sel) {
       const option = sel.options[sel.selectedIndex];
-      const id = option.dataset.id;
-      const nome = option.textContent;
-      if (Android.onPayloadSelecionada) {
-        Android.onPayloadSelecionada(id, nome);
-      }
+      Android?.onPayloadSelecionada(option.dataset.id, option.textContent);
     }
 
     function carregarDados(json) {
-      try {
-        const data = typeof json === "string" ? JSON.parse(json) : json;
+      const data = typeof json === "string" ? JSON.parse(json) : json;
 
-        // Fundo e logo online
-        if (data.BackgroundLink) {
-          document.body.style.backgroundImage = `url('${data.BackgroundLink}')`;
-        }
-        if (data.LogoLink) {
-          document.getElementById('logoOnline').src = data.LogoLink;
-        }
-
-        document.getElementById('user').value = data.USER || '';
-        document.getElementById('pass').value = data.PASS || '';
-
-        const servidorSelect = document.getElementById('servidorSelect');
-        servidorSelect.innerHTML = '';
-        data.servers.forEach(s => {
-          const opt = document.createElement('option');
-          opt.textContent = s.name;
-          opt.dataset.id = s.id;
-          opt.dataset.ip = s.serverIP;
-          if (data.ServerPos == s.id) opt.selected = true;
-          servidorSelect.appendChild(opt);
-        });
-
-        const payloadSelect = document.getElementById('payloadSelect');
-        payloadSelect.innerHTML = '';
-        data.payloads.forEach(p => {
-          const opt = document.createElement('option');
-          opt.textContent = p.name;
-          opt.dataset.id = p.id;
-          if (data.PayloadPos == p.id) opt.selected = true;
-          payloadSelect.appendChild(opt);
-        });
-      } catch (e) {
-        alert("Erro ao carregar dados");
-        console.error(e);
+      // fundo e logo
+      if (data.BackgroundLink) {
+        document.body.style.backgroundImage = `url('${data.BackgroundLink}')`;
       }
+      if (data.LogoLink) {
+        document.getElementById('logoOnline').src = data.LogoLink;
+      }
+
+      document.getElementById('user').value = data.USER || '';
+      document.getElementById('pass').value = data.PASS || '';
+
+      const servidorSelect = document.getElementById('servidorSelect');
+      servidorSelect.innerHTML = '';
+      data.servers.forEach(s => {
+        const opt = document.createElement('option');
+        opt.textContent = s.name;
+        opt.dataset.id = s.id;
+        opt.dataset.ip = s.serverIP;
+        if (data.ServerPos == s.id) opt.selected = true;
+        servidorSelect.appendChild(opt);
+      });
+
+      const payloadSelect = document.getElementById('payloadSelect');
+      payloadSelect.innerHTML = '';
+      data.payloads.forEach(p => {
+        const opt = document.createElement('option');
+        opt.textContent = p.name;
+        opt.dataset.id = p.id;
+        if (data.PayloadPos == p.id) opt.selected = true;
+        payloadSelect.appendChild(opt);
+      });
     }
 
     window.onload = () => {
-      if (Android && Android.requisitarConfig) {
-        Android.requisitarConfig();
-      }
+      Android?.requisitarConfig();
     }
   </script>
 </body>
