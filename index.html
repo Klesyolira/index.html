@@ -159,7 +159,6 @@
   </div>
 
   <script>
-    // Theme toggle
     let theme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', theme);
 
@@ -169,82 +168,57 @@
       document.documentElement.setAttribute('data-theme', theme);
     }
 
-    // Connect button handler
     function conectar() {
       const u = document.getElementById('user').value;
       const p = document.getElementById('pass').value;
-
-      if (u && p) {
-        // Store user and pass
-        localStorage.setItem('user', u);
-        localStorage.setItem('pass', p);
-
-        if (Android?.onLogin) {
-          Android.onLogin(u, p);
-          Android.startStopVPN();
-        }
+      if (u && p && Android?.onLogin) {
+        Android.onLogin(u, p);
+        Android.startStopVPN();
       } else {
         alert("Preencha usuário e senha.");
       }
     }
 
-    // Logs modal functions
     function abrirLogs() {
       document.getElementById('logsModal').style.display = 'block';
-      document.getElementById('logsContent').textContent = "Conectando à VPN...\nAguardando resposta...";
+      document.getElementById('logsContent').textContent = "Conectando à VPN...
+Aguardando resposta...";
     }
 
     function fecharLogs() {
       document.getElementById('logsModal').style.display = 'none';
     }
 
-    // Native UI switch
     function voltarNativo() {
       if (Android?.switchToNativeMode) {
         Android.switchToNativeMode();
       }
     }
 
-    // Server selection handler
     function selecionarServidor(sel) {
       const option = sel.options[sel.selectedIndex];
-      // Store selected server index
-      localStorage.setItem('selectedServerIndex', sel.selectedIndex);
-
-      if (Android?.onServidorSelecionado) {
-        Android.onServidorSelecionado(
-          parseInt(option.dataset.id),
-          option.textContent,
-          option.dataset.ip
-        );
-      }
+      Android?.onServidorSelecionado(
+        parseInt(option.dataset.id),
+        option.textContent,
+        option.dataset.ip
+      );
     }
 
-    // Payload selection handler
     function selecionarPayload(sel) {
       const option = sel.options[sel.selectedIndex];
-      // Store selected payload index
-      localStorage.setItem('selectedPayloadIndex', sel.selectedIndex);
-
-      if (Android?.onPayloadSelecionada) {
-        Android.onPayloadSelecionada(
-          parseInt(option.dataset.id),
-          option.textContent,
-          option.dataset.payload,
-          option.dataset.sni,
-          option.dataset.info,
-          option.dataset.proxyip,
-          option.dataset.proxyport
-        );
-      }
+      Android?.onPayloadSelecionada(
+        parseInt(option.dataset.id),
+        option.textContent,
+        option.dataset.payload,
+        option.dataset.sni,
+        option.dataset.info,
+        option.dataset.proxyip,
+        option.dataset.proxyport
+      );
     }
 
-    // Function to load and store configuration data
     function carregarDados(json) {
       const data = typeof json === "string" ? JSON.parse(json) : json;
-
-      // Store the entire configuration data for offline use
-      localStorage.setItem('cachedConfig', JSON.stringify(data));
 
       if (data.BackgroundLink) {
         document.body.style.backgroundImage = `url('${data.BackgroundLink}')`;
@@ -253,10 +227,8 @@
         document.getElementById('logoOnline').src = data.LogoLink;
       }
 
-      // Populate user and pass from either provided data or localStorage
-      document.getElementById('user').value = data.USER || localStorage.getItem('user') || '';
-      document.getElementById('pass').value = data.PASS || localStorage.getItem('pass') || '';
-
+      document.getElementById('user').value = data.USER || '';
+      document.getElementById('pass').value = data.PASS || '';
 
       const servidorSelect = document.getElementById('servidorSelect');
       servidorSelect.innerHTML = '';
@@ -265,16 +237,9 @@
         opt.textContent = s.Name || s.name;
         opt.dataset.id = index;
         opt.dataset.ip = s.ServerIP || s.serverIP;
+        if (data.ServerPos == index) opt.selected = true;
         servidorSelect.appendChild(opt);
       });
-      // Restore selected server if available
-      const storedServerIndex = localStorage.getItem('selectedServerIndex');
-      if (storedServerIndex !== null && servidorSelect.options[storedServerIndex]) {
-        servidorSelect.selectedIndex = storedServerIndex;
-      } else if (data.ServerPos !== undefined) {
-        servidorSelect.selectedIndex = data.ServerPos;
-      }
-
 
       const payloadSelect = document.getElementById('payloadSelect');
       payloadSelect.innerHTML = '';
@@ -288,54 +253,13 @@
         opt.dataset.proxyip = p.ProxyIP || '';
         opt.dataset.proxyport = p.ProxyPort || '';
         opt.dataset.color = p.Color || '';
+        if (data.PayloadPos == index) opt.selected = true;
         payloadSelect.appendChild(opt);
       });
-      // Restore selected payload if available
-      const storedPayloadIndex = localStorage.getItem('selectedPayloadIndex');
-      if (storedPayloadIndex !== null && payloadSelect.options[storedPayloadIndex]) {
-        payloadSelect.selectedIndex = storedPayloadIndex;
-      } else if (data.PayloadPos !== undefined) {
-        payloadSelect.selectedIndex = data.PayloadPos;
-      }
-
-      // Trigger selection to ensure Android side is updated with the loaded/cached selection
-      if (servidorSelect.options.length > 0) {
-        selecionarServidor(servidorSelect);
-      }
-      if (payloadSelect.options.length > 0) {
-        selecionarPayload(payloadSelect);
-      }
     }
 
     window.onload = () => {
-      // 1. Try to load cached configuration first
-      const cachedConfig = localStorage.getItem('cachedConfig');
-      if (cachedConfig) {
-        try {
-          console.log("Loading cached config...");
-          carregarDados(JSON.parse(cachedConfig));
-        } catch (e) {
-          console.error("Error parsing cached config:", e);
-          // Clear invalid cache
-          localStorage.removeItem('cachedConfig');
-        }
-      }
-
-      // 2. Load user and pass from localStorage initially
-      document.getElementById('user').value = localStorage.getItem('user') || '';
-      document.getElementById('pass').value = localStorage.getItem('pass') || '';
-
-      // 3. Request fresh configuration from Android (this will overwrite/update if successful)
-      if (Android?.requisitarConfig) {
-        Android.requisitarConfig();
-      } else {
-        // If Android interface is not available and no cached data, display a message or default
-        if (!cachedConfig) {
-            document.getElementById('servidorSelect').innerHTML = '<option>Nenhum dado disponível. Conecte-se à internet ou reinstale o app.</option>';
-            document.getElementById('payloadSelect').innerHTML = '<option>Nenhum dado disponível.</option>';
-        }
-        console.warn("Android interface not found. Cannot request fresh config.");
-      }
+      Android?.requisitarConfig();
     }
   </script>
 </body>
