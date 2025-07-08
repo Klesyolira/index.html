@@ -14,7 +14,6 @@
       --text: #111;
     }
 
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -223,10 +222,17 @@
       Android?.onPayloadSelecionada(option.dataset.id, option.textContent);
     }
 
+
+
+
+
+
+
+
+
     function carregarDados(json) {
       const data = typeof json === "string" ? JSON.parse(json) : json;
 
-      // fundo e logo
       if (data.BackgroundLink) {
         document.body.style.backgroundImage = `url('${data.BackgroundLink}')`;
       }
@@ -239,25 +245,35 @@
 
       const servidorSelect = document.getElementById('servidorSelect');
       servidorSelect.innerHTML = '';
-      data.servers.forEach(s => {
+      (data.Servers || []).forEach((s, index) => {
         const opt = document.createElement('option');
-        opt.textContent = s.name;
-        opt.dataset.id = s.id;
-        opt.dataset.ip = s.serverIP;
-        if (data.ServerPos == s.id) opt.selected = true;
+        opt.textContent = s.Name || s.name;
+        opt.dataset.id = index;
+        opt.dataset.ip = s.ServerIP || s.serverIP;
+        if (data.ServerPos == index) opt.selected = true;
         servidorSelect.appendChild(opt);
       });
 
       const payloadSelect = document.getElementById('payloadSelect');
       payloadSelect.innerHTML = '';
-      data.payloads.forEach(p => {
+      (data.Networks || data.Payloads || []).forEach((p, index) => {
         const opt = document.createElement('option');
-        opt.textContent = p.name;
-        opt.dataset.id = p.id;
-        if (data.PayloadPos == p.id) opt.selected = true;
+        opt.textContent = p.Name || p.name;
+        opt.dataset.id = index;
+        opt.dataset.payload = p.Payload || '';
+        opt.dataset.sni = p.SNI || '';
+        opt.dataset.info = p.Info || '';
+        opt.dataset.proxyip = p.ProxyIP || '';
+        opt.dataset.proxyport = p.ProxyPort || '';
+        opt.dataset.color = p.Color || '';
+        if (data.PayloadPos == index) opt.selected = true;
         payloadSelect.appendChild(opt);
       });
     }
+
+
+
+
 
     window.onload = () => {
       Android?.requisitarConfig();
