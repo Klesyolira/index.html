@@ -944,13 +944,14 @@
             document.getElementById('srvIndex').value = index;
             
             const obj = isNew ? {} : serversArray[index];
-            const fields = ['Name', 'Info', 'Flag', 'FlagUrl', 'ServerHost', 'ServerPort', 'SSLPort', 'ProxyHost', 'ProxyPort', 'CheckUser', 'USER', 'PASS', 'Payload', 'Sni', 'v2ray', 'xray'];
-            fields.forEach(f => {
-                let domId = 'srv' + (f === 'ServerHost' ? 'Host' : f === 'ServerPort' ? 'Port' : f.charAt(0).toUpperCase() + f.slice(1));
-                if(f==='v2ray') domId = 'srvV2ray';
-                if(f==='xray') domId = 'srvXray';
-                if(f==='USER') domId = 'srvUser';
-                if(f==='PASS') domId = 'srvPass';
+            const fieldMap = {
+                'Name':'srvName','Info':'srvInfo','Flag':'srvFlag','FlagUrl':'srvFlagUrl',
+                'ServerHost':'srvHost','ServerPort':'srvPort','SSLPort':'srvSSLPort',
+                'ProxyHost':'srvProxyHost','ProxyPort':'srvProxyPort','CheckUser':'srvCheckUser',
+                'USER':'srvUser','PASS':'srvPass','Payload':'srvPayload','Sni':'srvSni',
+                'v2ray':'srvV2ray','xray':'srvXray'
+            };
+            Object.entries(fieldMap).forEach(([f, domId]) => {
                 document.getElementById(domId).value = obj[f] || "";
             });
             openModal('modal-server');
@@ -959,13 +960,14 @@
         function saveServer() {
             const index = parseInt(document.getElementById('srvIndex').value);
             const obj = {};
-            const fields = ['Name', 'Info', 'Flag', 'FlagUrl', 'ServerHost', 'ServerPort', 'SSLPort', 'ProxyHost', 'ProxyPort', 'CheckUser', 'USER', 'PASS', 'Payload', 'Sni', 'v2ray', 'xray'];
-            fields.forEach(f => {
-                let domId = 'srv' + (f === 'ServerHost' ? 'Host' : f === 'ServerPort' ? 'Port' : f.charAt(0).toUpperCase() + f.slice(1));
-                if(f==='v2ray') domId = 'srvV2ray';
-                if(f==='xray') domId = 'srvXray';
-                if(f==='USER') domId = 'srvUser';
-                if(f==='PASS') domId = 'srvPass';
+            const fieldMap = {
+                'Name':'srvName','Info':'srvInfo','Flag':'srvFlag','FlagUrl':'srvFlagUrl',
+                'ServerHost':'srvHost','ServerPort':'srvPort','SSLPort':'srvSSLPort',
+                'ProxyHost':'srvProxyHost','ProxyPort':'srvProxyPort','CheckUser':'srvCheckUser',
+                'USER':'srvUser','PASS':'srvPass','Payload':'srvPayload','Sni':'srvSni',
+                'v2ray':'srvV2ray','xray':'srvXray'
+            };
+            Object.entries(fieldMap).forEach(([f, domId]) => {
                 obj[f] = document.getElementById(domId).value;
             });
             if (index === -1) serversArray.push(obj); else serversArray[index] = obj;
@@ -983,8 +985,13 @@
             document.getElementById('multiServModalTitle').innerText = isNew ? "Novo MultiServ" : "Editar MultiServ";
             document.getElementById('msIndex').value = index;
             const obj = isNew ? {} : multiServsArray[index];
-            ['Name','TYPE','FLAG','FlagUrl','ServerIP','CheckUser','ServerPort','SSLPort','USER','PASS'].forEach(k => {
-                document.getElementById('ms'+k).value = obj[k] || "";
+            const fieldMap = {
+                'Name':'msName','TYPE':'msType','FLAG':'msFlag','FlagUrl':'msFlagUrl',
+                'ServerIP':'msServerIP','CheckUser':'msCheckUser','ServerPort':'msPort',
+                'SSLPort':'msSSLPort','USER':'msUser','PASS':'msPass'
+            };
+            Object.entries(fieldMap).forEach(([f, domId]) => {
+                document.getElementById(domId).value = obj[f] || "";
             });
             openModal('modal-multiserv');
         }
@@ -992,8 +999,13 @@
         function saveMultiServ() {
             const index = parseInt(document.getElementById('msIndex').value);
             const obj = {};
-            ['Name','TYPE','FLAG','FlagUrl','ServerIP','CheckUser','ServerPort','SSLPort','USER','PASS'].forEach(k => {
-                obj[k] = document.getElementById('ms'+k).value;
+            const fieldMap = {
+                'Name':'msName','TYPE':'msType','FLAG':'msFlag','FlagUrl':'msFlagUrl',
+                'ServerIP':'msServerIP','CheckUser':'msCheckUser','ServerPort':'msPort',
+                'SSLPort':'msSSLPort','USER':'msUser','PASS':'msPass'
+            };
+            Object.entries(fieldMap).forEach(([f, domId]) => {
+                obj[f] = document.getElementById(domId).value;
             });
             if (index === -1) multiServsArray.push(obj); else multiServsArray[index] = obj;
             closeModal('modal-multiserv'); renderMultiServs(); processForm();
