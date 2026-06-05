@@ -44,7 +44,7 @@
                 <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
                     <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
                 </div>
-                <h2 class="text-2xl font-bold">Yumeko Cloud Panel</h2>
+                <h2 class="text-2xl font-bold">Yoru Shield Panel</h2>
                 <p class="text-indigo-100 text-xs mt-1">Conecte seu repositório de forma 100% segura e isolada no seu navegador.</p>
             </div>
             
@@ -97,7 +97,7 @@
                     <i class="fa-solid fa-terminal text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Yumeko Generator</h1>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Yoru Gerador</h1>
                     <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full font-bold">V2.5 CLOUD</span>
                 </div>
             </div>
@@ -260,7 +260,7 @@
                     <h2 class="text-lg font-extrabold text-slate-800 flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded"></span>HTML Converter</h2>
                     <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-md font-semibold">HTML.json</span>
                 </div>
-                <p class="text-xs text-slate-500 mb-4">Transforme designs HTML completos em blocos JSON base64 nativos do app Yumeko.</p>
+                <p class="text-xs text-slate-500 mb-4">Transforme designs HTML completos em blocos JSON base64 nativos do app Yoru.</p>
                 
                 <div class="mb-4">
                     <div class="flex justify-between items-end mb-1">
@@ -679,7 +679,7 @@
                     method: 'DELETE',
                     headers: { ...getGitHeaders(), 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        message: `Yumeko Deploy: Removendo arquivo ${path}`,
+                        message: `Yoru Shield Deploy: Removendo arquivo ${path}`,
                         sha: sha
                     })
                 });
@@ -1079,7 +1079,7 @@
                 }
 
                 const base64Content = btoa(unescape(encodeURIComponent(dados)));
-                const body = { message: `Yumeko Deploy: Auto-Update [${filename}] 🚀`, content: base64Content };
+                const body = { message: `Yoru Shield Deploy: Auto-Update [${filename}] 🚀`, content: base64Content };
                 if (sha) body.sha = sha;
 
                 const putRes = await fetch(apiUrl, {
