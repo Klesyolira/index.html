@@ -41,22 +41,6 @@
             "Sni": "google.com"
         },
         {
-            "Name": "TIM 03",
-            "Flag": "us",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
-            "Info": "PROXY",
-            "ServerHost": "g.gugu55.online",
-            "ServerPort": "22",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "SSLPort": "443",
-            "ProxyHost": "g.gugu55.online",
-            "ProxyPort": "80",
-            "USER": "gustavo33",
-            "PASS": "341914",
-            "Payload": "GET / HTTP/1.1[crlf]Host: g.gugu55.online[crlf]Upgrade: websocket[crlf][crlf]",
-            "Sni": "google.com"
-        },
-        {
             "Name": "SERVIDOR VMESS 01",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
