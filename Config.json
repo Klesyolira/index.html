@@ -1,5 +1,5 @@
 {
-    "Version": "30",
+    "Version": "15",
     "Ads": "on",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/Tema%20Yumeko%20ym",
@@ -63,22 +63,6 @@
             "Info": "V2RAY",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "v2ray": "vmess://eyJhZGQiOiJ1c3YtMy5vcGVudjJyYXkuY29tIiwiYWlkIjoiMTYiLCJob3N0IjoiY3JlYXRpdmVjb21tb25zLm9yZyIsImlkIjoiNGYxN2UxNzMtNGFmOS01MDQxLTk2NjItZjZjMjdlMGRlY2ZkIiwibmV0Ijoid3MiLCJwYXRoIjoiL29wZW50dW5uZWw/dXNlcj1vcGVudHVubmVsLm5ldC1sdWdoIiwicG9ydCI6IjgwIiwicHMiOiJvcGVudHVubmVsLm5ldC1sdWdoIiwidGxzIjoiIiwidHlwZSI6Im5vbmUiLCJ2IjoiMiJ9"
-        },
-        {
-            "Name": "SERVIDOR XRAY 02",
-            "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
-            "Info": "XRAY",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "xray": "vmess://eyJ0eXBlIjogIm5vbmUiLCAicGF0aCI6ICIvdnBuamFudGl0IiwgImhvc3QiOiAiIiwgIm5ldCI6ICJ3cyIsICJwb3J0IjogIjEwMDAwIiwgImFkZCI6ICJrcjMudnBuamFudGl0LmNvbSIsICJwcyI6ICJOZXR3b3JrLXZwbmphbnRpdC5jb20iLCAidGxzIjogIiIsICJhaWQiOiAiMCIsICJ2IjogIjIiLCAiaWQiOiAiMmMyZGNjNGMtNWExOC0xMWYxLTg0NWQtMDAxNjNlMDFjNzJhIn0="
-        },
-        {
-            "Name": "SERVIDOR XRAY 03",
-            "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
-            "Info": "XRAY",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "xray": ""
         }
     ],
     "MultiServs": [
