@@ -949,6 +949,8 @@
                 let domId = 'srv' + (f === 'ServerHost' ? 'Host' : f === 'ServerPort' ? 'Port' : f.charAt(0).toUpperCase() + f.slice(1));
                 if(f==='v2ray') domId = 'srvV2ray';
                 if(f==='xray') domId = 'srvXray';
+                if(f==='USER') domId = 'srvUser';
+                if(f==='PASS') domId = 'srvPass';
                 document.getElementById(domId).value = obj[f] || "";
             });
             openModal('modal-server');
@@ -962,6 +964,8 @@
                 let domId = 'srv' + (f === 'ServerHost' ? 'Host' : f === 'ServerPort' ? 'Port' : f.charAt(0).toUpperCase() + f.slice(1));
                 if(f==='v2ray') domId = 'srvV2ray';
                 if(f==='xray') domId = 'srvXray';
+                if(f==='USER') domId = 'srvUser';
+                if(f==='PASS') domId = 'srvPass';
                 obj[f] = document.getElementById(domId).value;
             });
             if (index === -1) serversArray.push(obj); else serversArray[index] = obj;
