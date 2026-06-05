@@ -1,6 +1,6 @@
 {
     "Version": "35",
-    "Ads": "on",
+    "Ads": "off",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/Tema%20Yumeko%20ym",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
