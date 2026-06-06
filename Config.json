@@ -1,7 +1,7 @@
 {
-    "Version": "43",
+    "Version": "1.0",
     "Ads": "on",
-    "UIMode": "nativo",
+    "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/Tema%20Yumeko%20ym",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "LUGH DEVELOP NOTES",
