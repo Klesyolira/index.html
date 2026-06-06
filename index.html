@@ -291,7 +291,7 @@
                     <h2 class="text-lg font-extrabold text-slate-800 dark:text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 dark:bg-indigo-500 rounded"></span>HTML Converter</h2>
                     <span class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md font-semibold">HTML.json</span>
                 </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Transforme designs HTML completos em blocos JSON base64 nativos do app Yoru.</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Transforme designs HTML completos em blocos JSON nativos do app Yoru (@).</p>
                 
                 <div class="mb-4">
                     <div class="flex justify-between items-end mb-1">
@@ -307,7 +307,7 @@
 
                 <div class="flex flex-wrap gap-2 mb-4">
                     <button onclick="convertHtml()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-4 py-2.5 rounded-xl shadow-md font-bold flex items-center gap-1.5 transition-colors">
-                        <i class="fa-solid fa-rotate"></i> Gerar JSON Base64
+                        <i class="fa-solid fa-rotate"></i> Gerar JSON HTML (@)
                     </button>
                     <button onclick="previewHtml()" class="bg-teal-500 hover:bg-teal-600 text-white text-xs px-4 py-2.5 rounded-xl shadow-md font-bold flex items-center gap-1.5 transition-colors">
                         <i class="fa-regular fa-eye"></i> Visualizar Render
@@ -315,7 +315,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Resultado Base64 de Saída</label>
+                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Resultado JSON de Saída</label>
                     <textarea id="outputHtmlJson" rows="5" readonly class="w-full p-3 font-mono text-xs text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-xl focus:outline-none resize-y"></textarea>
                 </div>
 
@@ -881,11 +881,18 @@
                 } else if (json.HtmlUI !== undefined) {
                     if(currentTab !== 'html') switchTab('html');
                     document.getElementById('inputVersion').value = json.Version || "";
-                    try {
-                        document.getElementById('inputHtmlRaw').value = decodeURIComponent(escape(atob(json.HtmlUI)));
-                    } catch(e) {
-                        document.getElementById('inputHtmlRaw').value = json.HtmlUI;
+                    
+                    let htmlLido = json.HtmlUI;
+                    
+                    // Remove os "@" do começo e do fim para renderizar na caixa de texto
+                    if (typeof htmlLido === 'string') {
+                        htmlLido = htmlLido.trim();
+                        if (htmlLido.startsWith('@') && htmlLido.endsWith('@')) {
+                            htmlLido = htmlLido.slice(1, -1).trim();
+                        }
                     }
+                    
+                    document.getElementById('inputHtmlRaw').value = htmlLido;
                     document.getElementById('outputHtmlJson').value = data;
                     previewHtml();
                 }
@@ -1078,7 +1085,7 @@
         }
 
         // ==========================================
-        // HTML CONVERTER LÓGICA
+        // HTML CONVERTER LÓGICA (AGORA COM '@')
         // ==========================================
         function clearHtml() {
             document.getElementById('inputHtmlRaw').value = "";
@@ -1091,11 +1098,16 @@
             if (!raw) return showToast("Por favor, cole um HTML válido antes.", "error");
             
             const version = document.getElementById('inputVersion').value || "1.0";
-            const htmlB64 = btoa(unescape(encodeURIComponent(raw)));
-            const jsonObj = { Version: version, HtmlUI: htmlB64 };
+            
+            // Adiciona o '@' no começo e no final
+            const htmlFormatado = `@\n${raw}\n@`;
+            
+            const jsonObj = { Version: version, HtmlUI: htmlFormatado };
             document.getElementById('outputHtmlJson').value = JSON.stringify(jsonObj, null, 4);
-            showToast("HTML convertido em Base64!", "success");
-            saveDraftToLocalStorage(); previewHtml();
+            showToast("JSON HTML gerado com sucesso!", "success");
+            
+            saveDraftToLocalStorage(); 
+            previewHtml();
         }
 
         function previewHtml() {
@@ -1283,4 +1295,3 @@
     </script>
 </body>
 </html>
-
