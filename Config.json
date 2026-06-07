@@ -1,7 +1,7 @@
 {
-    "Version": "2.5",
+    "Version": "2.6",
     "Ads": "off",
-    "UIMode": "html",
+    "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "LUGH DEVELOP NOTES",
