@@ -1293,5 +1293,137 @@
             }, 3500);
         }
     </script>
+
+
+<style id="yoru-fx-styles">
+  /* 1. Wallpaper do Menino Pescando (Quase invisível) */
+  .fishing-boy-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1000&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.04; /* Quase invisível */
+    mix-blend-mode: screen;
+  }
+
+  /* 2. Sol e Lua flutuando */
+  .celestial-body {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    font-size: 50px;
+    z-index: 1;
+    pointer-events: none;
+    animation: floatCelestial 6s ease-in-out infinite alternate;
+  }
+  
+  /* Controle do Sol: Forte no claro, fraco no escuro */
+  .celestial-sun { opacity: 0.3; filter: drop-shadow(0 0 10px rgba(255, 200, 0, 0.2)); }
+  [data-theme="light"] .celestial-sun { opacity: 1; filter: drop-shadow(0 0 20px rgba(255, 200, 0, 0.8)); }
+  .celestial-moon { filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5)); }
+
+  @keyframes floatCelestial {
+    0% { transform: translateY(0px) rotate(-5deg); }
+    100% { transform: translateY(15px) rotate(5deg); }
+  }
+
+  /* 3. Bola de Futebol Aleatória */
+  .random-football {
+    position: fixed;
+    font-size: 24px;
+    z-index: 100;
+    pointer-events: none; /* Não atrapalha o clique na VPN */
+    user-select: none;
+  }
+
+  /* 4. Estrelas de Fundo */
+  .fx-star {
+    position: fixed;
+    background-color: #fff;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    animation: twinkleStar linear infinite;
+  }
+  [data-theme="light"] .fx-star { background-color: #0f172a; opacity: 0; } /* Estrelas escuras no tema claro */
+
+  @keyframes twinkleStar {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.5); }
+  }
+</style>
+
+<script id="yoru-fx-script">
+(function() {
+  // 1. Injetar Wallpaper
+  const bg = document.createElement('div');
+  bg.className = 'fishing-boy-bg';
+  document.body.appendChild(bg);
+
+  // 2. Lógica do Sol e Lua
+  const hour = new Date().getHours();
+  const isDay = hour >= 6 && hour < 18; // Entre 6h e 17h59 é dia
+  const celestial = document.createElement('div');
+  celestial.className = 'celestial-body ' + (isDay ? 'celestial-sun' : 'celestial-moon');
+  celestial.innerText = isDay ? '☀️' : '🌙';
+  document.body.appendChild(celestial);
+
+  // 3. Estrelinhas no Fundo (Apenas 30 para não travar o celular)
+  const createStars = () => {
+    for (let i = 0; i < 30; i++) {
+      let star = document.createElement('div');
+      let size = Math.random() * 3 + 1; // 1px a 4px
+      star.className = 'fx-star';
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      star.style.animationDelay = Math.random() * 2 + 's';
+      document.body.appendChild(star);
+    }
+  };
+  createStars();
+
+  // 4. A Bola de Futebol Quicando pela Tela (Física Simples)
+  const ball = document.createElement('div');
+  ball.className = 'random-football';
+  ball.innerText = '⚽';
+  document.body.appendChild(ball);
+
+  let ballX = Math.random() * window.innerWidth;
+  let ballY = Math.random() * window.innerHeight;
+  let velX = 2; // Velocidade Horizontal
+  let velY = 2; // Velocidade Vertical
+  let rotation = 0;
+
+  function animateBall() {
+    ballX += velX;
+    ballY += velY;
+    rotation += 3;
+
+    // Colisão com as bordas da tela
+    if (ballX + 30 >= window.innerWidth || ballX <= 0) velX = -velX;
+    if (ballY + 30 >= window.innerHeight || ballY <= 0) velY = -velY;
+
+    ball.style.transform = `translate(${ballX}px, ${ballY}px) rotate(${rotation}deg)`;
+    requestAnimationFrame(animateBall);
+  }
+  
+  // Inicia a bola quicando
+  animateBall();
+
+})();
+</script>
+
+
+
+    
 </body>
 </html>
