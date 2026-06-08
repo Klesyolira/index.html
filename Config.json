@@ -1,6 +1,6 @@
 {
-    "Version": "3.2",
-    "Ads": "off",
+    "Version": "3.3",
+    "Ads": "on",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
