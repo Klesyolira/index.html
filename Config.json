@@ -41,6 +41,23 @@
             "Sni": "google.com"
         },
         {
+            "Name": "TIM 03",
+            "Flag": "us",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "Info": "PROXY",
+            "ServerHost": "g.gugu55.online",
+            "ServerPort": "22",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "SSLPort": "443",
+            "ProxyHost": "104.17.72.206#141.193.213.11#141.193.213.10#172.66.0.157#162.159.140.159#104.18.43.123#172.64.144.133#dev-cms.vivo.com.br#servicosdigitais.vivo.com.br#equipamentos.vivo.com.br#z9w105.store.vivo.com.br#assine.vivo.com.br#api.app.vivo.com.br#api.vivo-torpedoempresas.vivo.com.br#vivoplataformadigital.com.br#vivoup.vivo.com.br#serpro.vivo.com.br#planosempresas.vivo.com.br#portaldegovernancadocumental.vivo.com.br#planosempresas-hml.vivo.com.br#ospregional.vivo.com.br",
+            "ProxyPort": "80",
+            "USER": "gustavo33",
+            "PASS": "341914",
+            "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]#[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]",
+            "Sni": "google.com"
+        },
+        
+        {
             "Name": "SERVIDOR VMESS 01",
             "Info": "V2RAY",
             "Flag": "br",
