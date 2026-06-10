@@ -63,7 +63,7 @@
             "xray": ""
         },
         {
-            "Name": "VMESS XRAY 01",
+            "Name": "VMESS XRAY",
             "Info": "V2RAY",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
@@ -78,7 +78,7 @@
             "Payload": "",
             "Sni": "",
             "v2ray": "",
-            "xray": "vmess://eyJhZGQiOiJ1c3YtMi5vcGVudjJyYXkuY29tIiwiYWlkIjoiMTYiLCJob3N0IjoiY3JlYXRpdmVjb21tb25zLm9yZyIsImlkIjoiNGYxN2UxNzMtNGFmOS01MDQxLTk2NjItZjZjMjdlMGRlY2ZkIiwibmV0Ijoid3MiLCJwYXRoIjoiL29wZW50dW5uZWw/dXNlcj1vcGVudHVubmVsLm5ldC1sdWdoIiwicG9ydCI6IjQ0MyIsInBzIjoib3BlbnR1bm5lbC5uZXQtbHVnaCIsInRscyI6InRscyIsInNuaSI6ICJjcmVhdGl2ZWNvbW1vbnMub3JnIiwidHlwZSI6Im5vbmUiLCJ2IjoiMiJ9"
+            "xray": "\\\"log\\\":{\\\"loglevel\\\":\\\"warning\\\"},\\\"inbounds\\\":[{\\\"listen\\\":\\\"127.0.0.1\\\",\\\"port\\\":10808,\\\"protocol\\\":\\\"socks\\\",\\\"settings\\\":{\\\"auth\\\":\\\"noauth\\\",\\\"udp\\\":true}}],\\\"outbounds\\\":[{\\\"protocol\\\":\\\"vmess\\\",\\\"settings\\\":{\\\"vnext\\\":[{\\\"address\\\":\\\"usv-2.openv2ray.com\\\",\\\"port\\\":80,\\\"users\\\":[{\\\"id\\\":\\\"4f17e173-4af9-5041-9662-f6c27e0decfd\\\",\\\"alterId\\\":16,\\\"security\\\":\\\"auto\\\"}]}]},\\\"streamSettings\\\":{\\\"network\\\":\\\"ws\\\",\\\"security\\\":\\\"none\\\",\\\"wsSettings\\\":{\\\"path\\\":\\\"/opentunnel?user=opentunnel.net-lugh\\\",\\\"headers\\\":{\\\"Host\\\":\\\"creativecommons.org\\\"}}}}],\\\"routing\\\":{\\\"domainStrategy\\\":\\\"AsIs\\\"},\\\"dns\\\":{\\\"servers\\\":[\\\"1.1.1.1\\\",\\\"8.8.8.8\\\"]}}"
         }
     ],
     "MultiServs": [
