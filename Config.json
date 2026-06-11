@@ -1,5 +1,6 @@
+
 {
-    "Version": "5.1",
+    "Version": "5.2",
     "Ads": "off",
     "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -62,6 +63,7 @@
             "v2ray": "",
             "xray": ""
         },
+
         {
             "Name": "Vless Xray 01",
             "Info": "V2RAY",
@@ -78,7 +80,7 @@
             "Payload": "",
             "Sni": "",
             "v2ray": "",
-            "xray": "{\\\"log\\\":{\\\"loglevel\\\":\\\"warning\\\"},\\\"inbounds\\\":[{\\\"listen\\\":\\\"127.0.0.1\\\",\\\"port\\\":10808,\\\"protocol\\\":\\\"socks\\\",\\\"settings\\\":{\\\"auth\\\":\\\"noauth\\\",\\\"udp\\\":true}}],\\\"outbounds\\\":[{\\\"protocol\\\":\\\"vless\\\",\\\"settings\\\":{\\\"vnext\\\":[{\\\"address\\\":\\\"br6.vpnjantit.com\\\",\\\"port\\\":443,\\\"users\\\":[{\\\"id\\\":\\\"98b9a52a-65ad-11f1-a237-00163c8f98e8\\\",\\\"encryption\\\":\\\"none\\\",\\\"flow\\\":\\\"xtls-rprx-vision\\\"}]}]},\\\"streamSettings\\\":{\\\"network\\\":\\\"tcp\\\",\\\"security\\\":\\\"reality\\\",\\\"realitySettings\\\":{\\\"show\\\":false,\\\"fingerprint\\\":\\\"chrome\\\",\\\"serverName\\\":\\\"m.ofertas.tim.com.br\\\",\\\"publicKey\\\":\\\"QXQg3qOYGXfJs1xwDIEI69cpaWnGxCbk8x8feercFkU\\\",\\\"shortId\\\":\\\"b22b045edf8efb40\\\",\\\"spiderX\\\":\\\"\\\"}}}]}"
+            "xray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vless\",\"settings\":{\"vnext\":[{\"address\":\"br6.vpnjantit.com\",\"port\":443,\"users\":[{\"id\":\"98b9a52a-65ad-11f1-a237-00163c8f98e8\",\"encryption\":\"none\",\"flow\":\"xtls-rprx-vision\"}]}]},\"streamSettings\":{\"network\":\"tcp\",\"security\":\"reality\",\"realitySettings\":{\"show\":false,\"fingerprint\":\"chrome\",\"serverName\":\"m.ofertas.tim.com.br\",\"publicKey\":\"QXQg3qOYGXfJs1xwDIEI69cpaWnGxCbk8x8feercFkU\",\"shortId\":\"b22b045edf8efb40\",\"spiderX\":\"\"}}}]}"
         },
         {
             "Name": "Vmess V2ray 02",
@@ -98,6 +100,8 @@
             "v2ray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}",
             "xray": ""
         }
+        
+        
     ],
     "MultiServs": [
         {
