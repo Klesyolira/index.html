@@ -1,5 +1,5 @@
 {
-    "Version": "5.0",
+    "Version": "5.1",
     "Ads": "off",
     "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -63,7 +63,7 @@
             "xray": ""
         },
         {
-            "Name": "VMESS Xray 01",
+            "Name": "Vless Xray 01",
             "Info": "V2RAY",
             "Flag": "br",
             "FlagUrl": "https://static.vecteezy.com/system/resources/thumbnails/009/687/793/small/american-flag-usa-flag-png.png",
@@ -78,28 +78,10 @@
             "Payload": "",
             "Sni": "",
             "v2ray": "",
-            "xray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}"
+            "xray": "{\\\"log\\\":{\\\"loglevel\\\":\\\"warning\\\"},\\\"inbounds\\\":[{\\\"listen\\\":\\\"127.0.0.1\\\",\\\"port\\\":10808,\\\"protocol\\\":\\\"socks\\\",\\\"settings\\\":{\\\"auth\\\":\\\"noauth\\\",\\\"udp\\\":true}}],\\\"outbounds\\\":[{\\\"protocol\\\":\\\"vless\\\",\\\"settings\\\":{\\\"vnext\\\":[{\\\"address\\\":\\\"br6.vpnjantit.com\\\",\\\"port\\\":443,\\\"users\\\":[{\\\"id\\\":\\\"98b9a52a-65ad-11f1-a237-00163c8f98e8\\\",\\\"encryption\\\":\\\"none\\\",\\\"flow\\\":\\\"xtls-rprx-vision\\\"}]}]},\\\"streamSettings\\\":{\\\"network\\\":\\\"tcp\\\",\\\"security\\\":\\\"reality\\\",\\\"realitySettings\\\":{\\\"show\\\":false,\\\"fingerprint\\\":\\\"chrome\\\",\\\"serverName\\\":\\\"m.ofertas.tim.com.br\\\",\\\"publicKey\\\":\\\"QXQg3qOYGXfJs1xwDIEI69cpaWnGxCbk8x8feercFkU\\\",\\\"shortId\\\":\\\"b22b045edf8efb40\\\",\\\"spiderX\\\":\\\"\\\"}}}]}"
         },
         {
-            "Name": "VMESS Xray 02",
-            "Info": "V2RAY",
-            "Flag": "br",
-            "FlagUrl": "https://static.vecteezy.com/system/resources/thumbnails/009/687/793/small/american-flag-usa-flag-png.png",
-            "ServerHost": "",
-            "ServerPort": "",
-            "SSLPort": "",
-            "ProxyHost": "",
-            "ProxyPort": "",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "USER": "gustavo33",
-            "PASS": "",
-            "Payload": "",
-            "Sni": "",
-            "v2ray": "",
-            "xray": "vmess://eyJhZGQiOiJ1c3YtMi5vcGVudjJyYXkuY29tIiwiYWlkIjoiMTYiLCJob3N0IjoiY3JlYXRpdmVjb21tb25zLm9yZyIsImlkIjoiNGYxN2UxNzMtNGFmOS01MDQxLTk2NjItZjZjMjdlMGRlY2ZkIiwibmV0Ijoid3MiLCJwYXRoIjoiL29wZW50dW5uZWw/dXNlcj1vcGVudHVubmVsLm5ldC1sdWdoIiwicG9ydCI6IjQ0MyIsInBzIjoib3BlbnR1bm5lbC5uZXQtbHVnaCIsInRscyI6InRscyIsInNuaSI6ICJjcmVhdGl2ZWNvbW1vbnMub3JnIiwidHlwZSI6Im5vbmUiLCJ2IjoiMiJ9"
-        },
-        {
-            "Name": "VMESS V2ray 03",
+            "Name": "Vmess V2ray 02",
             "Info": "V2RAY",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
@@ -116,8 +98,6 @@
             "v2ray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}",
             "xray": ""
         }
-        
-        
     ],
     "MultiServs": [
         {
