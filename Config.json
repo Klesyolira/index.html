@@ -77,7 +77,7 @@
             "PASS": "",
             "Payload": "",
             "Sni": "",
-            "v2ray": "",
+            "v2ray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}",
             "xray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}"
         }
     ],
