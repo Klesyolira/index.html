@@ -1,8 +1,7 @@
-
 {
-    "Version": "5.2",
+    "Version": "5.3",
     "Ads": "off",
-    "UIMode": "html",
+    "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "LUGH DEVELOP NOTES",
@@ -63,7 +62,6 @@
             "v2ray": "",
             "xray": ""
         },
-
         {
             "Name": "Vless Xray 01",
             "Info": "V2RAY",
@@ -100,8 +98,6 @@
             "v2ray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}",
             "xray": ""
         }
-        
-        
     ],
     "MultiServs": [
         {
