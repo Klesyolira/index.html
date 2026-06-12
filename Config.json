@@ -1,5 +1,5 @@
 {
-    "Version": "5.4",
+    "Version": "5.5",
     "Ads": "off",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -31,7 +31,7 @@
             "Info": "PROXY",
             "Flag": "us",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
-            "ServerHost": "188.114.96.2#g.gugu55.online",
+            "ServerHost": "g.gugu55.online",
             "ServerPort": "80",
             "SSLPort": "443",
             "ProxyHost": "188.114.96.2#g.gugu55.online",
