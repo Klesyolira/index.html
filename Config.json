@@ -1,5 +1,5 @@
 {
-    "Version": "5.5",
+    "Version": "5.6",
     "Ads": "off",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -97,6 +97,24 @@
             "Sni": "",
             "v2ray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}",
             "xray": ""
+        },
+        {
+            "Name": "Xray",
+            "Info": "V2RAY",
+            "Flag": "Br",
+            "FlagUrl": "",
+            "ServerHost": "",
+            "ServerPort": "",
+            "SSLPort": "",
+            "ProxyHost": "",
+            "ProxyPort": "",
+            "CheckUser": "",
+            "USER": "",
+            "PASS": "",
+            "Payload": "",
+            "Sni": "",
+            "v2ray": "",
+            "xray": "{ \\\"dns\\\": {\\\"hosts\\\": {\\\"domain:googleapis.cn\\\": \\\"googleapis.com\\\"},\\\"servers\\\": [\\\"1.1.1.1\\\"]},\\\"inbounds\\\": [{ \\\"listen\\\": \\\"127.0.0.1\\\", \\\"port\\\": 10808,\\\"protocol\\\": \\\"socks\\\",\\\"settings\\\": {\\\"auth\\\": \\\"noauth\\\",\\\"udp\\\": true, \\\"userLevel\\\": 8},\\\"sniffing\\\": {\\\"destOverride\\\": [\\\"http\\\",\\\"tls\\\"],\\\"enabled\\\": false},\\\"tag\\\": \\\"socks\\\"},{\\\"listen\\\": \\\"127.0.0.1\\\",\\\"port\\\": 10809,\\\"protocol\\\": \\\"http\\\",\\\"settings\\\": {\\\"userLevel\\\": 8},\\\"tag\\\": \\\"http\\\"}],\\\"log\\\": {\\\"loglevel\\\": \\\"warning\\\"},\\\"outbounds\\\": [{\\\"mux\\\": {\\\"concurrency\\\": 8,\\\"enabled\\\": false}, \\\"protocol\\\": \\\"vmess\\\",\\\"settings\\\": {\\\"vnext\\\": [{\\\"address\\\": \\\"static.ads-twitter.com\\\",\\\"port\\\": 443,\\\"users\\\": [{\\\"alterId\\\": 0,\\\"encryption\\\": \\\"auto\\\",\\\"flow\\\": \\\"\\\",\\\"id\\\": \\\"f11251e8-4e8b-42a1-83f2-e25332f2a343\\\",\\\"level\\\": 8,\\\"security\\\": \\\"auto\\\"}]}]},\\\"streamSettings\\\": {\\\"network\\\": \\\"ws\\\",\\\"security\\\": \\\"tls\\\",\\\"tlsSettings\\\": {\\\"allowInsecure\\\": false,\\\"serverName\\\": \\\"static.ads-twitter.com\\\"},\\\"wsSettings\\\": {\\\"headers\\\": { \\\"Host\\\": \\\"bosfty.focusapps.site\\\"},\\\"path\\\": \\\"/whxOoSgV/\\\"}},\\\"tag\\\": \\\"proxy\\\"},{\\\"protocol\\\": \\\"freedom\\\",\\\"settings\\\": {},\\\"tag\\\": \\\"direct\\\"},{\\\"protocol\\\": \\\"blackhole\\\",\\\"settings\\\": {\\\"response\\\": {\\\"type\\\": \\\"http\\\"}},\\\"tag\\\": \\\"block\\\"}],\\\"policy\\\": {\\\"levels\\\": {\\\"8\\\": { \\\"connIdle\\\": 300, \\\"downlinkOnly\\\": 1, \\\"handshake\\\": 4, \\\"uplinkOnly\\\": 1 } }, \\\"system\\\": { \\\"statsOutboundUplink\\\": true, \\\"statsOutboundDownlink\\\": true } }, \\\"routing\\\": { \\\"domainStrategy\\\": \\\"IPIfNonMatch\\\", \\\"rules\\\": [ { \\\"ip\\\": [ \\\"1.1.1.1\\\" ], \\\"outboundTag\\\": \\\"proxy\\\", \\\"port\\\": \\\"53\\\", \\\"type\\\": \\\"field\\\" } ] },\\\"stats\\\":{}}"
         }
     ],
     "MultiServs": [
