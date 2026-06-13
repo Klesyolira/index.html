@@ -1,5 +1,5 @@
 {
-    "Version": "6.1",
+    "Version": "6.1.1",
     "Ads": "on",
     "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -28,7 +28,7 @@
         },
         {
             "Name": "TIM 02",
-            "Info": "PROXY",
+            "Info": "DIRECT",
             "Flag": "us",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "ServerHost": "g.gugu55.online",
