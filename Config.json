@@ -80,7 +80,24 @@
             "xray_path": "/opentunnel?user=opentunnel.net-lugh",
             "xray_host": "creativecommons.org",
             "xray_tls": false
+        },
+        {
+            "Name": "VMESS WS TLS - Gustavovpn",
+            "Info": "V2RAY",
+            "Flag": "br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "xray_protocol": "vmess",
+            "xray_address": "gr2.vpnjantit.com",
+            "xray_port": "10001",
+            "xray_uuid": "eb0a190c-578b-11f1-b58b-ef0d16b52830",
+            "xray_network": "ws",
+            "xray_path": "/vpnjantit",
+            "xray_host": "gr2.vpnjantit.com",
+            "xray_tls": true
         }
+
+
+        
     ],
     "MultiServs": [
         {
