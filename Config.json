@@ -97,7 +97,29 @@
             "Sni": "",
             "v2ray": "vmess://eyJhZGQiOiJ1c3YtMi5vcGVudjJyYXkuY29tIiwiaG9zdCI6ImNyZWF0aXZlY29tbW9ucy5vcmciLCJpZCI6IjRmMTdlMTczLTRhZjktNTA0MS05NjYyLWY2YzI3ZTBkZWNmZCIsIm5ldCI6IndzIiwicGF0aCI6Ii9vcGVudHVubmVsP3VzZXI9b3BlbnR1bm5lbC5uZXQtbHVnaCIsInBvcnQiOiI4MCIsInBzIjoiVm1lc3MgVjJyYXkgMDIiLCJ0bHMiOiIifQ==",
             "xray": ""
+        },
+        {
+            "Name": "VMESS WS TLS - Gustavovpn",
+            "Info": "XRAY",
+            "Flag": "br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "ServerHost": "",
+            "ServerPort": "",
+            "SSLPort": "",
+            "ProxyHost": "",
+            "ProxyPort": "",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "USER": "",
+            "PASS": "",
+            "Payload": "",
+            "Sni": "",
+            "v2ray": "",
+            "xray": "vmess://eyJwcyI6IlZNRVNTIFdTIFRMUyAtIEd1c3Rhdm92cG4iLCJhZGQiOiJncjIudnBuamFudGl0LmNvbSIsInBvcnQiOiIxMDAwMSIsImlkIjoiZWIwYTE5MGMtNTc4Yi0xMWYxLWI1OGItZWYwZDE2YjUyODMwIiwibmV0Ijoid3MiLCJwYXRoIjoiL3ZwbmphbnRpdCIsImhvc3QiOiJncjIudnBuamFudGl0LmNvbSIsInNuaSI6ImdyMi52cG5qYW50aXQuY29tIiwidGxzIjoidGxzIn0="
         }
+
+
+
+        
     ],
     "MultiServs": [
         {
