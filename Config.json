@@ -1,5 +1,5 @@
 {
-    "Version": "6.1.2",
+    "Version": "6.1.3",
     "Ads": "off",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -78,7 +78,7 @@
             "Payload": "",
             "Sni": "",
             "v2ray": "",
-            "xray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vless\",\"settings\":{\"vnext\":[{\"address\":\"br6.vpnjantit.com\",\"port\":443,\"users\":[{\"id\":\"98b9a52a-65ad-11f1-a237-00163c8f98e8\",\"encryption\":\"none\",\"flow\":\"xtls-rprx-vision\"}]}]},\"streamSettings\":{\"network\":\"tcp\",\"security\":\"reality\",\"realitySettings\":{\"show\":false,\"fingerprint\":\"chrome\",\"serverName\":\"m.ofertas.tim.com.br\",\"publicKey\":\"QXQg3qOYGXfJs1xwDIEI69cpaWnGxCbk8x8feercFkU\",\"shortId\":\"b22b045edf8efb40\",\"spiderX\":\"\"}}}]}"
+            "xray": "vless://98b9a52a-65ad-11f1-a237-00163c8f98e8@br6.vpnjantit.com:443?type=tcp&security=reality&sni=m.ofertas.tim.com.br&pbk=QXQg3qOYGXfJs1xwDIEI69cpaWnGxCbk8x8feercFkU&sid=b22b045edf8efb40&flow=xtls-rprx-vision#Vless%20Xray%2001"
         },
         {
             "Name": "Vmess V2ray 02",
@@ -95,7 +95,7 @@
             "PASS": "",
             "Payload": "",
             "Sni": "",
-            "v2ray": "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"listen\":\"127.0.0.1\",\"port\":10808,\"protocol\":\"socks\",\"settings\":{\"auth\":\"noauth\",\"udp\":true}}],\"outbounds\":[{\"protocol\":\"vmess\",\"settings\":{\"vnext\":[{\"address\":\"usv-2.openv2ray.com\",\"port\":80,\"users\":[{\"id\":\"4f17e173-4af9-5041-9662-f6c27e0decfd\",\"alterId\":16,\"security\":\"auto\"}]}]},\"streamSettings\":{\"network\":\"ws\",\"security\":\"none\",\"wsSettings\":{\"path\":\"/opentunnel?user=opentunnel.net-lugh\",\"headers\":{\"Host\":\"creativecommons.org\"}}}}],\"routing\":{\"domainStrategy\":\"AsIs\"},\"dns\":{\"servers\":[\"1.1.1.1\",\"8.8.8.8\"]}}",
+            "v2ray": "vmess://eyJhZGQiOiJ1c3YtMi5vcGVudjJyYXkuY29tIiwiaG9zdCI6ImNyZWF0aXZlY29tbW9ucy5vcmciLCJpZCI6IjRmMTdlMTczLTRhZjktNTA0MS05NjYyLWY2YzI3ZTBkZWNmZCIsIm5ldCI6IndzIiwicGF0aCI6Ii9vcGVudHVubmVsP3VzZXI9b3BlbnR1bm5lbC5uZXQtbHVnaCIsInBvcnQiOiI4MCIsInBzIjoiVm1lc3MgVjJyYXkgMDIiLCJ0bHMiOiIifQ==",
             "xray": ""
         }
     ],
