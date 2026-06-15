@@ -1,5 +1,5 @@
 {
-    "Version": "6.1.21",
+    "Version": "6.1.22",
     "Ads": "on",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -114,6 +114,21 @@
             "xray_network": "ws",
             "xray_path": "t.me/TEAMNETGRATISCOL",
             "xray_host": "x.mtt1.xyz",
+            "xray_tls": true
+        },
+        {
+            "Name": "Tim azion2",
+            "Info": "XRAY",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "CheckUser": "",
+            "xray_protocol": "vless",
+            "xray_address": "ofertas.tim.com.br",
+            "xray_port": "443",
+            "xray_uuid": "bcdf7f10-16e6-48bd-b28a-ac76fcb62fba",
+            "xray_network": "xhttp",
+            "xray_path": "/xhttp",
+            "xray_host": "vitrineempresas.tim.com.br",
             "xray_tls": true
         }
     ],
