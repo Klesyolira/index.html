@@ -1,5 +1,5 @@
 {
-    "Version": "6.1.9",
+    "Version": "6.1.19",
     "Ads": "off",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -99,6 +99,21 @@
             "xray_network": "ws",
             "xray_path": "/vpnjantit",
             "xray_host": "gr2.vpnjantit.com",
+            "xray_tls": true
+        },
+        {
+            "Name": "v2ray 443",
+            "Info": "XRAY",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "CheckUser": "",
+            "xray_protocol": "vless",
+            "xray_address": "x.mtt9.xyz",
+            "xray_port": "443",
+            "xray_uuid": "863b61d0-716a-4b23-9dcd-507cd165c1f3",
+            "xray_network": "ws",
+            "xray_path": "t.me/TEAMNETGRATISCOL",
+            "xray_host": "x.mtt1.xyz",
             "xray_tls": true
         }
     ],
