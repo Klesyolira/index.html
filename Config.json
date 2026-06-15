@@ -1,6 +1,6 @@
 {
-    "Version": "6.1.26",
-    "Ads": "off",
+    "Version": "6.1.27",
+    "Ads": "on",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
@@ -122,7 +122,7 @@
             "Flag": "Br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "",
-            "Xray":"vless://bcdf7f10-16e6-48bd-b28a-ac76fcb62fba@ofertas.tim.com.br:443?mode=auto&path=%2Fxhttp&security=tls&encryption=none&insecure=1&host=bfzakor6urs.map.azionedge.net&fp=chrome&type=xhttp&allowInsecure=1&sni=vitrineempresas.tim.com.br#Tim%20azion2"
+            "Xray": "vless://bcdf7f10-16e6-48bd-b28a-ac76fcb62fba@ofertas.tim.com.br:443?mode=auto&path=%2Fxhttp&security=tls&encryption=none&insecure=1&host=bfzakor6urs.map.azionedge.net&fp=chrome&type=xhttp&allowInsecure=1&sni=vitrineempresas.tim.com.br#Tim%20azion2"
         }
     ],
     "MultiServs": [
