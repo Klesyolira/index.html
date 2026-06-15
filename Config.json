@@ -1,7 +1,7 @@
 {
     "Version": "6.1.19",
-    "Ads": "off",
-    "UIMode": "nativo",
+    "Ads": "on",
+    "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "LUGH DEVELOP NOTES",
