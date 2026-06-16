@@ -1,5 +1,5 @@
 {
-    "Version": "6.1.29",
+    "Version": "9.7",
     "Ads": "on",
     "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -122,7 +122,22 @@
             "Flag": "Br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "",
-            "Xray": "vless://bcdf7f10-16e6-48bd-b28a-ac76fcb62fba@ofertas.tim.com.br:443?mode=auto&path=%2Fxhttp&security=tls&encryption=none&insecure=1&host=bfzakor6urs.map.azionedge.net&fp=chrome&type=xhttp&allowInsecure=1&sni=vitrineempresas.tim.com.br#Tim%20azion2"
+            "xray_protocol": "vless",
+            "xray_address": "ofertas.tim.com.br",
+            "xray_port": "443",
+            "xray_uuid": "bcdf7f10-16e6-48bd-b28a-ac76fcb62fba",
+            "xray_network": "xhttp",
+            "xray_path": "/xhttp",
+            "xray_mode": "auto",
+            "xray_security": "tls",
+            "xray_tls": true,
+            "xray_fingerprint": "chrome",
+            "xray_sni": "vitrineempresas.tim.com.br",
+            "xray_xhttp_host": "bfzakor6urs.map.azionedge.net",
+            "xray_flow": "",
+            "xray_pbk": "",
+            "xray_sid": "",
+            "xray_host": "vitrineempresas.tim.com.br"
         }
     ],
     "MultiServs": [
