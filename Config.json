@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.0.0.1",
+    "Version": "10.0.0.0.2",
     "Ads": "on",
     "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
@@ -124,6 +124,21 @@
             "xray_pbk": "",
             "xray_sid": "",
             "xray_host": "vitrineempresas.tim.com.br"
+        },
+        {
+            "Name": "Vless canada",
+            "Info": "XRAY",
+            "Flag": "Br",
+            "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
+            "CheckUser": "",
+            "xray_protocol": "vless",
+            "xray_address": "ca.connfull.org",
+            "xray_port": "9443",
+            "xray_uuid": "f87faa42-1b17-44e7-bbe4-67546508e04a",
+            "xray_network": "ws",
+            "xray_path": "/stream",
+            "xray_host": "ca.connfull.org",
+            "xray_tls": true
         }
     ],
     "MultiServs": [
