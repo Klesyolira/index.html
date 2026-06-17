@@ -1,8 +1,8 @@
 {
-    "Version": "46",
+    "Version": "47",
     "Wallpaper": "https://pbs.twimg.com/media/HK7lqXaW8AAJm5V?format=jpg&name=large",
     "Logo": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/ic_launcher.png",
-    "Banner": "https://images.steamusercontent.com/ugc/29938394321886205/A4AECB07E23D262D6F7008DD164C4A649015E9AD/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true",
+    "Banner": "https://images.steamusercontent.com/ugc/29938394321886205/A4AECB07E23D262D6F7008DD164C4A649015E9AD/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=truempolicy=Letterbox&imcolor=%23000000&letterbox=true",
     "BannerLink": "https://klesyolira.github.io/index.html/",
     "BannerMsg": "Xray em quase funcionando"
 }
