@@ -97,32 +97,6 @@
             "xray_mux": false,
             "use_fake_dns": false,
             "xray_fragment_packets": ""
-        },
-        {
-            "Name": "🇺🇸 CLOUDFLARE 433",
-            "Info": "XRAY",
-            "Flag": "Br",
-            "FlagUrl": "",
-            "CheckUser": "",
-            "xray_protocol": "vless",
-            "xray_address": "vultr.clmadi.online",
-            "xray_port": "443",
-            "xray_uuid": "47233169-f81e-4d27-9356-576413c0ea0d",
-            "xray_network": "xhttp",
-            "xray_path": "/2ZSsRGoz/",
-            "xray_mode": "auto",
-            "xray_security": "tls",
-            "xray_tls": true,
-            "xray_fingerprint": "chrome",
-            "xray_sni": "vultr.clmadi.online",
-            "xray_xhttp_host": "vultr.clmadi.online",
-            "xray_flow": "none",
-            "xray_pbk": "",
-            "xray_sid": "",
-            "xray_host": "vultr.clmadi.online",
-            "xray_mux": false,
-            "use_fake_dns": false,
-            "xray_fragment_packets": ""
         }
     ],
     "MultiServs": [
