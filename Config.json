@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.0.10.3",
+    "Version": "10.0.0.10.4",
     "Ads": "on",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -105,7 +105,7 @@
             "xray_address": "vultr.clmadi.online",
             "xray_port": "443",
             "xray_uuid": "47233169-f81e-4d27-9356-576413c0ea0d",
-            "xray_network": "ws",
+            "xray_network": "xhttp",
             "xray_path": "/2ZSsRGoz/",
             "xray_mode": "auto",
             "xray_security": "tls",
