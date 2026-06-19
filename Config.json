@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.0.10.4",
+    "Version": "10.0.0.10.5",
     "Ads": "on",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -93,7 +93,10 @@
             "xray_flow": "",
             "xray_pbk": "",
             "xray_sid": "",
-            "xray_host": "f8qvubazbve.map.azionedge.net"
+            "xray_host": "f8qvubazbve.map.azionedge.net",
+            "xray_mux": false,
+            "use_fake_dns": false,
+            "xray_fragment_packets": ""
         },
         {
             "Name": "🇺🇸 CLOUDFLARE 433",
