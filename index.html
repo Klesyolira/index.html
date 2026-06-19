@@ -18,11 +18,9 @@
         .active-nav-btn { color: #4f46e5; background-color: #f5f3ff; border-radius: 12px; }
         html.dark .active-nav-btn { color: #818cf8; background-color: #312e81; }
         .tab-transition { transition: all 0.3s ease-in-out; }
-        /* Badge de modo por tipo de servidor */
         .badge-ssh  { background:#1e40af22; color:#60a5fa; border:1px solid #1e40af44; }
         .badge-xray { background:#7c3aed22; color:#a78bfa; border:1px solid #7c3aed44; }
         .badge-other{ background:#06474422; color:#34d399; border:1px solid #06474444; }
-        /* Seção XRay no modal */
         #xray-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
         #ssh-section  { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
     </style>
@@ -341,8 +339,7 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- MODAL SERVIDOR — novo modelo unificado       -->
-    <!-- SSH + XRay num só lugar, V2Ray removido      -->
+    <!-- MODAL SERVIDOR — CORRIGIDO E COMPLETO        -->
     <!-- ============================================ -->
     <div id="modal-server" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-90 transition-all duration-300 border border-slate-200 dark:border-slate-700">
@@ -429,11 +426,10 @@
                     </div>
                 </div>
 
-                <!-- Seção XRay (modo XRAY) -->
+                <!-- Seção XRay COMPLETA (modo XRAY) -->
                 <div id="xray-section" class="hidden">
                     <div class="flex items-center justify-between mb-3">
                         <p class="text-xs font-extrabold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> Configurações XRay</p>
-                        <!-- Botão importar Base64 -->
                         <button onclick="importBase64ToFields()" class="bg-violet-600 hover:bg-violet-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-colors">
                             <i class="fa-solid fa-qrcode"></i> Importar vmess:// vless://
                         </button>
@@ -449,7 +445,7 @@
                         <p class="text-[10px] text-violet-400 mt-1">Ao importar, os campos abaixo são preenchidos automaticamente.</p>
                     </div>
 
-                    <!-- Campos estruturados XRay -->
+                    <!-- Campos básicos XRay -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Protocolo</label>
@@ -461,7 +457,7 @@
                         </div>
                         <div>
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Network</label>
-                            <select id="srvXrayNetwork" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                            <select id="srvXrayNetwork" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" onchange="onXrayNetworkChange()">
                                 <option value="tcp">TCP</option>
                                 <option value="ws">WebSocket (WS)</option>
                                 <option value="grpc">gRPC</option>
@@ -485,23 +481,89 @@
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Path</label>
                             <input type="text" id="srvXrayPath" placeholder="/ws" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host / SNI</label>
-                            <input type="text" id="srvXrayHost" placeholder="example.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div class="flex items-center gap-3 mt-2">
-                            <label class="flex items-center cursor-pointer gap-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 w-full p-2.5 rounded-xl">
-                                <input type="checkbox" id="srvXrayTls" class="w-4 h-4 text-violet-600 rounded">
-                                <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">TLS</span>
-                            </label>
+                        <!-- Mode (auto/manual) -->
+                        <div id="xrayModeWrap">
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Mode</label>
+                            <select id="srvXrayMode" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                                <option value="auto">Auto</option>
+                                <option value="manual">Manual</option>
+                            </select>
                         </div>
 
-                        <!-- JSON bruto (opcional — para quem já tem a config pronta) -->
-                        <div class="sm:col-span-2 mt-2">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">JSON XRay Completo (opcional — sobrepõe campos acima)</label>
-                            <textarea id="srvXrayJson" rows="3" placeholder='{"log":{"loglevel":"warning"},...}' class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"></textarea>
-                            <p class="text-[10px] text-slate-400 mt-1">Se preenchido, este JSON será usado diretamente no campo "xray" do servidor.</p>
+                        <!-- SNI e Host (XHTTP Host) -->
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SNI</label>
+                            <input type="text" id="srvXraySni" placeholder="server.name.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
+                        <div id="xrayXhttpHostWrap">
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host / XHTTP Host</label>
+                            <input type="text" id="srvXrayXhttpHost" placeholder="Host header" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+
+                        <!-- Security -->
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Security (TLS)</label>
+                            <select id="srvXraySecurity" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" onchange="onXraySecurityChange()">
+                                <option value="none">None</option>
+                                <option value="tls">TLS</option>
+                                <option value="reality">Reality</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fingerprint</label>
+                            <input type="text" id="srvXrayFingerprint" placeholder="chrome" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+
+                        <!-- Flow (condicional TLS) -->
+                        <div id="xrayFlowWrap">
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Flow</label>
+                            <input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+
+                        <!-- Reality: Pbk e Sid -->
+                        <div id="xrayPbkWrap" class="hidden">
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Public Key (pbk)</label>
+                            <input type="text" id="srvXrayPbk" placeholder="Chave pública" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div id="xraySidWrap" class="hidden">
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Short ID (sid)</label>
+                            <input type="text" id="srvXraySid" placeholder="abcdef" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
+
+                    <!-- Opções avançadas -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center cursor-pointer gap-2">
+                                <input type="checkbox" id="srvXrayMux" class="w-4 h-4 text-violet-600 rounded">
+                                <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">Mux (Multiplexação)</span>
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center cursor-pointer gap-2">
+                                <input type="checkbox" id="srvXrayFakeDns" class="w-4 h-4 text-violet-600 rounded">
+                                <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">Fake DNS</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fragment Packets</label>
+                            <input type="text" id="srvXrayFragmentPackets" placeholder="tlshello" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fragment Length</label>
+                            <input type="text" id="srvXrayFragmentLength" placeholder="100-200" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fragment Interval</label>
+                            <input type="text" id="srvXrayFragmentInterval" placeholder="10-30" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
+
+                    <!-- JSON bruto (opcional) -->
+                    <div class="mt-4">
+                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">JSON XRay Completo (opcional — sobrepõe campos acima)</label>
+                        <textarea id="srvXrayJson" rows="3" placeholder='{"log":{"loglevel":"warning"},...}' class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"></textarea>
+                        <p class="text-[10px] text-slate-400 mt-1">Se preenchido, este JSON será usado diretamente no campo "xray" do servidor.</p>
                     </div>
                 </div>
 
@@ -513,7 +575,7 @@
         </div>
     </div>
 
-    <!-- MODAL MULTISERV -->
+    <!-- MODAL MULTISERV (mantido igual) -->
     <div id="modal-multiserv" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden transform scale-90 transition-all duration-300 border border-slate-200 dark:border-slate-700">
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/80">
@@ -801,14 +863,12 @@
         else { actionPanel.classList.remove('hidden'); previewPanel.classList.add('hidden'); processForm(); }
     }
 
-    // ── MODAL SERVIDOR — NOVO MODELO ──────────────────────────────────────────
+    // ── MODAL SERVIDOR ────────────────────────────────────────────────────────
     function onModeChange() {
         const mode      = document.getElementById('srvInfo').value.toUpperCase();
         const isXray    = mode === 'XRAY';
-        const sshSec    = document.getElementById('ssh-section');
-        const xraySec   = document.getElementById('xray-section');
-        sshSec.classList.toggle('hidden',  isXray);
-        xraySec.classList.toggle('hidden', !isXray);
+        document.getElementById('ssh-section').classList.toggle('hidden', isXray);
+        document.getElementById('xray-section').classList.toggle('hidden', !isXray);
         if (isXray) { onXrayNetworkChange(); onXraySecurityChange(); }
     }
 
@@ -852,7 +912,7 @@
         document.getElementById('srvSni').value       = obj.Sni        || "";
         document.getElementById('srvPayload').value   = obj.Payload    || "";
 
-        // XRay — campos estruturados básicos
+        // XRay — campos estruturados
         document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
         document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
         document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
@@ -861,7 +921,6 @@
         document.getElementById('srvXrayPath').value     = obj.xray_path     || "";
         document.getElementById('srvXrayMode').value     = obj.xray_mode     || "auto";
 
-        // XRay — segurança avançada
         const tlsFlag = !!obj.xray_tls;
         document.getElementById('srvXraySecurity').value    = obj.xray_security || (tlsFlag ? "tls" : "none");
         document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || "chrome";
@@ -871,16 +930,13 @@
         document.getElementById('srvXrayPbk').value         = obj.xray_pbk || "";
         document.getElementById('srvXraySid').value         = obj.xray_sid || "";
 
-        // XRay — avançado: Mux / FakeDNS / Fragmentação
         document.getElementById('srvXrayMux').checked              = !!obj.xray_mux;
         document.getElementById('srvXrayFakeDns').checked          = !!obj.use_fake_dns;
         document.getElementById('srvXrayFragmentPackets').value    = obj.xray_fragment_packets  || "";
         document.getElementById('srvXrayFragmentLength').value     = obj.xray_fragment_length   || "";
         document.getElementById('srvXrayFragmentInterval').value   = obj.xray_fragment_interval || "";
 
-        // JSON bruto (campo "xray")
-        const xrayJson = obj.xray || "";
-        document.getElementById('srvXrayJson').value = xrayJson;
+        document.getElementById('srvXrayJson').value = obj.xray || "";
         document.getElementById('srvXrayImportLink').value = "";
 
         onModeChange();
@@ -901,7 +957,6 @@
         };
 
         if (!isXray) {
-            // SSH
             obj.ServerHost = document.getElementById('srvHost').value;
             obj.ServerPort = document.getElementById('srvPort').value;
             obj.SSLPort    = document.getElementById('srvSSLPort').value;
@@ -912,7 +967,6 @@
             obj.Sni        = document.getElementById('srvSni').value;
             obj.Payload    = document.getElementById('srvPayload').value;
         } else {
-            // XRay — JSON bruto tem prioridade se preenchido
             const rawJson = document.getElementById('srvXrayJson').value.trim();
             if (rawJson) {
                 try { JSON.parse(rawJson); obj.xray = rawJson; }
@@ -951,7 +1005,7 @@
         closeModal('modal-server'); renderServers(); processForm();
     }
 
-    // ── IMPORT BASE64 (vmess:// vless://) ────────────────────────────────────
+    // ── IMPORT BASE64 ─────────────────────────────────────────────────────────
     function importBase64ToFields() {
         const link = document.getElementById('srvXrayImportLink').value.trim();
         if (!link) { showToast("Cole um link vmess:// ou vless:// antes.", "error"); return; }
@@ -966,10 +1020,8 @@
                 document.getElementById('srvXrayNetwork').value  = decoded.net  || "tcp";
                 document.getElementById('srvXrayPath').value     = decoded.path || "/";
                 document.getElementById('srvXrayMode').value     = "auto";
-                const sniV = decoded.sni || decoded.host || "";
-                const hdrV = decoded.host || decoded.sni || "";
-                document.getElementById('srvXraySni').value       = sniV;
-                document.getElementById('srvXrayXhttpHost').value = hdrV;
+                document.getElementById('srvXraySni').value      = decoded.sni || decoded.host || "";
+                document.getElementById('srvXrayXhttpHost').value = decoded.host || decoded.sni || "";
                 const sec = decoded.tls === "tls" ? "tls" : "none";
                 document.getElementById('srvXraySecurity').value    = sec;
                 document.getElementById('srvXrayFingerprint').value = decoded.fp || "chrome";
@@ -1121,11 +1173,7 @@
     }
 
     // ── HTML CONVERTER ────────────────────────────────────────────────────────
-    function clearHtml() {
-        document.getElementById('inputHtmlRaw').value   = "";
-        document.getElementById('outputHtmlJson').value = "";
-        document.getElementById('htmlPreviewFrame').srcdoc = "";
-    }
+    function clearHtml() { document.getElementById('inputHtmlRaw').value=""; document.getElementById('outputHtmlJson').value=""; document.getElementById('htmlPreviewFrame').srcdoc=""; }
     function convertHtml() {
         const raw = document.getElementById('inputHtmlRaw').value.trim();
         if (!raw) return showToast("Cole um HTML válido antes.", "error");
