@@ -138,6 +138,14 @@
                             <span class="ml-3 text-sm text-slate-700 dark:text-slate-200 font-medium">Ativar Anúncios (Ads)</span>
                         </label>
                     </div>
+                    <div class="flex items-center">
+                        <label class="flex items-center cursor-pointer bg-violet-50 dark:bg-violet-900/20 hover:bg-violet-100 dark:hover:bg-violet-900/30 border border-violet-200 dark:border-violet-800 w-full p-2.5 rounded-xl transition-all">
+                            <input type="checkbox" id="checkHybridMode" class="w-5 h-5 text-violet-600 border-violet-300 rounded focus:ring-violet-500 cursor-pointer" onchange="processForm()">
+                            <span class="ml-3 text-sm text-violet-700 dark:text-violet-300 font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-flask text-xs"></i> Modo Híbrido (Servidores Offline VIP)
+                            </span>
+                        </label>
+                    </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">URL UI HTML</label>
                         <input type="text" id="inputHtmlUiUrl" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
@@ -438,7 +446,7 @@
                             <input type="text" id="srvXrayImportLink" placeholder="vmess://... ou vless://... ou UUID" class="flex-grow p-2 border border-violet-300 dark:border-violet-700 rounded-xl text-xs bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-violet-500 outline-none">
                             <button onclick="importBase64ToFields()" class="bg-violet-600 hover:bg-violet-700 text-white text-xs px-3 rounded-xl font-bold transition-colors whitespace-nowrap">Importar</button>
                         </div>
-                        <p class="text-[10px] text-violet-400 mt-1">Ao importar, os campos abaixo são preenchidos automaticamente (inclusive REALITY/XHTTP).</p>
+                        <p class="text-[10px] text-violet-400 mt-1">Ao importar, os campos abaixo são preenchidos automaticamente.</p>
                     </div>
 
                     <!-- Campos estruturados XRay -->
@@ -453,13 +461,12 @@
                         </div>
                         <div>
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Network</label>
-                            <select id="srvXrayNetwork" onchange="onXrayNetworkChange()" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                            <select id="srvXrayNetwork" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                                 <option value="tcp">TCP</option>
                                 <option value="ws">WebSocket (WS)</option>
                                 <option value="grpc">gRPC</option>
                                 <option value="xhttp">XHTTP</option>
                                 <option value="h2">HTTP/2</option>
-                                <option value="quic">QUIC</option>
                             </select>
                         </div>
                         <div>
@@ -478,64 +485,15 @@
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Path</label>
                             <input type="text" id="srvXrayPath" placeholder="/ws" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-                        <div id="xrayModeWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">XHTTP Mode</label>
-                            <select id="srvXrayMode" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                                <option value="auto">auto</option>
-                                <option value="stream-up">stream-up</option>
-                                <option value="stream-down">stream-down</option>
-                                <option value="packet-up">packet-up</option>
-                            </select>
-                        </div>
-
-                        <div class="sm:col-span-2 border-t border-slate-200 dark:border-slate-700 pt-3 mt-1">
-                            <p class="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 mb-1">SEGURANÇA</p>
-                        </div>
                         <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Security</label>
-                            <select id="srvXraySecurity" onchange="onXraySecurityChange()" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                                <option value="none">Nenhuma</option>
-                                <option value="tls">TLS</option>
-                                <option value="reality">REALITY</option>
-                            </select>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host / SNI</label>
+                            <input type="text" id="srvXrayHost" placeholder="example.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fingerprint (uTLS)</label>
-                            <select id="srvXrayFingerprint" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                                <option value="chrome">chrome</option>
-                                <option value="firefox">firefox</option>
-                                <option value="safari">safari</option>
-                                <option value="ios">ios</option>
-                                <option value="android">android</option>
-                                <option value="edge">edge</option>
-                                <option value="random">random</option>
-                                <option value="randomized">randomized</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SNI (TLS/REALITY serverName)</label>
-                            <input type="text" id="srvXraySni" placeholder="example.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xrayXhttpHostWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host (separado do SNI — usado no XHTTP/WS)</label>
-                            <input type="text" id="srvXrayXhttpHost" placeholder="example.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xrayFlowWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Flow (XTLS)</label>
-                            <select id="srvXrayFlow" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                                <option value="">Nenhum</option>
-                                <option value="xtls-rprx-vision">xtls-rprx-vision</option>
-                            </select>
-                        </div>
-
-                        <!-- REALITY: Public Key / Short ID -->
-                        <div id="xrayPbkWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">REALITY Public Key (pbk)</label>
-                            <input type="text" id="srvXrayPbk" placeholder="chave pública do servidor" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono">
-                        </div>
-                        <div id="xraySidWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">REALITY Short ID (sid)</label>
-                            <input type="text" id="srvXraySid" placeholder="short id (pode ser vazio)" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono">
+                        <div class="flex items-center gap-3 mt-2">
+                            <label class="flex items-center cursor-pointer gap-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 w-full p-2.5 rounded-xl">
+                                <input type="checkbox" id="srvXrayTls" class="w-4 h-4 text-violet-600 rounded">
+                                <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">TLS</span>
+                            </label>
                         </div>
 
                         <!-- JSON bruto (opcional — para quem já tem a config pronta) -->
@@ -763,6 +721,7 @@
         if (currentTab === 'config') {
             jsonObj.Ads          = document.getElementById('checkAds').checked ? "on" : "off";
             jsonObj.UIMode       = document.getElementById('inputUIMode').value || "nativo";
+            jsonObj.ServerEditMode = document.getElementById('checkHybridMode').checked ? "hybrid" : "off";
             jsonObj.HtmlUIUrl    = document.getElementById('inputHtmlUiUrl').value;
             jsonObj.UpdateUrl    = document.getElementById('inputUpdateUrl').value;
             jsonObj.ReleaseNotes = document.getElementById('inputReleaseNotes').value;
@@ -793,6 +752,7 @@
                 if (currentTab !== 'config') switchTab('config');
                 document.getElementById('inputVersion').value      = json.Version || "";
                 document.getElementById('checkAds').checked        = (json.Ads && json.Ads.toLowerCase() === 'on');
+                document.getElementById('checkHybridMode').checked = (json.ServerEditMode && json.ServerEditMode.toLowerCase() === 'hybrid');
                 document.getElementById('inputUIMode').value       = json.UIMode || "nativo";
                 document.getElementById('inputHtmlUiUrl').value    = json.HtmlUIUrl || "";
                 document.getElementById('inputUpdateUrl').value    = json.UpdateUrl || "";
@@ -852,22 +812,18 @@
         if (isXray) { onXrayNetworkChange(); onXraySecurityChange(); }
     }
 
-    // Mostra/esconde campos dependentes do tipo de transporte (network)
     function onXrayNetworkChange() {
         const net = document.getElementById('srvXrayNetwork').value;
         document.getElementById('xrayModeWrap').classList.toggle('hidden', net !== 'xhttp');
-        // Host separado do SNI só é relevante em xhttp/ws/h2 (onde existe header Host distinto)
         document.getElementById('xrayXhttpHostWrap').classList.toggle('hidden', !['xhttp','ws','h2'].includes(net));
     }
 
-    // Mostra/esconde campos dependentes do tipo de segurança (security)
     function onXraySecurityChange() {
         const sec = document.getElementById('srvXraySecurity').value;
         const isReality = sec === 'reality';
         const isTlsLike = sec === 'tls' || sec === 'reality';
         document.getElementById('xrayPbkWrap').classList.toggle('hidden', !isReality);
         document.getElementById('xraySidWrap').classList.toggle('hidden', !isReality);
-        // Flow (XTLS) só faz sentido com REALITY ou TLS no VLess
         document.getElementById('xrayFlowWrap').classList.toggle('hidden', !isTlsLike);
     }
 
@@ -905,7 +861,7 @@
         document.getElementById('srvXrayPath').value     = obj.xray_path     || "";
         document.getElementById('srvXrayMode').value     = obj.xray_mode     || "auto";
 
-        // XRay — segurança avançada (REALITY/TLS/XHTTP)
+        // XRay — segurança avançada
         const tlsFlag = !!obj.xray_tls;
         document.getElementById('srvXraySecurity').value    = obj.xray_security || (tlsFlag ? "tls" : "none");
         document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || "chrome";
@@ -914,6 +870,13 @@
         document.getElementById('srvXrayFlow').value        = obj.xray_flow || "";
         document.getElementById('srvXrayPbk').value         = obj.xray_pbk || "";
         document.getElementById('srvXraySid').value         = obj.xray_sid || "";
+
+        // XRay — avançado: Mux / FakeDNS / Fragmentação
+        document.getElementById('srvXrayMux').checked              = !!obj.xray_mux;
+        document.getElementById('srvXrayFakeDns').checked          = !!obj.use_fake_dns;
+        document.getElementById('srvXrayFragmentPackets').value    = obj.xray_fragment_packets  || "";
+        document.getElementById('srvXrayFragmentLength').value     = obj.xray_fragment_length   || "";
+        document.getElementById('srvXrayFragmentInterval').value   = obj.xray_fragment_interval || "";
 
         // JSON bruto (campo "xray")
         const xrayJson = obj.xray || "";
@@ -955,7 +918,6 @@
                 try { JSON.parse(rawJson); obj.xray = rawJson; }
                 catch(e) { showToast("JSON XRay inválido: " + e.message, "error"); return; }
             } else {
-                // Monta a partir dos campos estruturados básicos
                 obj.xray_protocol = document.getElementById('srvXrayProtocol').value;
                 obj.xray_address  = document.getElementById('srvXrayAddress').value;
                 obj.xray_port     = document.getElementById('srvXrayPort').value;
@@ -964,20 +926,24 @@
                 obj.xray_path     = document.getElementById('srvXrayPath').value;
                 obj.xray_mode     = document.getElementById('srvXrayMode').value;
 
-                // Segurança avançada
                 const security = document.getElementById('srvXraySecurity').value;
-                obj.xray_security   = security;
-                obj.xray_tls         = security === 'tls' || security === 'reality'; // compat com app antigo
+                obj.xray_security    = security;
+                obj.xray_tls         = security === 'tls' || security === 'reality';
                 obj.xray_fingerprint = document.getElementById('srvXrayFingerprint').value;
                 obj.xray_sni         = document.getElementById('srvXraySni').value;
                 obj.xray_xhttp_host  = document.getElementById('srvXrayXhttpHost').value;
                 obj.xray_flow        = document.getElementById('srvXrayFlow').value;
                 obj.xray_pbk         = document.getElementById('srvXrayPbk').value;
                 obj.xray_sid         = document.getElementById('srvXraySid').value;
+                obj.xray_host        = obj.xray_sni || obj.xray_xhttp_host || "";
 
-                // xray_host: compatibilidade com versões antigas do app que só leem este campo —
-                // usa SNI como prioridade (TLS/REALITY), senão o host do XHTTP/WS
-                obj.xray_host = obj.xray_sni || obj.xray_xhttp_host || "";
+                obj.xray_mux               = document.getElementById('srvXrayMux').checked;
+                obj.use_fake_dns           = document.getElementById('srvXrayFakeDns').checked;
+                obj.xray_fragment_packets  = document.getElementById('srvXrayFragmentPackets').value.trim();
+                const fl = parseInt(document.getElementById('srvXrayFragmentLength').value);
+                const fi = parseInt(document.getElementById('srvXrayFragmentInterval').value);
+                if (!isNaN(fl)) obj.xray_fragment_length   = fl;
+                if (!isNaN(fi)) obj.xray_fragment_interval = fi;
             }
         }
 
@@ -989,7 +955,6 @@
     function importBase64ToFields() {
         const link = document.getElementById('srvXrayImportLink').value.trim();
         if (!link) { showToast("Cole um link vmess:// ou vless:// antes.", "error"); return; }
-
         try {
             if (link.startsWith("vmess://")) {
                 const b64 = link.substring(8);
@@ -1000,30 +965,30 @@
                 document.getElementById('srvXrayUuid').value     = decoded.id   || "";
                 document.getElementById('srvXrayNetwork').value  = decoded.net  || "tcp";
                 document.getElementById('srvXrayPath').value     = decoded.path || "/";
-
-                const sniVal  = decoded.sni  || decoded.host || "";
-                const hostVal = decoded.host || decoded.sni  || "";
-                document.getElementById('srvXraySni').value       = sniVal;
-                document.getElementById('srvXrayXhttpHost').value = hostVal;
-
+                document.getElementById('srvXrayMode').value     = "auto";
+                const sniV = decoded.sni || decoded.host || "";
+                const hdrV = decoded.host || decoded.sni || "";
+                document.getElementById('srvXraySni').value       = sniV;
+                document.getElementById('srvXrayXhttpHost').value = hdrV;
                 const sec = decoded.tls === "tls" ? "tls" : "none";
                 document.getElementById('srvXraySecurity').value    = sec;
                 document.getElementById('srvXrayFingerprint').value = decoded.fp || "chrome";
-                document.getElementById('srvXrayFlow').value        = "";
-                document.getElementById('srvXrayPbk').value         = "";
-                document.getElementById('srvXraySid').value         = "";
-                document.getElementById('srvXrayMode').value        = "auto";
-
+                document.getElementById('srvXrayFlow').value = "";
+                document.getElementById('srvXrayPbk').value  = "";
+                document.getElementById('srvXraySid').value  = "";
+                document.getElementById('srvXrayMux').checked     = false;
+                document.getElementById('srvXrayFakeDns').checked = false;
+                document.getElementById('srvXrayFragmentPackets').value  = "";
+                document.getElementById('srvXrayFragmentLength').value   = "";
+                document.getElementById('srvXrayFragmentInterval').value = "";
                 if (decoded.ps) document.getElementById('srvName').value = decoded.ps;
-                // Limpa JSON bruto para usar campos estruturados
                 document.getElementById('srvXrayJson').value = "";
                 onXrayNetworkChange(); onXraySecurityChange();
                 showToast("VMess importado! UUID: " + (decoded.id||"").substring(0,8) + "...", "success");
 
             } else if (link.startsWith("vless://")) {
                 const noPrefix = link.substring(8);
-                let name = "";
-                let rest = noPrefix;
+                let name = "", rest = noPrefix;
                 if (rest.includes("#")) { const s = rest.split("#",2); rest = s[0]; name = decodeURIComponent(s[1]); }
                 const atIdx = rest.indexOf("@");
                 const uuid  = rest.substring(0, atIdx);
@@ -1035,10 +1000,7 @@
                     const b = hostPort.lastIndexOf("]");
                     address = hostPort.substring(1, b);
                     if (b+2 < hostPort.length) port = hostPort.substring(b+2);
-                } else {
-                    const hp = hostPort.split(":");
-                    address = hp[0]; if (hp.length > 1) port = hp[1];
-                }
+                } else { const hp = hostPort.split(":"); address = hp[0]; if (hp.length > 1) port = hp[1]; }
                 const params = {};
                 query.split("&").forEach(p => { const kv = p.split("=",2); if (kv.length===2) params[kv[0]] = decodeURIComponent(kv[1]); });
 
@@ -1049,25 +1011,25 @@
                 document.getElementById('srvXrayNetwork').value  = params.type || "tcp";
                 document.getElementById('srvXrayPath').value     = params.path || "/";
                 document.getElementById('srvXrayMode').value     = params.mode || "auto";
-
-                // SNI (TLS/REALITY) e host (xhttp/ws) podem vir em parâmetros diferentes
                 document.getElementById('srvXraySni').value       = params.sni  || params.host || "";
                 document.getElementById('srvXrayXhttpHost').value = params.host || params.sni  || "";
-
                 const sec = params.security || "none";
                 document.getElementById('srvXraySecurity').value    = sec;
-                document.getElementById('srvXrayFingerprint').value = params.fp || "chrome";
-                document.getElementById('srvXrayFlow').value        = params.flow || "";
-                document.getElementById('srvXrayPbk').value         = params.pbk || "";
-                document.getElementById('srvXraySid').value         = params.sid || "";
-
+                document.getElementById('srvXrayFingerprint').value = params.fp   || "chrome";
+                document.getElementById('srvXrayFlow').value = params.flow || "";
+                document.getElementById('srvXrayPbk').value  = params.pbk  || "";
+                document.getElementById('srvXraySid').value  = params.sid  || "";
+                document.getElementById('srvXrayMux').checked     = false;
+                document.getElementById('srvXrayFakeDns').checked = false;
+                document.getElementById('srvXrayFragmentPackets').value  = "";
+                document.getElementById('srvXrayFragmentLength').value   = "";
+                document.getElementById('srvXrayFragmentInterval').value = "";
                 if (name) document.getElementById('srvName').value = name;
                 document.getElementById('srvXrayJson').value = "";
                 onXrayNetworkChange(); onXraySecurityChange();
                 showToast("VLess importado! UUID: " + uuid.substring(0,8) + "...", "success");
 
             } else {
-                // Tenta como UUID direto
                 const uuidRe = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
                 if (uuidRe.test(link)) {
                     document.getElementById('srvXrayUuid').value = link;
@@ -1248,6 +1210,7 @@
         const draft = {
             v:      document.getElementById('inputVersion').value,
             c_ads:  document.getElementById('checkAds').checked,
+            c_hybrid: document.getElementById('checkHybridMode').checked,
             c_ui:   document.getElementById('inputUIMode').value,
             c_h_url:document.getElementById('inputHtmlUiUrl').value,
             c_up_url:document.getElementById('inputUpdateUrl').value,
@@ -1273,6 +1236,7 @@
                 const d = JSON.parse(draftStr);
                 document.getElementById('inputVersion').value      = d.v || "1.0";
                 document.getElementById('checkAds').checked        = !!d.c_ads;
+                document.getElementById('checkHybridMode').checked = !!d.c_hybrid;
                 document.getElementById('inputUIMode').value       = d.c_ui || "";
                 document.getElementById('inputHtmlUiUrl').value    = d.c_h_url || "";
                 document.getElementById('inputUpdateUrl').value    = d.c_up_url || "";
