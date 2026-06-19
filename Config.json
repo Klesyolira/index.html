@@ -1,6 +1,6 @@
 {
-    "Version": "10.0.0.5",
-    "Ads": "off",
+    "Version": "10.0.0.6",
+    "Ads": "on",
     "UIMode": "html",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
