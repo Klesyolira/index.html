@@ -1,7 +1,7 @@
 {
-    "Version": "10.0.0.6",
-    "Ads": "on",
-    "UIMode": "html",
+    "Version": "10.0.0.7",
+    "Ads": "off",
+    "UIMode": "nativo",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "LUGH DEVELOP NOTES",
