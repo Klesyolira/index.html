@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.2",
+    "Version": "10.0.3",
     "Ads": "off",
     "UIMode": "nativo",
     "ServerEditMode": "hybrid",
@@ -12,7 +12,7 @@
         {
             "Name": "TIM 01",
             "Info": "PROXY",
-            "Flag": "br",
+            "Flag": "tim",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
@@ -28,7 +28,7 @@
         {
             "Name": "TIM 02",
             "Info": "PROXY",
-            "Flag": "us",
+            "Flag": "tim",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
@@ -44,7 +44,7 @@
         {
             "Name": "TIM 03",
             "Info": "PROXY",
-            "Flag": "us",
+            "Flag": "tim",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
@@ -60,7 +60,7 @@
         {
             "Name": "Vless canada",
             "Info": "XRAY",
-            "Flag": "Br",
+            "Flag": "ca",
             "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
             "CheckUser": "",
             "xray_protocol": "vless",
@@ -69,13 +69,24 @@
             "xray_uuid": "f87faa42-1b17-44e7-bbe4-67546508e04a",
             "xray_network": "ws",
             "xray_path": "/stream",
+            "xray_mode": "auto",
+            "xray_security": "tls",
+            "xray_tls": true,
+            "xray_fingerprint": "chrome",
+            "xray_sni": "ca.connfull.org",
+            "xray_xhttp_host": "ca.connfull.org",
+            "xray_flow": "",
+            "xray_pbk": "",
+            "xray_sid": "",
             "xray_host": "ca.connfull.org",
-            "xray_tls": true
+            "xray_mux": false,
+            "use_fake_dns": false,
+            "xray_fragment_packets": ""
         },
         {
             "Name": "YumekoLT-vpnjantit.com",
             "Info": "XRAY",
-            "Flag": "Br",
+            "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "",
             "xray_protocol": "vless",
