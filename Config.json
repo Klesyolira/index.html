@@ -58,7 +58,7 @@
             "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]"
         },
         {
-            "Name": "Vless canada",
+            "Name": "ca.connfull.org-racevpn-9dga40",
             "Info": "XRAY",
             "Flag": "ca",
             "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
@@ -66,7 +66,7 @@
             "xray_protocol": "vless",
             "xray_address": "ca.connfull.org",
             "xray_port": "9443",
-            "xray_uuid": "f87faa42-1b17-44e7-bbe4-67546508e04a",
+            "xray_uuid": "ced366e2-8367-47b7-a020-f42fade2d861",
             "xray_network": "ws",
             "xray_path": "/stream",
             "xray_mode": "auto",
