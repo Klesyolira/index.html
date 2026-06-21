@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.6",
+    "Version": "10.0.7",
     "Ads": "off",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -86,8 +86,8 @@
         {
             "Name": "Canada 02 Vless",
             "Info": "XRAY",
-            "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "Flag": "ca",
+            "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
             "CheckUser": "",
             "xray_protocol": "vless",
             "xray_address": "ca.connfull.org",
