@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.9.5",
+    "Version": "10.0.9.6",
     "Ads": "off",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -10,10 +10,10 @@
     "Fundo": "https://pbs.twimg.com/media/HI4QpqeWkAAl9ys?format=jpg&name=large",
     "Servers": [
         {
-            "Name": "TIM 01",
+            "Name": "Yoru 01",
             "Info": "PROXY",
-            "Flag": "tim",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "Flag": "br",
+            "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
             "ServerPort": "80",
@@ -26,10 +26,10 @@
             "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]"
         },
         {
-            "Name": "TIM 02",
+            "Name": "Yoru 02",
             "Info": "PROXY",
-            "Flag": "tim",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "Flag": "br",
+            "FlagUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9Jc1yx5rXatSyWjb9PQKuM_UG6uti2WMhb_Svvq0KJQ&s=10",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
             "ServerPort": "80",
@@ -42,10 +42,10 @@
             "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
         },
         {
-            "Name": "TIM 03",
+            "Name": "Yoru 03",
             "Info": "PROXY",
-            "Flag": "tim",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "Flag": "br",
+            "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
             "ServerPort": "80",
@@ -58,7 +58,7 @@
             "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]"
         },
         {
-            "Name": "Canada 01 Vless",
+            "Name": "Vless Canada 01",
             "Info": "XRAY",
             "Flag": "ca",
             "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
@@ -84,10 +84,10 @@
             "xray_fragment_packets": ""
         },
         {
-            "Name": "TIM-XRAY",
+            "Name": "Azion Vless",
             "Info": "XRAY",
-            "Flag": "ca",
-            "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
+            "Flag": "we",
+            "FlagUrl": "https://www.storagenewsletter.com/wp-content/uploads/2025/01/Azion_technologies_logo.png",
             "CheckUser": "",
             "xray_protocol": "vless",
             "xray_address": "cloud.claro.com.ar",
@@ -110,7 +110,7 @@
             "xray_fragment_packets": ""
         },
         {
-            "Name": "Vless Alemanha",
+            "Name": "Vless Alemanha 01",
             "Info": "XRAY",
             "Flag": "we",
             "FlagUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9Jc1yx5rXatSyWjb9PQKuM_UG6uti2WMhb_Svvq0KJQ&s=10",
