@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.9.3",
+    "Version": "10.0.9.4",
     "Ads": "off",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -101,7 +101,7 @@
             "xray_fingerprint": "chrome",
             "xray_sni": "www.tim.com.br",
             "xray_xhttp_host": "hosting43.azion.app",
-            "xray_flow": "none",
+            "xray_flow": "",
             "xray_pbk": "",
             "xray_sid": "",
             "xray_host": "www.tim.com.br",
