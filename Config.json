@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.9.2",
+    "Version": "10.0.9.3",
     "Ads": "off",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -84,12 +84,30 @@
             "xray_fragment_packets": ""
         },
         {
-            "Name": "TIM-XRAY 01",
+            "Name": "TIM-XRAY",
             "Info": "XRAY",
             "Flag": "ca",
             "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
             "CheckUser": "",
-            "xray": "{\"v\":\"2\",\"ps\":\"TIM-XRAY\",\"add\":\"cloud.claro.com.ar\",\"port\":\"443\",\"id\":\"3de98c74-8954-4365-b2e6-4e420c11c76d\",\"aid\":\"0\",\"scy\":\"none\",\"net\":\"xhttp\",\"type\":\"none\",\"host\":\"hosting43.azion.app\",\"path\":\"/\",\"tls\":\"tls\",\"sni\":\"www.tim.com.br\",\"fp\":\"chrome\"}"
+            "xray_protocol": "vless",
+            "xray_address": "cloud.claro.com.ar",
+            "xray_port": "443",
+            "xray_uuid": "3de98c74-8954-4365-b2e6-4e420c11c76d",
+            "xray_network": "xhttp",
+            "xray_path": "/",
+            "xray_mode": "auto",
+            "xray_security": "tls",
+            "xray_tls": true,
+            "xray_fingerprint": "chrome",
+            "xray_sni": "www.tim.com.br",
+            "xray_xhttp_host": "hosting43.azion.app",
+            "xray_flow": "none",
+            "xray_pbk": "",
+            "xray_sid": "",
+            "xray_host": "www.tim.com.br",
+            "xray_mux": false,
+            "use_fake_dns": false,
+            "xray_fragment_packets": ""
         }
     ],
     "MultiServs": [
