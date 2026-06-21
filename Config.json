@@ -1,5 +1,5 @@
 {
-    "Version": "10.0.8",
+    "Version": "10.0.9",
     "Ads": "off",
     "UIMode": "html",
     "ServerEditMode": "hybrid",
@@ -94,7 +94,7 @@
             "xray_port": "9443",
             "xray_uuid": "ced366e2-8367-47b7-a020-f42fade2d861",
             "xray_network": "ws",
-            "xray_path": "/fluxo",
+            "xray_path": "/stream",
             "xray_mode": "auto",
             "xray_security": "tls",
             "xray_tls": true,
