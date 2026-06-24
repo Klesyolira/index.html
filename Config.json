@@ -10,7 +10,7 @@
     "Fundo": "https://pbs.twimg.com/media/HI4QpqeWkAAl9ys?format=jpg&name=large",
     "Servers": [
         {
-            "Name": "Yoru 01",
+            "Name": "Yoru 01 Free",
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
@@ -20,13 +20,13 @@
             "SSLPort": "443",
             "ProxyHost": "104.17.70.206#172.66.0.157#141.193.213.10#101espn.com#162.159.140.159",
             "ProxyPort": "80",
-            "USER": "",
-            "PASS": "",
+            "USER": "gustavo33",
+            "PASS": "341914",
             "Sni": "google.com",
             "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]"
         },
         {
-            "Name": "Yoru 02",
+            "Name": "Yoru 02 Premium ",
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
@@ -42,7 +42,7 @@
             "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
         },
         {
-            "Name": "Yoru 03",
+            "Name": "Yoru 03 Premium",
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
