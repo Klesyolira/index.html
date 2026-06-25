@@ -1,7 +1,7 @@
 {
-    "Version": "9.11",
+    "Version": "9.12",
     "Ads": "off",
-    "UIMode": "html",
+    "UIMode": "nativo",
     "ServerEditMode": "hybrid",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
