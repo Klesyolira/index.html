@@ -1,7 +1,7 @@
 {
     "Version": "10.1",
     "Ads": "on",
-    "UIMode": "nativo",
+    "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
     "ServerEditMode": "hybrid",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
