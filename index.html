@@ -130,6 +130,14 @@
                         <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Modo UI</label>
                         <input type="text" id="inputUIMode" placeholder="nativo" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
                     </div>
+                    <!-- NOVO CAMPO NativeAnchor -->
+                    <div class="md:col-span-2 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-800 p-3 rounded-xl">
+                        <label class="block text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase">
+                            <i class="fa-solid fa-key mr-1"></i> NativeAnchor (Chave de Genuinidade)
+                        </label>
+                        <input type="text" id="inputNativeAnchor" value="4affa1f54a40194f" class="w-full mt-1 p-2.5 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
+                        <p class="text-[10px] text-indigo-400 dark:text-indigo-300 mt-1">Valor padrão. Altere aqui se modificar a key no código-fonte do app.</p>
+                    </div>
                     <div class="flex items-center md:mt-5">
                         <label class="flex items-center cursor-pointer bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full p-2.5 rounded-xl transition-all">
                             <input type="checkbox" id="checkAds" class="w-5 h-5 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer" onchange="processForm()">
@@ -783,6 +791,7 @@
         if (currentTab === 'config') {
             jsonObj.Ads          = document.getElementById('checkAds').checked ? "on" : "off";
             jsonObj.UIMode       = document.getElementById('inputUIMode').value || "nativo";
+            jsonObj.NativeAnchor = document.getElementById('inputNativeAnchor').value;  // 👈 NOVO CAMPO
             jsonObj.ServerEditMode = document.getElementById('checkHybridMode').checked ? "hybrid" : "off";
             jsonObj.HtmlUIUrl    = document.getElementById('inputHtmlUiUrl').value;
             jsonObj.UpdateUrl    = document.getElementById('inputUpdateUrl').value;
@@ -810,12 +819,13 @@
             if (!data) return;
             const json = JSON.parse(data);
 
-            if (json.UpdateUrl !== undefined || json.Servers !== undefined) {
+            if (json.UpdateUrl !== undefined || json.Servers !== undefined || json.NativeAnchor !== undefined) {
                 if (currentTab !== 'config') switchTab('config');
                 document.getElementById('inputVersion').value      = json.Version || "";
                 document.getElementById('checkAds').checked        = (json.Ads && json.Ads.toLowerCase() === 'on');
                 document.getElementById('checkHybridMode').checked = (json.ServerEditMode && json.ServerEditMode.toLowerCase() === 'hybrid');
                 document.getElementById('inputUIMode').value       = json.UIMode || "nativo";
+                document.getElementById('inputNativeAnchor').value = json.NativeAnchor || "4affa1f54a40194f";  // 👈 padrão se vazio
                 document.getElementById('inputHtmlUiUrl').value    = json.HtmlUIUrl || "";
                 document.getElementById('inputUpdateUrl').value    = json.UpdateUrl || "";
                 document.getElementById('inputReleaseNotes').value = json.ReleaseNotes || "";
@@ -1260,6 +1270,7 @@
             c_ads:  document.getElementById('checkAds').checked,
             c_hybrid: document.getElementById('checkHybridMode').checked,
             c_ui:   document.getElementById('inputUIMode').value,
+            c_nativeAnchor: document.getElementById('inputNativeAnchor').value,  // 👈 NOVO
             c_h_url:document.getElementById('inputHtmlUiUrl').value,
             c_up_url:document.getElementById('inputUpdateUrl').value,
             c_rn:   document.getElementById('inputReleaseNotes').value,
@@ -1286,6 +1297,7 @@
                 document.getElementById('checkAds').checked        = !!d.c_ads;
                 document.getElementById('checkHybridMode').checked = !!d.c_hybrid;
                 document.getElementById('inputUIMode').value       = d.c_ui || "";
+                document.getElementById('inputNativeAnchor').value = d.c_nativeAnchor || "4affa1f54a40194f";  // 👈 padrão
                 document.getElementById('inputHtmlUiUrl').value    = d.c_h_url || "";
                 document.getElementById('inputUpdateUrl').value    = d.c_up_url || "";
                 document.getElementById('inputReleaseNotes').value = d.c_rn || "";
