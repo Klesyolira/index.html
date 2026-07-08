@@ -1,8 +1,8 @@
 {
-    "Version": "9.14",
-    "NativeAnchor": "4affa1f54a40194f",
-    "Ads": "off",
+    "Version": "9.15",
+    "Ads": "on",
     "UIMode": "html",
+    "NativeAnchor": "4affa1f54a40194f",
     "ServerEditMode": "hybrid",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
