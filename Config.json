@@ -1,5 +1,5 @@
 {
-    "Version": "10",
+    "Version": "10.1",
     "Ads": "on",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -15,7 +15,7 @@
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "CheckUser": "https://152.70.220.155:5656/checkUser",
             "ServerHost": "g.gugu55.online",
             "ServerPort": "80",
             "SSLPort": "443",
