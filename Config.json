@@ -1,5 +1,5 @@
 {
-    "Version": "10.7",
+    "Version": "10.8",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -99,7 +99,7 @@
             "xray_mode": "auto",
             "xray_security": "reality",
             "xray_tls": true,
-            "xray_fingerprint": "chrome",
+            "xray_fingerprint": "random",
             "xray_sni": "www.cloudflare.com",
             "xray_xhttp_host": "www.cloudflare.com",
             "xray_flow": "xtls-rprx-vision",
