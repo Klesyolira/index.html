@@ -23,6 +23,36 @@
         .badge-other{ background:#06474422; color:#34d399; border:1px solid #06474444; }
         #xray-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
         #ssh-section  { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
+        
+        /* Preview da flag */
+        .flag-preview {
+            width: 32px;
+            height: 24px;
+            border-radius: 4px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            display: inline-block;
+        }
+        html.dark .flag-preview {
+            border-color: #475569;
+            background: #1e293b;
+        }
+        .flag-preview[src=""], .flag-preview:not([src]) {
+            display: none;
+        }
+        .flag-input-group {
+            position: relative;
+        }
+        .flag-input-group .flag-preview {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .flag-input-group input {
+            padding-right: 48px;
+        }
     </style>
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -346,9 +376,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- MODAL SERVIDOR — CORRIGIDO E COMPLETO        -->
-    <!-- ============================================ -->
+    <!-- MODAL SERVIDOR -->
     <div id="modal-server" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden transform scale-90 transition-all duration-300 border border-slate-200 dark:border-slate-700">
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/80">
@@ -381,9 +409,12 @@
                         <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Sigla País (Flag)</label>
                         <input type="text" id="srvFlag" placeholder="Ex: br, us" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                     </div>
-                    <div>
+                    <div class="flag-input-group">
                         <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">URL Ícone (FlagUrl)</label>
-                        <input type="text" id="srvFlagUrl" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        <div class="relative mt-1">
+                            <input type="text" id="srvFlagUrl" class="w-full p-2 pr-12 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" oninput="updateFlagPreview('srvFlagUrl', 'srvFlagPreview')">
+                            <img id="srvFlagPreview" class="flag-preview" src="" alt="Flag Preview" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%);">
+                        </div>
                     </div>
                     <div class="sm:col-span-2">
                         <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">CheckUser URL</label>
@@ -391,7 +422,7 @@
                     </div>
                 </div>
 
-                <!-- Seção SSH (modos Direct/Proxy/SSL/WS/WSS/UDP) -->
+                <!-- Seção SSH -->
                 <div id="ssh-section">
                     <p class="text-xs font-extrabold text-blue-400 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-terminal"></i> Configurações SSH</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -434,7 +465,7 @@
                     </div>
                 </div>
 
-                <!-- Seção XRay COMPLETA (modo XRAY) -->
+                <!-- Seção XRay -->
                 <div id="xray-section" class="hidden">
                     <div class="flex items-center justify-between mb-3">
                         <p class="text-xs font-extrabold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> Configurações XRay</p>
@@ -443,7 +474,6 @@
                         </button>
                     </div>
 
-                    <!-- Campo de colar link ou UUID -->
                     <div class="mb-4 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-xl p-3">
                         <label class="text-xs text-violet-600 dark:text-violet-400 font-bold">Cole aqui o link vmess:// ou vless:// (ou UUID direto)</label>
                         <div class="flex gap-2 mt-1">
@@ -453,7 +483,6 @@
                         <p class="text-[10px] text-violet-400 mt-1">Ao importar, os campos abaixo são preenchidos automaticamente.</p>
                     </div>
 
-                    <!-- Campos básicos XRay -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Protocolo</label>
@@ -489,7 +518,6 @@
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Path</label>
                             <input type="text" id="srvXrayPath" placeholder="/ws" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-                        <!-- Mode (auto/manual) -->
                         <div id="xrayModeWrap">
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Mode</label>
                             <select id="srvXrayMode" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
@@ -497,8 +525,6 @@
                                 <option value="manual">Manual</option>
                             </select>
                         </div>
-
-                        <!-- SNI e Host (XHTTP Host) -->
                         <div>
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SNI</label>
                             <input type="text" id="srvXraySni" placeholder="server.name.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
@@ -507,8 +533,6 @@
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host / XHTTP Host</label>
                             <input type="text" id="srvXrayXhttpHost" placeholder="Host header" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-
-                        <!-- Security -->
                         <div>
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Security (TLS)</label>
                             <select id="srvXraySecurity" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" onchange="onXraySecurityChange()">
@@ -521,14 +545,10 @@
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fingerprint</label>
                             <input type="text" id="srvXrayFingerprint" placeholder="chrome" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-
-                        <!-- Flow (condicional TLS) -->
                         <div id="xrayFlowWrap">
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Flow</label>
                             <input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
-
-                        <!-- Reality: Pbk e Sid -->
                         <div id="xrayPbkWrap" class="hidden">
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Public Key (pbk)</label>
                             <input type="text" id="srvXrayPbk" placeholder="Chave pública" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
@@ -539,7 +559,6 @@
                         </div>
                     </div>
 
-                    <!-- Opções avançadas -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                         <div class="flex items-center gap-4">
                             <label class="flex items-center cursor-pointer gap-2">
@@ -567,14 +586,12 @@
                         </div>
                     </div>
 
-                    <!-- JSON bruto (opcional) -->
                     <div class="mt-4">
                         <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">JSON XRay Completo (opcional — sobrepõe campos acima)</label>
                         <textarea id="srvXrayJson" rows="3" placeholder='{"log":{"loglevel":"warning"},...}' class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"></textarea>
                         <p class="text-[10px] text-slate-400 mt-1">Se preenchido, este JSON será usado diretamente no campo "xray" do servidor.</p>
                     </div>
                 </div>
-
             </div>
             <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end gap-3">
                 <button onclick="closeModal('modal-server')" class="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-bold rounded-xl border border-transparent dark:border-slate-600">Cancelar</button>
@@ -583,7 +600,7 @@
         </div>
     </div>
 
-    <!-- MODAL MULTISERV (mantido igual) -->
+    <!-- MODAL MULTISERV -->
     <div id="modal-multiserv" class="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden transform scale-90 transition-all duration-300 border border-slate-200 dark:border-slate-700">
             <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/80">
@@ -596,7 +613,13 @@
                     <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Nome Grupo</label><input type="text" id="msName" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
                     <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Categoria (TYPE)</label><input type="text" id="msType" placeholder="Ex: premium" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
                     <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">FLAG</label><input type="text" id="msFlag" placeholder="Ex: br" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">FlagUrl</label><input type="text" id="msFlagUrl" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
+                    <div class="flag-input-group">
+                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">FlagUrl</label>
+                        <div class="relative mt-1">
+                            <input type="text" id="msFlagUrl" class="w-full p-2 pr-12 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" oninput="updateFlagPreview('msFlagUrl', 'msFlagPreview')">
+                            <img id="msFlagPreview" class="flag-preview" src="" alt="Flag Preview" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%);">
+                        </div>
+                    </div>
                     <div class="sm:col-span-2"><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">ServerIP</label><input type="text" id="msServerIP" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
                     <div class="sm:col-span-2"><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">CheckUser</label><input type="text" id="msCheckUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
                     <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">ServerPort</label><input type="text" id="msPort" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
@@ -650,11 +673,16 @@
             document.getElementById('configFolder').value = githubConfig.folder || "";
             loadState();
             fetchGitHubProfile();
-            autoLoadFromCloud();
+            
+            // AUTO-CARREGAMENTO INTELIGENTE: puxa o JSON da aba atual
+            setTimeout(() => {
+                autoLoadCurrentTabFromCloud();
+            }, 500);
         } else {
             document.getElementById('login-screen').classList.remove('hidden');
         }
     }
+    
     function saveCloudConnection() {
         const token = document.getElementById('loginToken').value.trim();
         const owner = document.getElementById('loginOwner').value.trim();
@@ -667,19 +695,64 @@
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('configFolder').value = folder;
         showToast("Conexão estabelecida!", "success");
-        fetchGitHubProfile(); autoLoadFromCloud(); processForm();
+        fetchGitHubProfile(); 
+        autoLoadCurrentTabFromCloud(); 
+        processForm();
     }
+    
     function clearCloudSession() {
         if (confirm("Deseja se desconectar? Suas alterações locais não serão perdidas.")) {
             localStorage.removeItem('yumeko_github_config'); location.reload();
         }
     }
+    
     function updateCloudPath() {
         let folder = document.getElementById('configFolder').value.trim();
         if (folder && !folder.endsWith('/')) folder += '/';
         githubConfig.folder = folder;
         localStorage.setItem('yumeko_github_config', JSON.stringify(githubConfig));
-        showToast("Pasta atualizada!", "success"); fetchCloudFiles();
+        showToast("Pasta atualizada!", "success"); 
+        fetchCloudFiles();
+        autoLoadCurrentTabFromCloud();
+    }
+
+    // ── AUTO-CARREGAMENTO POR ABA ─────────────────────────────────────────────
+    async function autoLoadCurrentTabFromCloud() {
+        if (!githubConfig.token) return;
+        
+        const filenameMap = {
+            'config': 'Config.json',
+            'theme': 'theme_cache.json',
+            'html': 'HTML.json'
+        };
+        
+        const filename = filenameMap[currentTab] || 'Config.json';
+        
+        try {
+            const res = await fetch(
+                `https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}${filename}`, 
+                { headers: getGitHeaders() }
+            );
+            
+            if (res.ok) {
+                const data = await res.json();
+                const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
+                
+                if (currentTab === 'html') {
+                    document.getElementById('outputHtmlJson').value = decoded;
+                } else {
+                    document.getElementById('outputJson').value = decoded;
+                }
+                
+                loadFromJson();
+                showToast(`${filename} carregado automaticamente da nuvem!`, "success");
+            } else if (res.status === 404) {
+                // Arquivo não existe ainda, ignora silenciosamente
+                console.log(`${filename} não encontrado na nuvem. Usando dados locais.`);
+            }
+        } catch(e) {
+            console.log("Erro ao carregar da nuvem:", e.message);
+        }
     }
 
     // ── GITHUB API ────────────────────────────────────────────────────────────
@@ -749,20 +822,6 @@
         } catch(e) { showToast("Erro de conexão.", "error"); }
     }
 
-    async function autoLoadFromCloud() {
-        if (!githubConfig.token) return;
-        try {
-            const res = await fetch(`https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}Config.json`, { headers: getGitHeaders() });
-            if (res.ok) {
-                const data = await res.json();
-                const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
-                document.getElementById('outputJson').value = decoded;
-                switchTab('config'); loadFromJson();
-                showToast("Configurações atualizadas da Nuvem!", "success");
-            }
-        } catch(e) { console.log("Sem config na nuvem. Usando rascunho local."); }
-    }
-
     async function pullCurrentFileFromCloud() {
         let filename = currentTab==='theme'?'theme_cache.json':currentTab==='html'?'HTML.json':'Config.json';
         await pullSpecificFile(filename);
@@ -776,8 +835,12 @@
             if (!res.ok) throw new Error(res.status === 404 ? "Arquivo não existe na nuvem." : "Erro ao baixar.");
             const data = await res.json();
             const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
-            if (filename === 'HTML.json') { switchTab('html'); document.getElementById('outputHtmlJson').value = decoded; }
-            else document.getElementById('outputJson').value = decoded;
+            if (filename === 'HTML.json') { 
+                switchTab('html'); 
+                document.getElementById('outputHtmlJson').value = decoded; 
+            } else {
+                document.getElementById('outputJson').value = decoded;
+            }
             loadFromJson();
             showToast(`${filename} importado!`, "success");
             closeModal('modal-profile');
@@ -791,7 +854,7 @@
         if (currentTab === 'config') {
             jsonObj.Ads          = document.getElementById('checkAds').checked ? "on" : "off";
             jsonObj.UIMode       = document.getElementById('inputUIMode').value || "nativo";
-            jsonObj.NativeAnchor = document.getElementById('inputNativeAnchor').value;  // 👈 NOVO CAMPO
+            jsonObj.NativeAnchor = document.getElementById('inputNativeAnchor').value;
             jsonObj.ServerEditMode = document.getElementById('checkHybridMode').checked ? "hybrid" : "off";
             jsonObj.HtmlUIUrl    = document.getElementById('inputHtmlUiUrl').value;
             jsonObj.UpdateUrl    = document.getElementById('inputUpdateUrl').value;
@@ -825,7 +888,7 @@
                 document.getElementById('checkAds').checked        = (json.Ads && json.Ads.toLowerCase() === 'on');
                 document.getElementById('checkHybridMode').checked = (json.ServerEditMode && json.ServerEditMode.toLowerCase() === 'hybrid');
                 document.getElementById('inputUIMode').value       = json.UIMode || "nativo";
-                document.getElementById('inputNativeAnchor').value = json.NativeAnchor || "4affa1f54a40194f";  // 👈 padrão se vazio
+                document.getElementById('inputNativeAnchor').value = json.NativeAnchor || "4affa1f54a40194f";
                 document.getElementById('inputHtmlUiUrl').value    = json.HtmlUIUrl || "";
                 document.getElementById('inputUpdateUrl').value    = json.UpdateUrl || "";
                 document.getElementById('inputReleaseNotes').value = json.ReleaseNotes || "";
@@ -861,7 +924,8 @@
 
     // ── ABAS ──────────────────────────────────────────────────────────────────
     function switchTab(tab) {
-        saveDraftToLocalStorage(); currentTab = tab;
+        saveDraftToLocalStorage(); 
+        currentTab = tab;
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-nav-btn'));
         const activeBtn = document.getElementById(`nav-${tab}`);
         if (activeBtn) activeBtn.classList.add('active-nav-btn');
@@ -869,8 +933,43 @@
         document.getElementById(`section-${tab}`).classList.remove('hidden');
         const actionPanel  = document.getElementById('action-panel');
         const previewPanel = document.getElementById('html-preview-panel');
-        if (tab === 'html') { actionPanel.classList.add('hidden'); previewPanel.classList.remove('hidden'); previewHtml(); }
-        else { actionPanel.classList.remove('hidden'); previewPanel.classList.add('hidden'); processForm(); }
+        if (tab === 'html') { 
+            actionPanel.classList.add('hidden'); 
+            previewPanel.classList.remove('hidden'); 
+            previewHtml(); 
+        } else { 
+            actionPanel.classList.remove('hidden'); 
+            previewPanel.classList.add('hidden'); 
+            processForm(); 
+        }
+        
+        // Auto-carrega o JSON da nuvem ao trocar de aba
+        autoLoadCurrentTabFromCloud();
+    }
+
+    // ── FLAG PREVIEW ──────────────────────────────────────────────────────────
+    function updateFlagPreview(inputId, previewId) {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
+        const url = input.value.trim();
+        
+        if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+            preview.src = url;
+            preview.style.display = 'inline-block';
+            
+            // Se a imagem falhar ao carregar, esconde o preview
+            preview.onerror = function() {
+                preview.style.display = 'none';
+                preview.src = '';
+            };
+            
+            preview.onload = function() {
+                preview.style.display = 'inline-block';
+            };
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
     }
 
     // ── MODAL SERVIDOR ────────────────────────────────────────────────────────
@@ -910,6 +1009,9 @@
         document.getElementById('srvFlag').value      = obj.Flag      || "";
         document.getElementById('srvFlagUrl').value   = obj.FlagUrl   || "";
         document.getElementById('srvCheckUser').value = obj.CheckUser || "";
+        
+        // Atualiza preview da flag
+        updateFlagPreview('srvFlagUrl', 'srvFlagPreview');
 
         // SSH
         document.getElementById('srvHost').value      = obj.ServerHost || "";
@@ -922,7 +1024,7 @@
         document.getElementById('srvSni').value       = obj.Sni        || "";
         document.getElementById('srvPayload').value   = obj.Payload    || "";
 
-        // XRay — campos estruturados
+        // XRay
         document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
         document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
         document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
@@ -1015,7 +1117,6 @@
         closeModal('modal-server'); renderServers(); processForm();
     }
 
-    // ── IMPORT BASE64 ─────────────────────────────────────────────────────────
     function importBase64ToFields() {
         const link = document.getElementById('srvXrayImportLink').value.trim();
         if (!link) { showToast("Cole um link vmess:// ou vless:// antes.", "error"); return; }
@@ -1117,8 +1218,13 @@
                       ServerIP:'msServerIP',CheckUser:'msCheckUser',ServerPort:'msPort',
                       SSLPort:'msSSLPort',USER:'msUser',PASS:'msPass' };
         Object.entries(map).forEach(([f,id]) => document.getElementById(id).value = obj[f] || "");
+        
+        // Atualiza preview da flag
+        updateFlagPreview('msFlagUrl', 'msFlagPreview');
+        
         openModal('modal-multiserv');
     }
+    
     function saveMultiServ() {
         const index = parseInt(document.getElementById('msIndex').value);
         const obj = {};
@@ -1129,6 +1235,7 @@
         if (index===-1) multiServsArray.push(obj); else multiServsArray[index] = obj;
         closeModal('modal-multiserv'); renderMultiServs(); processForm();
     }
+    
     function deleteMultiServ(index) {
         if (confirm("Remover este grupo?")) { multiServsArray.splice(index,1); renderMultiServs(); processForm(); }
     }
@@ -1270,7 +1377,7 @@
             c_ads:  document.getElementById('checkAds').checked,
             c_hybrid: document.getElementById('checkHybridMode').checked,
             c_ui:   document.getElementById('inputUIMode').value,
-            c_nativeAnchor: document.getElementById('inputNativeAnchor').value,  // 👈 NOVO
+            c_nativeAnchor: document.getElementById('inputNativeAnchor').value,
             c_h_url:document.getElementById('inputHtmlUiUrl').value,
             c_up_url:document.getElementById('inputUpdateUrl').value,
             c_rn:   document.getElementById('inputReleaseNotes').value,
@@ -1297,7 +1404,7 @@
                 document.getElementById('checkAds').checked        = !!d.c_ads;
                 document.getElementById('checkHybridMode').checked = !!d.c_hybrid;
                 document.getElementById('inputUIMode').value       = d.c_ui || "";
-                document.getElementById('inputNativeAnchor').value = d.c_nativeAnchor || "4affa1f54a40194f";  // 👈 padrão
+                document.getElementById('inputNativeAnchor').value = d.c_nativeAnchor || "4affa1f54a40194f";
                 document.getElementById('inputHtmlUiUrl').value    = d.c_h_url || "";
                 document.getElementById('inputUpdateUrl').value    = d.c_up_url || "";
                 document.getElementById('inputReleaseNotes').value = d.c_rn || "";
