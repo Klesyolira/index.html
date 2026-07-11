@@ -1,5 +1,5 @@
 {
-    "Version": "10.8",
+    "Version": "10.9",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -43,7 +43,7 @@
             "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
         },
         {
-            "Name": "Yoru 03 Premium",
+            "Name": "Yoru 03 Premium Roteite",
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://cdn-icons-png.flaticon.com/512/2859/2859723.png",
