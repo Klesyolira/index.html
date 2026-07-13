@@ -1,9 +1,9 @@
 {
     "Version": "10.10",
     "Ads": "off",
-    "UIMode": "nativo",
+    "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
-    "ServerEditMode": "hybrid",
+    "ServerEditMode": "off",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "Vem coisa boa por aí! 🚀 Nosso aplicativo está em pleno desenvolvimento. Estamos trabalhando duro para entregar uma experiência incrível e facilitar o seu dia a dia. Fique ligado, em breve traremos novidades!",
