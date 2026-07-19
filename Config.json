@@ -1,5 +1,5 @@
 {
-    "Version": "11.3",
+    "Version": "11.4",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -117,14 +117,14 @@
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
-            "ServerPort": "22",
+            "ServerPort": "443",
             "SSLPort": "443",
-            "ProxyHost": "172.67.202.138#104.26.11.54",
-            "ProxyPort": "80",
+            "ProxyHost": "162.247.241.4#172.67.202.138#104.26.11.54",
+            "ProxyPort": "443",
             "USER": "gustavo33",
             "PASS": "341914",
             "Sni": "g.gugu55.online",
-            "Payload": "GET / [split]HTTP/1.1 [lf]Host: g.gugu55.online works[lf]Upgrade: Websocket[lf][lf]"
+            "Payload": "GET / HTTP/1.1[lf]Host: g.gugu55.online[lf]Upgrade: websocket[lf][lf]"
         },
         {
             "Name": "Modo Ssl",
