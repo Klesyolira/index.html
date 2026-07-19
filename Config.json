@@ -1,5 +1,5 @@
 {
-    "Version": "11",
+    "Version": "11.1",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -135,6 +135,22 @@
             "xray_mux": false,
             "use_fake_dns": false,
             "xray_fragment_packets": ""
+        },
+        {
+            "Name": "Modo Ssl",
+            "Info": "SSL",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "ServerHost": "g.gugu55.online",
+            "ServerPort": "22",
+            "SSLPort": "443",
+            "ProxyHost": "",
+            "ProxyPort": "",
+            "USER": "gustavo33",
+            "PASS": "341914",
+            "Sni": "www.whatsapp.com",
+            "Payload": ""
         }
     ],
     "MultiServs": [
