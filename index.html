@@ -23,36 +23,23 @@
         .badge-other{ background:#06474422; color:#34d399; border:1px solid #06474444; }
         #xray-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
         #ssh-section  { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
-        
+
         /* Preview da flag */
         .flag-preview {
-            width: 32px;
-            height: 24px;
-            border-radius: 4px;
-            object-fit: cover;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            display: inline-block;
+            width: 32px; height: 24px; border-radius: 4px; object-fit: cover;
+            border: 1px solid #e2e8f0; background: #f8fafc; display: inline-block;
         }
-        html.dark .flag-preview {
-            border-color: #475569;
-            background: #1e293b;
-        }
-        .flag-preview[src=""], .flag-preview:not([src]) {
-            display: none;
-        }
-        .flag-input-group {
-            position: relative;
-        }
-        .flag-input-group .flag-preview {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .flag-input-group input {
-            padding-right: 48px;
-        }
+        html.dark .flag-preview { border-color: #475569; background: #1e293b; }
+        .flag-preview[src=""], .flag-preview:not([src]) { display: none; }
+        .flag-input-group { position: relative; }
+        .flag-input-group .flag-preview { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
+        .flag-input-group input { padding-right: 48px; }
+
+        /* Drag and drop styles */
+        .dragging { opacity: 0.5; background-color: #eef2ff !important; }
+        html.dark .dragging { background-color: #1e1b4b !important; }
+        .sortable-row { cursor: grab; transition: background-color 0.2s; }
+        .sortable-row:active { cursor: grabbing; }
     </style>
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -160,7 +147,6 @@
                         <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Modo UI</label>
                         <input type="text" id="inputUIMode" placeholder="nativo" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
                     </div>
-                    <!-- NOVO CAMPO NativeAnchor -->
                     <div class="md:col-span-2 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-800 p-3 rounded-xl">
                         <label class="block text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase">
                             <i class="fa-solid fa-key mr-1"></i> NativeAnchor (Chave de Genuinidade)
@@ -216,6 +202,7 @@
                         <table class="w-full text-sm text-left">
                             <thead class="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-100 dark:bg-slate-700/50">
                                 <tr>
+                                    <th class="px-3 py-2 w-8"></th>
                                     <th class="px-3 py-2">Nome</th>
                                     <th class="px-3 py-2">Modo</th>
                                     <th class="px-3 py-2 text-right">Ações</th>
@@ -239,6 +226,7 @@
                         <table class="w-full text-sm text-left">
                             <thead class="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-100 dark:bg-slate-700/50">
                                 <tr>
+                                    <th class="px-3 py-2 w-8"></th>
                                     <th class="px-3 py-2">Grupo</th>
                                     <th class="px-3 py-2">Categoria</th>
                                     <th class="px-3 py-2 text-right">Ações</th>
@@ -657,6 +645,7 @@
     let serversArray    = [];
     let multiServsArray = [];
     let githubConfig    = { token: "", owner: "", repo: "", folder: "" };
+    let dragSrcIndex    = null; // Para drag & drop
 
     document.addEventListener('DOMContentLoaded', () => {
         loadCloudSession();
@@ -673,16 +662,12 @@
             document.getElementById('configFolder').value = githubConfig.folder || "";
             loadState();
             fetchGitHubProfile();
-            
-            // AUTO-CARREGAMENTO INTELIGENTE: puxa o JSON da aba atual
-            setTimeout(() => {
-                autoLoadCurrentTabFromCloud();
-            }, 500);
+            setTimeout(() => { autoLoadCurrentTabFromCloud(); }, 500);
         } else {
             document.getElementById('login-screen').classList.remove('hidden');
         }
     }
-    
+
     function saveCloudConnection() {
         const token = document.getElementById('loginToken').value.trim();
         const owner = document.getElementById('loginOwner').value.trim();
@@ -695,23 +680,23 @@
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('configFolder').value = folder;
         showToast("Conexão estabelecida!", "success");
-        fetchGitHubProfile(); 
-        autoLoadCurrentTabFromCloud(); 
+        fetchGitHubProfile();
+        autoLoadCurrentTabFromCloud();
         processForm();
     }
-    
+
     function clearCloudSession() {
         if (confirm("Deseja se desconectar? Suas alterações locais não serão perdidas.")) {
             localStorage.removeItem('yumeko_github_config'); location.reload();
         }
     }
-    
+
     function updateCloudPath() {
         let folder = document.getElementById('configFolder').value.trim();
         if (folder && !folder.endsWith('/')) folder += '/';
         githubConfig.folder = folder;
         localStorage.setItem('yumeko_github_config', JSON.stringify(githubConfig));
-        showToast("Pasta atualizada!", "success"); 
+        showToast("Pasta atualizada!", "success");
         fetchCloudFiles();
         autoLoadCurrentTabFromCloud();
     }
@@ -719,40 +704,24 @@
     // ── AUTO-CARREGAMENTO POR ABA ─────────────────────────────────────────────
     async function autoLoadCurrentTabFromCloud() {
         if (!githubConfig.token) return;
-        
-        const filenameMap = {
-            'config': 'Config.json',
-            'theme': 'theme_cache.json',
-            'html': 'HTML.json'
-        };
-        
+        const filenameMap = { 'config': 'Config.json', 'theme': 'theme_cache.json', 'html': 'HTML.json' };
         const filename = filenameMap[currentTab] || 'Config.json';
-        
         try {
             const res = await fetch(
-                `https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}${filename}`, 
+                `https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}${filename}`,
                 { headers: getGitHeaders() }
             );
-            
             if (res.ok) {
                 const data = await res.json();
                 const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
-                
-                if (currentTab === 'html') {
-                    document.getElementById('outputHtmlJson').value = decoded;
-                } else {
-                    document.getElementById('outputJson').value = decoded;
-                }
-                
+                if (currentTab === 'html') document.getElementById('outputHtmlJson').value = decoded;
+                else document.getElementById('outputJson').value = decoded;
                 loadFromJson();
                 showToast(`${filename} carregado automaticamente da nuvem!`, "success");
             } else if (res.status === 404) {
-                // Arquivo não existe ainda, ignora silenciosamente
                 console.log(`${filename} não encontrado na nuvem. Usando dados locais.`);
             }
-        } catch(e) {
-            console.log("Erro ao carregar da nuvem:", e.message);
-        }
+        } catch(e) { console.log("Erro ao carregar da nuvem:", e.message); }
     }
 
     // ── GITHUB API ────────────────────────────────────────────────────────────
@@ -835,12 +804,8 @@
             if (!res.ok) throw new Error(res.status === 404 ? "Arquivo não existe na nuvem." : "Erro ao baixar.");
             const data = await res.json();
             const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
-            if (filename === 'HTML.json') { 
-                switchTab('html'); 
-                document.getElementById('outputHtmlJson').value = decoded; 
-            } else {
-                document.getElementById('outputJson').value = decoded;
-            }
+            if (filename === 'HTML.json') { switchTab('html'); document.getElementById('outputHtmlJson').value = decoded; }
+            else { document.getElementById('outputJson').value = decoded; }
             loadFromJson();
             showToast(`${filename} importado!`, "success");
             closeModal('modal-profile');
@@ -924,7 +889,7 @@
 
     // ── ABAS ──────────────────────────────────────────────────────────────────
     function switchTab(tab) {
-        saveDraftToLocalStorage(); 
+        saveDraftToLocalStorage();
         currentTab = tab;
         document.querySelectorAll('nav button').forEach(b => b.classList.remove('active-nav-btn'));
         const activeBtn = document.getElementById(`nav-${tab}`);
@@ -933,17 +898,8 @@
         document.getElementById(`section-${tab}`).classList.remove('hidden');
         const actionPanel  = document.getElementById('action-panel');
         const previewPanel = document.getElementById('html-preview-panel');
-        if (tab === 'html') { 
-            actionPanel.classList.add('hidden'); 
-            previewPanel.classList.remove('hidden'); 
-            previewHtml(); 
-        } else { 
-            actionPanel.classList.remove('hidden'); 
-            previewPanel.classList.add('hidden'); 
-            processForm(); 
-        }
-        
-        // Auto-carrega o JSON da nuvem ao trocar de aba
+        if (tab === 'html') { actionPanel.classList.add('hidden'); previewPanel.classList.remove('hidden'); previewHtml(); }
+        else { actionPanel.classList.remove('hidden'); previewPanel.classList.add('hidden'); processForm(); }
         autoLoadCurrentTabFromCloud();
     }
 
@@ -952,20 +908,11 @@
         const input = document.getElementById(inputId);
         const preview = document.getElementById(previewId);
         const url = input.value.trim();
-        
         if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
             preview.src = url;
             preview.style.display = 'inline-block';
-            
-            // Se a imagem falhar ao carregar, esconde o preview
-            preview.onerror = function() {
-                preview.style.display = 'none';
-                preview.src = '';
-            };
-            
-            preview.onload = function() {
-                preview.style.display = 'inline-block';
-            };
+            preview.onerror = function() { preview.style.display = 'none'; preview.src = ''; };
+            preview.onload = function() { preview.style.display = 'inline-block'; };
         } else {
             preview.src = '';
             preview.style.display = 'none';
@@ -1000,20 +947,13 @@
         const isNew = index === -1;
         document.getElementById('serverModalTitle').innerText = isNew ? "Novo Servidor" : "Editar Servidor";
         document.getElementById('srvIndex').value = index;
-
         const obj = isNew ? {} : serversArray[index];
-
-        // Campos comuns
         document.getElementById('srvName').value      = obj.Name      || "";
         document.getElementById('srvInfo').value      = obj.Info      || "DIRECT";
         document.getElementById('srvFlag').value      = obj.Flag      || "";
         document.getElementById('srvFlagUrl').value   = obj.FlagUrl   || "";
         document.getElementById('srvCheckUser').value = obj.CheckUser || "";
-        
-        // Atualiza preview da flag
         updateFlagPreview('srvFlagUrl', 'srvFlagPreview');
-
-        // SSH
         document.getElementById('srvHost').value      = obj.ServerHost || "";
         document.getElementById('srvPort').value      = obj.ServerPort || "";
         document.getElementById('srvSSLPort').value   = obj.SSLPort    || "";
@@ -1023,8 +963,6 @@
         document.getElementById('srvPass').value      = obj.PASS       || "";
         document.getElementById('srvSni').value       = obj.Sni        || "";
         document.getElementById('srvPayload').value   = obj.Payload    || "";
-
-        // XRay
         document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
         document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
         document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
@@ -1032,7 +970,6 @@
         document.getElementById('srvXrayNetwork').value  = obj.xray_network  || "tcp";
         document.getElementById('srvXrayPath').value     = obj.xray_path     || "";
         document.getElementById('srvXrayMode').value     = obj.xray_mode     || "auto";
-
         const tlsFlag = !!obj.xray_tls;
         document.getElementById('srvXraySecurity').value    = obj.xray_security || (tlsFlag ? "tls" : "none");
         document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || "chrome";
@@ -1041,16 +978,13 @@
         document.getElementById('srvXrayFlow').value        = obj.xray_flow || "";
         document.getElementById('srvXrayPbk').value         = obj.xray_pbk || "";
         document.getElementById('srvXraySid').value         = obj.xray_sid || "";
-
         document.getElementById('srvXrayMux').checked              = !!obj.xray_mux;
         document.getElementById('srvXrayFakeDns').checked          = !!obj.use_fake_dns;
         document.getElementById('srvXrayFragmentPackets').value    = obj.xray_fragment_packets  || "";
         document.getElementById('srvXrayFragmentLength').value     = obj.xray_fragment_length   || "";
         document.getElementById('srvXrayFragmentInterval').value   = obj.xray_fragment_interval || "";
-
         document.getElementById('srvXrayJson').value = obj.xray || "";
         document.getElementById('srvXrayImportLink').value = "";
-
         onModeChange();
         openModal('modal-server');
     }
@@ -1059,7 +993,6 @@
         const index = parseInt(document.getElementById('srvIndex').value);
         const mode  = document.getElementById('srvInfo').value.toUpperCase();
         const isXray = mode === 'XRAY';
-
         const obj = {
             Name:      document.getElementById('srvName').value,
             Info:      mode,
@@ -1067,7 +1000,6 @@
             FlagUrl:   document.getElementById('srvFlagUrl').value,
             CheckUser: document.getElementById('srvCheckUser').value,
         };
-
         if (!isXray) {
             obj.ServerHost = document.getElementById('srvHost').value;
             obj.ServerPort = document.getElementById('srvPort').value;
@@ -1091,7 +1023,6 @@
                 obj.xray_network  = document.getElementById('srvXrayNetwork').value;
                 obj.xray_path     = document.getElementById('srvXrayPath').value;
                 obj.xray_mode     = document.getElementById('srvXrayMode').value;
-
                 const security = document.getElementById('srvXraySecurity').value;
                 obj.xray_security    = security;
                 obj.xray_tls         = security === 'tls' || security === 'reality';
@@ -1102,7 +1033,6 @@
                 obj.xray_pbk         = document.getElementById('srvXrayPbk').value;
                 obj.xray_sid         = document.getElementById('srvXraySid').value;
                 obj.xray_host        = obj.xray_sni || obj.xray_xhttp_host || "";
-
                 obj.xray_mux               = document.getElementById('srvXrayMux').checked;
                 obj.use_fake_dns           = document.getElementById('srvXrayFakeDns').checked;
                 obj.xray_fragment_packets  = document.getElementById('srvXrayFragmentPackets').value.trim();
@@ -1112,7 +1042,6 @@
                 if (!isNaN(fi)) obj.xray_fragment_interval = fi;
             }
         }
-
         if (index === -1) serversArray.push(obj); else serversArray[index] = obj;
         closeModal('modal-server'); renderServers(); processForm();
     }
@@ -1148,7 +1077,6 @@
                 document.getElementById('srvXrayJson').value = "";
                 onXrayNetworkChange(); onXraySecurityChange();
                 showToast("VMess importado! UUID: " + (decoded.id||"").substring(0,8) + "...", "success");
-
             } else if (link.startsWith("vless://")) {
                 const noPrefix = link.substring(8);
                 let name = "", rest = noPrefix;
@@ -1166,7 +1094,6 @@
                 } else { const hp = hostPort.split(":"); address = hp[0]; if (hp.length > 1) port = hp[1]; }
                 const params = {};
                 query.split("&").forEach(p => { const kv = p.split("=",2); if (kv.length===2) params[kv[0]] = decodeURIComponent(kv[1]); });
-
                 document.getElementById('srvXrayProtocol').value = "vless";
                 document.getElementById('srvXrayAddress').value  = address;
                 document.getElementById('srvXrayPort').value     = port;
@@ -1191,21 +1118,111 @@
                 document.getElementById('srvXrayJson').value = "";
                 onXrayNetworkChange(); onXraySecurityChange();
                 showToast("VLess importado! UUID: " + uuid.substring(0,8) + "...", "success");
-
             } else {
                 const uuidRe = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
                 if (uuidRe.test(link)) {
                     document.getElementById('srvXrayUuid').value = link;
                     showToast("UUID aplicado ao campo!", "success");
-                } else {
-                    showToast("Link inválido. Use vmess://, vless:// ou UUID.", "error");
-                }
+                } else { showToast("Link inválido. Use vmess://, vless:// ou UUID.", "error"); }
             }
         } catch(e) { showToast("Erro ao decodificar: " + e.message, "error"); }
     }
 
     function deleteServer(index) {
         if (confirm("Excluir este servidor?")) { serversArray.splice(index,1); renderServers(); processForm(); }
+    }
+
+    // ── REORDENAÇÃO (MOVER PARA CIMA/BAIXO) ──────────────────────────────────
+    function moveServerUp(index) {
+        if (index <= 0) return;
+        [serversArray[index-1], serversArray[index]] = [serversArray[index], serversArray[index-1]];
+        renderServers();
+        processForm();
+    }
+
+    function moveServerDown(index) {
+        if (index >= serversArray.length - 1) return;
+        [serversArray[index], serversArray[index+1]] = [serversArray[index+1], serversArray[index]];
+        renderServers();
+        processForm();
+    }
+
+    function moveMultiServUp(index) {
+        if (index <= 0) return;
+        [multiServsArray[index-1], multiServsArray[index]] = [multiServsArray[index], multiServsArray[index-1]];
+        renderMultiServs();
+        processForm();
+    }
+
+    function moveMultiServDown(index) {
+        if (index >= multiServsArray.length - 1) return;
+        [multiServsArray[index], multiServsArray[index+1]] = [multiServsArray[index+1], multiServsArray[index]];
+        renderMultiServs();
+        processForm();
+    }
+
+    // ── DRAG AND DROP ─────────────────────────────────────────────────────────
+    function handleDragStart(e, index) {
+        dragSrcIndex = index;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
+    }
+
+    function handleDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleDrop(e, index) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (dragSrcIndex !== null && dragSrcIndex !== index) {
+            const item = serversArray.splice(dragSrcIndex, 1)[0];
+            serversArray.splice(index, 0, item);
+            renderServers();
+            processForm();
+        }
+        dragSrcIndex = null;
+        return false;
+    }
+
+    function handleDragEnd() {
+        this.classList.remove('dragging');
+        document.querySelectorAll('#serversList tr').forEach(tr => tr.classList.remove('dragging'));
+        dragSrcIndex = null;
+    }
+
+    // MultiServs drag
+    function handleMultiDragStart(e, index) {
+        dragSrcIndex = index;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
+    }
+
+    function handleMultiDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    function handleMultiDrop(e, index) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (dragSrcIndex !== null && dragSrcIndex !== index) {
+            const item = multiServsArray.splice(dragSrcIndex, 1)[0];
+            multiServsArray.splice(index, 0, item);
+            renderMultiServs();
+            processForm();
+        }
+        dragSrcIndex = null;
+        return false;
+    }
+
+    function handleMultiDragEnd() {
+        this.classList.remove('dragging');
+        document.querySelectorAll('#multiServsList tr').forEach(tr => tr.classList.remove('dragging'));
+        dragSrcIndex = null;
     }
 
     // ── MULTISERV ─────────────────────────────────────────────────────────────
@@ -1218,13 +1235,10 @@
                       ServerIP:'msServerIP',CheckUser:'msCheckUser',ServerPort:'msPort',
                       SSLPort:'msSSLPort',USER:'msUser',PASS:'msPass' };
         Object.entries(map).forEach(([f,id]) => document.getElementById(id).value = obj[f] || "");
-        
-        // Atualiza preview da flag
         updateFlagPreview('msFlagUrl', 'msFlagPreview');
-        
         openModal('modal-multiserv');
     }
-    
+
     function saveMultiServ() {
         const index = parseInt(document.getElementById('msIndex').value);
         const obj = {};
@@ -1235,7 +1249,7 @@
         if (index===-1) multiServsArray.push(obj); else multiServsArray[index] = obj;
         closeModal('modal-multiserv'); renderMultiServs(); processForm();
     }
-    
+
     function deleteMultiServ(index) {
         if (confirm("Remover este grupo?")) { multiServsArray.splice(index,1); renderMultiServs(); processForm(); }
     }
@@ -1257,11 +1271,21 @@
         empty.classList.add('hidden');
         serversArray.forEach((srv, idx) => {
             const tr = document.createElement('tr');
-            tr.className = "hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-colors border-b border-slate-100 dark:border-slate-700/50";
+            tr.className = "sortable-row hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-colors border-b border-slate-100 dark:border-slate-700/50";
+            tr.setAttribute('draggable', 'true');
+            tr.addEventListener('dragstart', (e) => handleDragStart.call(tr, e, idx), false);
+            tr.addEventListener('dragover', handleDragOver, false);
+            tr.addEventListener('drop', (e) => handleDrop.call(tr, e, idx), false);
+            tr.addEventListener('dragend', handleDragEnd, false);
             tr.innerHTML = `
+                <td class="px-2 py-3 text-slate-400 dark:text-slate-500 cursor-grab" draggable="true">
+                    <i class="fa-solid fa-grip-vertical text-xs"></i>
+                </td>
                 <td class="px-3 py-3 font-bold text-slate-800 dark:text-slate-200 text-xs">${srv.Name||'Sem Nome'}</td>
                 <td class="px-3 py-3 text-xs">${modeBadge(srv.Info)}</td>
                 <td class="px-3 py-3 text-right whitespace-nowrap">
+                    <button onclick="moveServerUp(${idx})" ${idx===0?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para cima"><i class="fa-solid fa-chevron-up text-xs"></i></button>
+                    <button onclick="moveServerDown(${idx})" ${idx===serversArray.length-1?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para baixo"><i class="fa-solid fa-chevron-down text-xs"></i></button>
                     <button onclick="openServerModal(${idx})" class="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-700 p-1.5 rounded"><i class="fa-solid fa-pen"></i></button>
                     <button onclick="deleteServer(${idx})" class="text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-slate-700 p-1.5 ml-1 rounded"><i class="fa-solid fa-trash"></i></button>
                 </td>`;
@@ -1277,11 +1301,21 @@
         empty.classList.add('hidden');
         multiServsArray.forEach((ms, idx) => {
             const tr = document.createElement('tr');
-            tr.className = "hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-colors border-b border-slate-100 dark:border-slate-700/50";
+            tr.className = "sortable-row hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-colors border-b border-slate-100 dark:border-slate-700/50";
+            tr.setAttribute('draggable', 'true');
+            tr.addEventListener('dragstart', (e) => handleMultiDragStart.call(tr, e, idx), false);
+            tr.addEventListener('dragover', handleMultiDragOver, false);
+            tr.addEventListener('drop', (e) => handleMultiDrop.call(tr, e, idx), false);
+            tr.addEventListener('dragend', handleMultiDragEnd, false);
             tr.innerHTML = `
+                <td class="px-2 py-3 text-slate-400 dark:text-slate-500 cursor-grab" draggable="true">
+                    <i class="fa-solid fa-grip-vertical text-xs"></i>
+                </td>
                 <td class="px-3 py-3 font-bold text-slate-800 dark:text-slate-200 text-xs">${ms.Name||'Sem Nome'}</td>
                 <td class="px-3 py-3 text-slate-500 dark:text-slate-400 text-[11px]">${ms.TYPE||'-'}</td>
                 <td class="px-3 py-3 text-right whitespace-nowrap">
+                    <button onclick="moveMultiServUp(${idx})" ${idx===0?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para cima"><i class="fa-solid fa-chevron-up text-xs"></i></button>
+                    <button onclick="moveMultiServDown(${idx})" ${idx===multiServsArray.length-1?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para baixo"><i class="fa-solid fa-chevron-down text-xs"></i></button>
                     <button onclick="openMultiServModal(${idx})" class="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-700 p-1.5 rounded"><i class="fa-solid fa-pen"></i></button>
                     <button onclick="deleteMultiServ(${idx})" class="text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-slate-700 p-1.5 ml-1 rounded"><i class="fa-solid fa-trash"></i></button>
                 </td>`;
