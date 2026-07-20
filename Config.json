@@ -59,6 +59,38 @@
             "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]"
         },
         {
+            "Name": "Tlsws",
+            "Info": "TLSWS",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "ServerHost": "g.gugu55.online",
+            "ServerPort": "443",
+            "SSLPort": "443",
+            "ProxyHost": "162.247.241.4#172.67.202.138#104.26.11.54",
+            "ProxyPort": "443",
+            "USER": "gustavo33",
+            "PASS": "341914",
+            "Sni": "g.gugu55.online",
+            "Payload": "GET / HTTP/1.1[lf]Host: g.gugu55.online[lf]Upgrade: websocket[lf][lf]"
+        },
+        {
+            "Name": "Modo Ssl",
+            "Info": "SSL",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "ServerHost": "g.gugu55.online",
+            "ServerPort": "22",
+            "SSLPort": "443",
+            "ProxyHost": "",
+            "ProxyPort": "",
+            "USER": "gustavo33",
+            "PASS": "341914",
+            "Sni": "www.whatsapp.com",
+            "Payload": ""
+        },
+        {
             "Name": "Vless Canada 01",
             "Info": "XRAY",
             "Flag": "ca",
@@ -109,38 +141,6 @@
             "xray_mux": false,
             "use_fake_dns": false,
             "xray_fragment_packets": ""
-        },
-        {
-            "Name": "Tlsws",
-            "Info": "TLSWS",
-            "Flag": "Br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "ServerHost": "g.gugu55.online",
-            "ServerPort": "443",
-            "SSLPort": "443",
-            "ProxyHost": "162.247.241.4#172.67.202.138#104.26.11.54",
-            "ProxyPort": "443",
-            "USER": "gustavo33",
-            "PASS": "341914",
-            "Sni": "g.gugu55.online",
-            "Payload": "GET / HTTP/1.1[lf]Host: g.gugu55.online[lf]Upgrade: websocket[lf][lf]"
-        },
-        {
-            "Name": "Modo Ssl",
-            "Info": "SSL",
-            "Flag": "Br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "ServerHost": "g.gugu55.online",
-            "ServerPort": "22",
-            "SSLPort": "443",
-            "ProxyHost": "",
-            "ProxyPort": "",
-            "USER": "gustavo33",
-            "PASS": "341914",
-            "Sni": "www.whatsapp.com",
-            "Payload": ""
         }
     ],
     "MultiServs": [
