@@ -1,5 +1,5 @@
 {
-    "Version": "11.5",
+    "Version": "11.6",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -59,7 +59,7 @@
             "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]"
         },
         {
-            "Name": "Tlsws",
+            "Name": "01 Tlsws",
             "Info": "TLSWS",
             "Flag": "Br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
@@ -67,12 +67,12 @@
             "ServerHost": "g.gugu55.online",
             "ServerPort": "443",
             "SSLPort": "443",
-            "ProxyHost": "162.247.241.4#172.67.202.138#104.26.11.54",
+            "ProxyHost": "104.16.239.166",
             "ProxyPort": "443",
             "USER": "gustavo33",
             "PASS": "341914",
             "Sni": "g.gugu55.online",
-            "Payload": "GET / HTTP/1.1[lf]Host: g.gugu55.online[lf]Upgrade: websocket[lf][lf]"
+            "Payload": "GET / HTTP/1.1[crlf]Host: g.gugu55.online[crlf]Upgrade: websocket[crlf]Connection: Upgrade[crlf][crlf]"
         },
         {
             "Name": "Modo Ssl",
