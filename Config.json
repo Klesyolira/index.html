@@ -1,5 +1,5 @@
 {
-    "Version": "11.11",
+    "Version": "11.12",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -37,8 +37,8 @@
             "SSLPort": "443",
             "ProxyHost": "104.17.72.206#[app_host]#104.18.43.123#dev-cms.vivo.com.br#servicosdigitais.vivo.com.br#equipamentos.vivo.com.br#z9w105.store.vivo.com.br#assine.vivo.com.br#api.app.vivo.com.br#api.vivo-torpedoempresas.vivo.com.br#vivoplataformadigital.com.br#vivoup.vivo.com.br#serpro.vivo.com.br#planosempresas.vivo.com.br#portaldegovernancadocumental.vivo.com.br#planosempresas-hml.vivo.com.br#ospregional.vivo.com.br",
             "ProxyPort": "80",
-            "USER": "",
-            "PASS": "",
+            "USER": "gustavo33",
+            "PASS": "341914",
             "Sni": "google.com",
             "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]"
         },
