@@ -1,5 +1,5 @@
 {
-    "Version": "11.9",
+    "Version": "11.10",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -65,9 +65,9 @@
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
             "ServerHost": "g.gugu55.online",
-            "ServerPort": "443",
+            "ServerPort": "22",
             "SSLPort": "443",
-            "ProxyHost": "104.16.239.166",
+            "ProxyHost": "g.gugu55.online",
             "ProxyPort": "443",
             "USER": "gustavo33",
             "PASS": "341914",
