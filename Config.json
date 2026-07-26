@@ -1,5 +1,5 @@
 {
-    "Version": "11.12",
+    "Version": "11.13",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -99,7 +99,7 @@
             "xray_protocol": "vless",
             "xray_address": "ca.connfull.org",
             "xray_port": "9443",
-            "xray_uuid": "ced366e2-8367-47b7-a020-f42fade2d861",
+            "xray_uuid": "",
             "xray_network": "ws",
             "xray_path": "/stream",
             "xray_mode": "auto",
