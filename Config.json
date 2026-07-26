@@ -1,7 +1,7 @@
 {
-    "Version": "11.19",
+    "Version": "11.20",
     "Ads": "off",
-    "UIMode": "Ht",
+    "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
     "ServerEditMode": "off",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
