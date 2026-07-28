@@ -1,5 +1,5 @@
 {
-    "Version": "11.20",
+    "Version": "11.21",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -150,7 +150,7 @@
             "FLAG": "br.png",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
             "ServerIP": "g.gugu55.online",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
             "ServerPort": "80",
             "SSLPort": "443",
             "USER": "",
