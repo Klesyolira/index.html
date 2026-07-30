@@ -121,7 +121,7 @@
             "Info": "XRAY",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
-            "CheckUser": "",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
             "xray_protocol": "vless",
             "xray_address": "144.22.239.150",
             "xray_port": "443",
