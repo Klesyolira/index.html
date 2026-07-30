@@ -1,5 +1,5 @@
 {
-    "Version": "11.25",
+    "Version": "11.27",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -95,7 +95,7 @@
             "Info": "XRAY",
             "Flag": "ca",
             "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
-            "CheckUser": "",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
             "xray_protocol": "vless",
             "xray_address": "ca.connfull.org",
             "xray_port": "9443",
