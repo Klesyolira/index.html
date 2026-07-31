@@ -120,7 +120,7 @@
             "Name": "OracleVPS Reality",
             "Info": "XRAY",
             "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/br.png",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
             "CheckUser": "http://152.70.220.155:5656/checkUser",
             "xray_protocol": "vless",
             "xray_address": "144.22.239.150",
