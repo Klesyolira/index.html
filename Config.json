@@ -1,5 +1,5 @@
 {
-    "Version": "12.2",
+    "Version": "12.3",
     "Ads": "on",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -94,7 +94,7 @@
             "Name": "Xray canada",
             "Info": "XRAY",
             "Flag": "ca",
-            "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/33334931-nacional-pais-bandeira-do-canada-vetor.jpg",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/ca.png",
             "CheckUser": "http://152.70.220.155:5656/checkUser",
             "xray_protocol": "vless",
             "xray_address": "ca.connfull.org",
