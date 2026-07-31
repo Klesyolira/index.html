@@ -1,6 +1,6 @@
 {
-    "Version": "12.3",
-    "Ads": "on",
+    "Version": "12.5",
+    "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
     "ServerEditMode": "off",
