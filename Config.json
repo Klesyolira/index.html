@@ -1,5 +1,5 @@
 {
-    "Version": "12.5.1",
+    "Version": "12.5.2",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -152,6 +152,18 @@
             "ServerIP": "g.gugu55.online",
             "CheckUser": "http://152.70.220.155:5656/checkUser",
             "ServerPort": "80",
+            "SSLPort": "443",
+            "USER": "",
+            "PASS": ""
+        },
+        {
+            "Name": "Ca",
+            "TYPE": "premium",
+            "FLAG": "ca",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/ca.png",
+            "ServerIP": "tr2.vpnjantit.com",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "ServerPort": "22",
             "SSLPort": "443",
             "USER": "",
             "PASS": ""
