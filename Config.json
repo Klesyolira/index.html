@@ -1,5 +1,5 @@
 {
-    "Version": "12.5.2",
+    "Version": "12.5.3",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -87,7 +87,7 @@
             "ProxyPort": "",
             "USER": "gustavo33",
             "PASS": "341914",
-            "Sni": "www.whatsapp.com",
+            "Sni": "g.gugu55.online",
             "Payload": ""
         },
         {
@@ -141,6 +141,22 @@
             "xray_mux": false,
             "use_fake_dns": false,
             "xray_fragment_packets": ""
+        },
+        {
+            "Name": "Ssl ca",
+            "Info": "SSL",
+            "Flag": "br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/ca.png",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "ServerHost": "tr2.vpnjantit.com",
+            "ServerPort": "22",
+            "SSLPort": "443",
+            "ProxyHost": "",
+            "ProxyPort": "",
+            "USER": "",
+            "PASS": "",
+            "Sni": "tr2.vpnjantit.com",
+            "Payload": ""
         }
     ],
     "MultiServs": [
