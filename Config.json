@@ -1,5 +1,5 @@
 {
-    "Version": "12.5.5",
+    "Version": "13",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -11,7 +11,7 @@
     "Fundo": "https://pbs.twimg.com/media/HI4QpqeWkAAl9ys?format=jpg&name=large",
     "Servers": [
         {
-            "Name": "Yoru 01 Free",
+            "Name": "01 Yoru  Roteite ProxyIP",
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
@@ -27,7 +27,7 @@
             "Payload": "ACL / HTTP/1.1[lf]Host: [app_host][lf]Upgrade: Websocket websocket[lf][split][lf]"
         },
         {
-            "Name": "Yoru 02 Free Roteite",
+            "Name": "02 Yoru Roteite Payload",
             "Info": "PROXY",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
@@ -43,39 +43,23 @@
             "Payload": "[rotate=GET;POST;PUT;HEAD;CONNECT] / HTTP/1.1[lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]@@@[rotate=ACL;MOVE;MERGE;PATCH;SEARCH] / HTTP/1.1 [lf]Host: [app_host][crlf]Connection: Upgrade[lf]Upgrade: Websocket[lf][lf]"
         },
         {
-            "Name": "Yoru 03 Premium ",
-            "Info": "PROXY",
-            "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/vip.webp",
-            "CheckUser": "https://152.70.220.155:5656/checkUser",
-            "ServerHost": "g.gugu55.online",
+            "Name": "03 Yoru Direct",
+            "Info": "DIRECT",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "ServerHost": "152.70.220.155",
             "ServerPort": "80",
             "SSLPort": "443",
-            "ProxyHost": "104.18.23.26#104.18.22.26#104.16.53.111#104.16.51.111",
+            "ProxyHost": "152.70.220.155",
             "ProxyPort": "80",
-            "USER": "",
-            "PASS": "",
-            "Sni": "google.com",
-            "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
-        },
-        {
-            "Name": "01 Tlsws",
-            "Info": "TLSWS",
-            "Flag": "Br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "ServerHost": "g.gugu55.online",
-            "ServerPort": "22",
-            "SSLPort": "443",
-            "ProxyHost": "104.16.239.166",
-            "ProxyPort": "443",
             "USER": "gustavo33",
             "PASS": "341914",
-            "Sni": "g.gugu55.online",
-            "Payload": "GET / HTTP/1.1[crlf]Host: g.gugu55.online[crlf]Upgrade: websocket[crlf]Connection: Upgrade[crlf][crlf]"
+            "Sni": "152.70.220.155",
+            "Payload": "[split]ACL / HTTP/1.1[crlf]Host: ced.vivo.ddivulga.com[crlf]Connection: keep-alive[crlf]User-Agent: ua[crlf]Referer: http://a.vivo.ddivulga.com/index-tag.html[crlf][crlf]"
         },
         {
-            "Name": "Modo Ssl",
+            "Name": "04 Yoru Ssl",
             "Info": "SSL",
             "Flag": "Br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
@@ -91,7 +75,55 @@
             "Payload": ""
         },
         {
-            "Name": "Xray canada",
+            "Name": "05 Yoru Ssl ca",
+            "Info": "SSL",
+            "Flag": "br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/ca.png",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "ServerHost": "tr2.vpnjantit.com",
+            "ServerPort": "22",
+            "SSLPort": "443",
+            "ProxyHost": "",
+            "ProxyPort": "",
+            "USER": "",
+            "PASS": "",
+            "Sni": "tr2.vpnjantit.com",
+            "Payload": ""
+        },
+        {
+            "Name": "06 Yoru Tlsws",
+            "Info": "TLSWS",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "ServerHost": "g.gugu55.online",
+            "ServerPort": "22",
+            "SSLPort": "443",
+            "ProxyHost": "104.16.239.166",
+            "ProxyPort": "443",
+            "USER": "gustavo33",
+            "PASS": "341914",
+            "Sni": "g.gugu55.online",
+            "Payload": "GET / HTTP/1.1[crlf]Host: g.gugu55.online[crlf]Upgrade: websocket[crlf]Connection: Upgrade[crlf][crlf]"
+        },
+        {
+            "Name": "07 Yoru Premium ",
+            "Info": "PROXY",
+            "Flag": "br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/vip.webp",
+            "CheckUser": "https://152.70.220.155:5656/checkUser",
+            "ServerHost": "g.gugu55.online",
+            "ServerPort": "80",
+            "SSLPort": "443",
+            "ProxyHost": "104.18.23.26#104.18.22.26#104.16.53.111#104.16.51.111",
+            "ProxyPort": "80",
+            "USER": "",
+            "PASS": "",
+            "Sni": "google.com",
+            "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
+        },
+        {
+            "Name": "08 Yoru Xray Canadá",
             "Info": "XRAY",
             "Flag": "ca",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/ca.png",
@@ -117,7 +149,7 @@
             "xray_fragment_packets": ""
         },
         {
-            "Name": "OracleVPS Reality",
+            "Name": "09 Yoru OracleVPS Reality",
             "Info": "XRAY",
             "Flag": "br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Oracle.webp",
@@ -141,22 +173,6 @@
             "xray_mux": false,
             "use_fake_dns": false,
             "xray_fragment_packets": ""
-        },
-        {
-            "Name": "Ssl ca",
-            "Info": "SSL",
-            "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/ca.png",
-            "CheckUser": "http://152.70.220.155:5656/checkUser",
-            "ServerHost": "tr2.vpnjantit.com",
-            "ServerPort": "22",
-            "SSLPort": "443",
-            "ProxyHost": "",
-            "ProxyPort": "",
-            "USER": "",
-            "PASS": "",
-            "Sni": "tr2.vpnjantit.com",
-            "Payload": ""
         }
     ],
     "MultiServs": [
