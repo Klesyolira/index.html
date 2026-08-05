@@ -1,9 +1,9 @@
 {
-    "Version": "12.5.4",
+    "Version": "12.5.5",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
-    "ServerEditMode": "hybrid",
+    "ServerEditMode": "off",
     "HtmlUIUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/HTML.json",
     "UpdateUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/Config.json",
     "ReleaseNotes": "Vem coisa boa por aí! 🚀 Nosso aplicativo está em pleno desenvolvimento.",
