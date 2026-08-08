@@ -1,5 +1,5 @@
 {
-    "Version": "13",
+    "Version": "14",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -48,15 +48,15 @@
             "Flag": "Br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "http://152.70.220.155:5656/checkUser",
-            "ServerHost": "152.70.220.155",
+            "ServerHost": "[app_host]",
             "ServerPort": "80",
             "SSLPort": "443",
-            "ProxyHost": "152.70.220.155",
+            "ProxyHost": "[app_host]",
             "ProxyPort": "80",
             "USER": "gustavo33",
             "PASS": "341914",
             "Sni": "152.70.220.155",
-            "Payload": "[split]ACL / HTTP/1.1[crlf]Host: ced.vivo.ddivulga.com[crlf]Connection: keep-alive[crlf]User-Agent: ua[crlf]Referer: http://a.vivo.ddivulga.com/index-tag.html[crlf][crlf]"
+            "Payload": "[delay_split]ACL / HTTP/1.1[lf][crlf]Host:[rotate= 104.18.6.80;104.18.7.80;162.159.138.6;162.159.128.7;104.17.70.206;104.17.71.206;104.17.72.206;104.17.73.206;104.17.74.206;172.64.144.109;104.18.43.147;104.18.7.41][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
         },
         {
             "Name": "04 Yoru Ssl",
