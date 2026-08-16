@@ -225,6 +225,24 @@
             "SSLPort": "443",
             "USER": "",
             "PASS": ""
+        },
+{
+            "Name": "10 Yoru Xhttp",
+            "Info": "XHTTP",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "xhttpServer": "179.191.168.49",
+            "xhttpPort": "443",
+            "xhttpHost": "br5.azion.app",
+            "USER": "",
+            "PASS": "",
+            "xhttpSni": "app.tim.com.br"
+            "xhttpTls":"true",
+            "xhttpPath":"/ssh"
+            
         }
+
+        
     ]
 }
