@@ -237,7 +237,7 @@
             "xhttpHost": "br5.azion.app",
             "USER": "",
             "PASS": "",
-            "xhttpSni": "app.tim.com.br"
+            "xhttpSni": "app.tim.com.br",
             "xhttpTls":"true",
             "xhttpPath":"/ssh"
             
