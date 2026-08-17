@@ -20,9 +20,11 @@
         .tab-transition { transition: all 0.3s ease-in-out; }
         .badge-ssh  { background:#1e40af22; color:#60a5fa; border:1px solid #1e40af44; }
         .badge-xray { background:#7c3aed22; color:#a78bfa; border:1px solid #7c3aed44; }
+        .badge-xhttp{ background:#0e749022; color:#2dd4bf; border:1px solid #0e749044; }
         .badge-other{ background:#06474422; color:#34d399; border:1px solid #06474444; }
         #xray-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
         #ssh-section  { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
+        #xhttp-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
 
         /* Preview da flag */
         .flag-preview {
@@ -389,7 +391,7 @@
                             <option value="TLSWS">TLSWS</option>
                             <option value="WS">WS</option>
                             <option value="WSS">WSS</option>
-                            <option value="UDP">UDP</option>
+                            <option value="XHTTP">XHTTP (SSH)</option>
                             <option value="XRAY">XRAY</option>
                         </select>
                     </div>
@@ -449,6 +451,59 @@
                         <div class="sm:col-span-2">
                             <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Payload</label>
                             <textarea id="srvPayload" rows="2" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção SSH-XHTTP -->
+                <div id="xhttp-section" class="hidden">
+                    <p class="text-xs font-extrabold text-teal-400 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-globe"></i> Transporte SSH-XHTTP</p>
+                    <div class="mb-3 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-xl p-3 text-[11px] text-teal-700 dark:text-teal-300">
+                        <i class="fa-solid fa-info-circle mr-1"></i>
+                        XHTTP é o <b>transporte</b> do SSH (não usa core Xray). Preencha o endpoint HTTP/2 + SNI/Host/Path. USER/PASS continuam sendo credenciais SSH.
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpServer (IP/Host endpoint)</label>
+                            <input type="text" id="srvXhttpServer" placeholder="179.191.168.49" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpPort</label>
+                            <input type="text" id="srvXhttpPort" placeholder="443" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpHost (Header Host / CDN)</label>
+                            <input type="text" id="srvXhttpHost" placeholder="br5.azion.app" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpSni (SNI TLS)</label>
+                            <input type="text" id="srvXhttpSni" placeholder="app.p.com.br" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpPath</label>
+                            <input type="text" id="srvXhttpPath" placeholder="/ssh" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div class="flex items-end">
+                            <label class="flex items-center cursor-pointer bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 w-full p-2.5 rounded-xl">
+                                <input type="checkbox" id="srvXhttpTls" checked class="w-5 h-5 text-teal-600 border-slate-300 rounded focus:ring-teal-500 cursor-pointer">
+                                <span class="ml-3 text-sm text-slate-700 dark:text-slate-200 font-medium">xhttpTls (HTTPS)</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SSH Host destino (ServerHost) — opcional</label>
+                            <input type="text" id="srvXhttpSshHost" placeholder="mesmo do xhttpServer se vazio" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SSH Port destino (ServerPort)</label>
+                            <input type="text" id="srvXhttpSshPort" placeholder="22" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Usuário SSH (USER)</label>
+                            <input type="text" id="srvXhttpUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Senha SSH (PASS)</label>
+                            <input type="text" id="srvXhttpPass" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
                         </div>
                     </div>
                 </div>
@@ -923,7 +978,10 @@
     function onModeChange() {
         const mode      = document.getElementById('srvInfo').value.toUpperCase();
         const isXray    = mode === 'XRAY';
-        document.getElementById('ssh-section').classList.toggle('hidden', isXray);
+        const isXHttp   = mode === 'XHTTP' || mode === 'SSHXHTTP';
+        const isSshLegacy = !isXray && !isXHttp;
+        document.getElementById('ssh-section').classList.toggle('hidden', !isSshLegacy);
+        document.getElementById('xhttp-section').classList.toggle('hidden', !isXHttp);
         document.getElementById('xray-section').classList.toggle('hidden', !isXray);
         if (isXray) { onXrayNetworkChange(); onXraySecurityChange(); }
     }
@@ -949,11 +1007,16 @@
         document.getElementById('srvIndex').value = index;
         const obj = isNew ? {} : serversArray[index];
         document.getElementById('srvName').value      = obj.Name      || "";
-        document.getElementById('srvInfo').value      = obj.Info      || "DIRECT";
+        // Normaliza Info legado UDP → DIRECT
+        let infoVal = (obj.Info || "DIRECT").toUpperCase();
+        if (infoVal === "UDP" || infoVal === "SLOWDNS") infoVal = "DIRECT";
+        if (infoVal === "SSHXHTTP") infoVal = "XHTTP";
+        document.getElementById('srvInfo').value      = infoVal;
         document.getElementById('srvFlag').value      = obj.Flag      || "";
         document.getElementById('srvFlagUrl').value   = obj.FlagUrl   || "";
         document.getElementById('srvCheckUser').value = obj.CheckUser || "";
         updateFlagPreview('srvFlagUrl', 'srvFlagPreview');
+        // SSH legado
         document.getElementById('srvHost').value      = obj.ServerHost || "";
         document.getElementById('srvPort').value      = obj.ServerPort || "";
         document.getElementById('srvSSLPort').value   = obj.SSLPort    || "";
@@ -963,6 +1026,19 @@
         document.getElementById('srvPass').value      = obj.PASS       || "";
         document.getElementById('srvSni').value       = obj.Sni        || "";
         document.getElementById('srvPayload').value   = obj.Payload    || "";
+        // SSH-XHTTP
+        document.getElementById('srvXhttpServer').value  = obj.xhttpServer || "";
+        document.getElementById('srvXhttpPort').value    = obj.xhttpPort   || "443";
+        document.getElementById('srvXhttpHost').value    = obj.xhttpHost   || "";
+        document.getElementById('srvXhttpSni').value     = obj.xhttpSni    || obj.Sni || "";
+        document.getElementById('srvXhttpPath').value    = obj.xhttpPath   || "/ssh";
+        const tlsRaw = obj.xhttpTls;
+        document.getElementById('srvXhttpTls').checked   = (tlsRaw === undefined || tlsRaw === null || tlsRaw === "" || tlsRaw === true || tlsRaw === "true" || tlsRaw === "1");
+        document.getElementById('srvXhttpSshHost').value = obj.ServerHost || "";
+        document.getElementById('srvXhttpSshPort').value = obj.ServerPort || "22";
+        document.getElementById('srvXhttpUser').value    = obj.USER || "";
+        document.getElementById('srvXhttpPass').value    = obj.PASS || "";
+        // XRay
         document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
         document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
         document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
@@ -978,12 +1054,12 @@
         document.getElementById('srvXrayFlow').value        = obj.xray_flow || "";
         document.getElementById('srvXrayPbk').value         = obj.xray_pbk || "";
         document.getElementById('srvXraySid').value         = obj.xray_sid || "";
-        document.getElementById('srvXrayMux').checked              = !!obj.xray_mux;
-        document.getElementById('srvXrayFakeDns').checked          = !!obj.use_fake_dns;
-        document.getElementById('srvXrayFragmentPackets').value    = obj.xray_fragment_packets  || "";
-        document.getElementById('srvXrayFragmentLength').value     = obj.xray_fragment_length   || "";
-        document.getElementById('srvXrayFragmentInterval').value   = obj.xray_fragment_interval || "";
-        document.getElementById('srvXrayJson').value = obj.xray || "";
+        document.getElementById('srvXrayMux').checked       = !!obj.xray_mux;
+        document.getElementById('srvXrayFakeDns').checked   = !!obj.use_fake_dns;
+        document.getElementById('srvXrayFragmentPackets').value  = obj.xray_fragment_packets || "";
+        document.getElementById('srvXrayFragmentLength').value   = obj.xray_fragment_length != null ? obj.xray_fragment_length : "";
+        document.getElementById('srvXrayFragmentInterval').value = obj.xray_fragment_interval != null ? obj.xray_fragment_interval : "";
+        document.getElementById('srvXrayJson').value = (typeof obj.xray === "string" ? obj.xray : "") || "";
         document.getElementById('srvXrayImportLink').value = "";
         onModeChange();
         openModal('modal-server');
@@ -993,14 +1069,32 @@
         const index = parseInt(document.getElementById('srvIndex').value);
         const mode  = document.getElementById('srvInfo').value.toUpperCase();
         const isXray = mode === 'XRAY';
+        const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
         const obj = {
             Name:      document.getElementById('srvName').value,
-            Info:      mode,
+            Info:      isXHttp ? 'XHTTP' : mode,
             Flag:      document.getElementById('srvFlag').value,
             FlagUrl:   document.getElementById('srvFlagUrl').value,
-            CheckUser: document.getElementById('srvCheckUser').value,
+            CheckUser: document.getElementById('srvCheckUser').value
         };
-        if (!isXray) {
+        if (isXHttp) {
+            obj.xhttpServer = document.getElementById('srvXhttpServer').value.trim();
+            obj.xhttpPort   = document.getElementById('srvXhttpPort').value.trim() || "443";
+            obj.xhttpHost   = document.getElementById('srvXhttpHost').value.trim();
+            obj.xhttpSni    = document.getElementById('srvXhttpSni').value.trim();
+            obj.xhttpPath   = document.getElementById('srvXhttpPath').value.trim() || "/ssh";
+            obj.xhttpTls    = document.getElementById('srvXhttpTls').checked ? "true" : "false";
+            const sshHost = document.getElementById('srvXhttpSshHost').value.trim();
+            const sshPort = document.getElementById('srvXhttpSshPort').value.trim() || "22";
+            if (sshHost) obj.ServerHost = sshHost;
+            obj.ServerPort = sshPort;
+            obj.USER = document.getElementById('srvXhttpUser').value;
+            obj.PASS = document.getElementById('srvXhttpPass').value;
+            if (!obj.xhttpServer) {
+                showToast("xhttpServer é obrigatório no modo XHTTP", "error");
+                return;
+            }
+        } else if (!isXray) {
             obj.ServerHost = document.getElementById('srvHost').value;
             obj.ServerPort = document.getElementById('srvPort').value;
             obj.SSLPort    = document.getElementById('srvSSLPort').value;
@@ -1258,7 +1352,8 @@
     function modeBadge(info) {
         const m = (info||"").toUpperCase();
         if (m === "XRAY") return `<span class="badge-xray text-[10px] px-1.5 py-0.5 rounded-full font-bold">⚡ XRAY</span>`;
-        if (["DIRECT","PROXY","SSL","TLSWS","WS","WSS","UDP"].includes(m))
+        if (m === "XHTTP" || m === "SSHXHTTP") return `<span class="badge-xhttp text-[10px] px-1.5 py-0.5 rounded-full font-bold">🌐 XHTTP</span>`;
+        if (["DIRECT","PROXY","SSL","TLSWS","WS","WSS"].includes(m))
             return `<span class="badge-ssh text-[10px] px-1.5 py-0.5 rounded-full font-bold">🔒 SSH</span>`;
         return `<span class="badge-other text-[10px] px-1.5 py-0.5 rounded-full font-bold">${m}</span>`;
     }
