@@ -522,6 +522,7 @@
                             <option value="WS">WS</option>
                             <option value="WSS">WSS</option>
                             <option value="XHTTP">XHTTP (SSH)</option>
+                            <option value="OPENVPN">OPENVPN</option>
                             <option value="XRAY">XRAY</option>
                         </select>
                         <p class="field-hint">Troque o modo para revelar os campos SSH, XHTTP ou XRay.</p>
@@ -574,6 +575,54 @@
                     </div>
                 </div>
 
+                <!-- OPENVPN -->
+                <div id="openvpn-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-shield-halved"></i> OpenVPN / OpenConnect</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> O APK Full/Lite OpenVPN lê estes campos pelo Config.json. Você pode colar o perfil `.ovpn` completo ou preencher os campos estruturados.</div>
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <button type="button" onclick="importOpenVpnFile()" class="btn btn-secondary btn-sm"><i class="fa-solid fa-file-import"></i> Importar .ovpn</button>
+                        <input type="file" id="srvOpenvpnFile" class="hidden" accept=".ovpn,.conf,.txt" onchange="readOpenVpnFile(this)">
+                        <button type="button" onclick="clearOpenVpnProfile()" class="btn btn-danger-ghost btn-sm"><i class="fa-solid fa-eraser"></i> Limpar perfil</button>
+                    </div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Perfil `.ovpn` completo (opcional)</label><textarea id="srvOpenvpnProfile" rows="7" placeholder="client\\ndev tun\\nproto tcp-client\\nremote ...\\n<ca>...</ca>" class="field-input font-mono text-xs"></textarea><p class="field-hint">Se preenchido, ele tem prioridade sobre os campos estruturados abaixo.</p></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">Servidor OpenVPN</label><input type="text" id="srvOpenvpnServer" placeholder="vpn.example.com" class="field-input font-mono"></div>
+                            <div><label class="field-label">Porta</label><input type="text" id="srvOpenvpnPort" placeholder="443" class="field-input font-mono"></div>
+                            <div><label class="field-label">Protocolo</label><select id="srvOpenvpnProto" class="field-input"><option value="tcp-client">TCP</option><option value="udp">UDP</option></select></div>
+                            <div><label class="field-label">Cifra</label><input type="text" id="srvOpenvpnCipher" placeholder="AES-256-GCM:CHACHA20-POLY1305" class="field-input font-mono"></div>
+                            <div><label class="field-label">Usuário</label><input type="text" id="srvOpenvpnUser" class="field-input"></div>
+                            <div><label class="field-label">Senha</label><input type="password" id="srvOpenvpnPass" class="field-input"></div>
+                            <div><label class="field-label">Auth digest</label><input type="text" id="srvOpenvpnAuth" placeholder="SHA256" class="field-input font-mono"></div>
+                            <div><label class="field-label">DNS secundário</label><input type="text" id="srvOpenvpnDns2" placeholder="8.8.8.8" class="field-input font-mono"></div>
+                            <div><label class="field-label">DNS primário</label><input type="text" id="srvOpenvpnDns" placeholder="1.1.1.1" class="field-input font-mono"></div>
+                            <label class="toggle-row" style="align-self:end;"><input type="checkbox" id="srvOpenvpnIpv6"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Ativar IPv6</span></label>
+                        </div>
+                        <details class="adv">
+                            <summary><i class="fa-solid fa-chevron-right adv-chevron"></i> Certificados e chaves PEM</summary>
+                            <div class="adv-body space-y-3">
+                                <div><label class="field-label">CA (`ca`)</label><textarea id="srvOpenvpnCa" rows="3" placeholder="-----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">Certificado do cliente (`cert`)</label><textarea id="srvOpenvpnCert" rows="3" placeholder="-----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">Chave privada (`key`)</label><textarea id="srvOpenvpnKey" rows="3" placeholder="-----BEGIN PRIVATE KEY-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">TLS Crypt (`tls_crypt`)</label><textarea id="srvOpenvpnTlsCrypt" rows="3" placeholder="-----BEGIN OpenVPN Static key V1-----" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">TLS Auth (`tls_auth`, opcional)</label><textarea id="srvOpenvpnTlsAuth" rows="3" class="field-input font-mono text-xs"></textarea></div>
+                                <div><label class="field-label">CRL (`crl`, opcional)</label><textarea id="srvOpenvpnCrl" rows="3" class="field-input font-mono text-xs"></textarea></div>
+                            </div>
+                        </details>
+                        <details class="adv">
+                            <summary><i class="fa-solid fa-chevron-right adv-chevron"></i> WSS / relay HTTP opcional</summary>
+                            <div class="adv-body grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <label class="toggle-row sm:col-span-2"><input type="checkbox" id="srvOpenvpnWss" onchange="onOpenVpnWssChange()"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Usar OpenVPN sobre WSS</span></label>
+                                <div><label class="field-label">WSS host / bughost</label><input type="text" id="srvOpenvpnWssHost" placeholder="cdn.example.com" class="field-input font-mono"></div>
+                                <div><label class="field-label">WSS porta</label><input type="text" id="srvOpenvpnWssPort" placeholder="443" class="field-input font-mono"></div>
+                                <div class="sm:col-span-2"><label class="field-label">Payload</label><textarea id="srvOpenvpnWssPayload" rows="3" class="field-input font-mono text-xs" placeholder="GET / HTTP/1.1[crlf]Host: [host][crlf]Upgrade: websocket[crlf][crlf]"></textarea></div>
+                                <label class="toggle-row"><input type="checkbox" id="srvOpenvpnWssTls" checked><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">TLS no relay</span></label>
+                                <div><label class="field-label">Porta local</label><input type="text" id="srvOpenvpnWssLocalPort" placeholder="9393" class="field-input font-mono"></div>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
                 <!-- XRAY -->
                 <div id="xray-section" class="hidden mt-2">
                     <div class="group-title"><i class="fa-solid fa-bolt"></i> XRay</div>
@@ -594,7 +643,7 @@
                         <div>
                             <label class="field-label">Network</label>
                             <select id="srvXrayNetwork" class="field-input" onchange="onXrayNetworkChange()">
-                                <option value="tcp">TCP</option><option value="ws">WebSocket (WS)</option><option value="grpc">gRPC</option><option value="xhttp">XHTTP</option><option value="h2">HTTP/2</option>
+                                <option value="tcp">TCP</option><option value="ws">WebSocket (WS)</option>                                <option value="grpc">gRPC</option><option value="xhttp">XHTTP</option><option value="h2">HTTP/2</option><option value="httpupgrade">HTTP Upgrade</option>
                             </select>
                         </div>
                         <div><label class="field-label">Address</label><input type="text" id="srvXrayAddress" placeholder="servidor.example.com" class="field-input font-mono"></div>
@@ -973,20 +1022,29 @@
 
     // ── MODAL SERVIDOR ────────────────────────────────────────────────────────
     function onModeChange() {
-        const mode      = document.getElementById('srvInfo').value.toUpperCase();
-        const isXray    = mode === 'XRAY';
-        const isXHttp   = mode === 'XHTTP' || mode === 'SSHXHTTP';
-        const isSshLegacy = !isXray && !isXHttp;
+        const mode = document.getElementById('srvInfo').value.toUpperCase();
+        const isXray = mode === 'XRAY';
+        const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
+        const isOpenVpn = mode === 'OPENVPN' || mode === 'OVPN' || mode === 'OPENCONNECT';
+        const isSshLegacy = !isXray && !isXHttp && !isOpenVpn;
         document.getElementById('ssh-section').classList.toggle('hidden', !isSshLegacy);
         document.getElementById('xhttp-section').classList.toggle('hidden', !isXHttp);
+        document.getElementById('openvpn-section').classList.toggle('hidden', !isOpenVpn);
         document.getElementById('xray-section').classList.toggle('hidden', !isXray);
         if (isXray) { onXrayNetworkChange(); onXraySecurityChange(); }
+        if (isOpenVpn) onOpenVpnWssChange();
     }
 
     function onXrayNetworkChange() {
         const net = document.getElementById('srvXrayNetwork').value;
         document.getElementById('xrayModeWrap').classList.toggle('hidden', net !== 'xhttp');
-        document.getElementById('xrayXhttpHostWrap').classList.toggle('hidden', !['xhttp','ws','h2'].includes(net));
+        document.getElementById('xrayXhttpHostWrap').classList.toggle('hidden', !['xhttp','ws','grpc','h2','httpupgrade'].includes(net));
+    }
+
+    function onOpenVpnWssChange() {
+        const enabled = document.getElementById('srvOpenvpnWss').checked;
+        ['srvOpenvpnWssHost','srvOpenvpnWssPort','srvOpenvpnWssPayload','srvOpenvpnWssTls','srvOpenvpnWssLocalPort']
+            .forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !enabled; });
     }
 
     function onXraySecurityChange() {
@@ -1004,7 +1062,7 @@
         document.getElementById('srvIndex').value = index;
         const obj = isNew ? {} : serversArray[index];
         document.getElementById('srvName').value      = obj.Name      || "";
-        let infoVal = (obj.Info || "DIRECT").toUpperCase();
+        let infoVal = (obj.Info || obj.type || "DIRECT").toUpperCase();
         if (infoVal === "UDP" || infoVal === "SLOWDNS") infoVal = "DIRECT";
         if (infoVal === "SSHXHTTP") infoVal = "XHTTP";
         document.getElementById('srvInfo').value      = infoVal;
@@ -1032,6 +1090,29 @@
         document.getElementById('srvXhttpSshPort').value = obj.ServerPort || "22";
         document.getElementById('srvXhttpUser').value    = obj.USER || "";
         document.getElementById('srvXhttpPass').value    = obj.PASS || "";
+        document.getElementById('srvOpenvpnProfile').value = obj.ovpn || obj.openvpn_profile || obj.profile || "";
+        document.getElementById('srvOpenvpnServer').value = obj.server || obj.ServerHost || "";
+        document.getElementById('srvOpenvpnPort').value = obj.port || obj.ServerPort || "443";
+        document.getElementById('srvOpenvpnProto').value = obj.proto || obj.protocol || "tcp-client";
+        document.getElementById('srvOpenvpnCipher').value = obj.cipher || obj.data_cipher || "";
+        document.getElementById('srvOpenvpnUser').value = obj.username || obj.user || obj.USER || "";
+        document.getElementById('srvOpenvpnPass').value = obj.password || obj.pass || obj.PASS || "";
+        document.getElementById('srvOpenvpnAuth').value = obj.auth || obj.auth_digest || "SHA256";
+        document.getElementById('srvOpenvpnDns').value = obj.dns || obj.dns1 || "";
+        document.getElementById('srvOpenvpnDns2').value = obj.dns2 || "";
+        document.getElementById('srvOpenvpnIpv6').checked = !!obj.ipv6;
+        document.getElementById('srvOpenvpnCa').value = obj.ca || obj.ca_cert || "";
+        document.getElementById('srvOpenvpnCert').value = obj.cert || obj.client_cert || "";
+        document.getElementById('srvOpenvpnKey').value = obj.key || obj.client_key || obj.private_key || "";
+        document.getElementById('srvOpenvpnTlsCrypt').value = obj.tls_crypt || obj['tls-crypt'] || "";
+        document.getElementById('srvOpenvpnTlsAuth').value = obj.tls_auth || obj['tls-auth'] || "";
+        document.getElementById('srvOpenvpnCrl').value = obj.crl || obj.crl_verify || "";
+        document.getElementById('srvOpenvpnWss').checked = !!(obj.wss || obj.websocket || obj.openvpn_wss);
+        document.getElementById('srvOpenvpnWssHost').value = obj.wss_host || obj.bughost || obj.bugHost || "";
+        document.getElementById('srvOpenvpnWssPort').value = obj.wss_port || obj.bugport || obj.bugPort || "443";
+        document.getElementById('srvOpenvpnWssPayload').value = obj.wss_payload || obj.payload || obj.Payload || "";
+        document.getElementById('srvOpenvpnWssTls').checked = obj.wss_tls === undefined ? true : !!obj.wss_tls;
+        document.getElementById('srvOpenvpnWssLocalPort').value = obj.wss_local_port || obj.local_proxy_port || "9393";
         document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
         document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
         document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
@@ -1063,9 +1144,10 @@
         const mode  = document.getElementById('srvInfo').value.toUpperCase();
         const isXray = mode === 'XRAY';
         const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
+        const isOpenVpn = mode === 'OPENVPN' || mode === 'OVPN' || mode === 'OPENCONNECT';
         const obj = {
             Name:      document.getElementById('srvName').value,
-            Info:      isXHttp ? 'XHTTP' : mode,
+            Info:      isOpenVpn ? 'OPENVPN' : (isXHttp ? 'XHTTP' : mode),
             Flag:      document.getElementById('srvFlag').value,
             FlagUrl:   document.getElementById('srvFlagUrl').value,
             CheckUser: document.getElementById('srvCheckUser').value
@@ -1085,6 +1167,38 @@
             obj.PASS = document.getElementById('srvXhttpPass').value;
             if (!obj.xhttpServer) {
                 showToast("xhttpServer é obrigatório no modo XHTTP", "error");
+                return;
+            }
+        } else if (isOpenVpn) {
+            obj.ovpn = document.getElementById('srvOpenvpnProfile').value.trim();
+            obj.server = document.getElementById('srvOpenvpnServer').value.trim();
+            obj.port = document.getElementById('srvOpenvpnPort').value.trim() || "443";
+            obj.proto = document.getElementById('srvOpenvpnProto').value;
+            obj.cipher = document.getElementById('srvOpenvpnCipher').value.trim();
+            obj.username = document.getElementById('srvOpenvpnUser').value;
+            obj.password = document.getElementById('srvOpenvpnPass').value;
+            obj.auth = document.getElementById('srvOpenvpnAuth').value.trim() || "SHA256";
+            obj.dns = document.getElementById('srvOpenvpnDns').value.trim();
+            obj.dns2 = document.getElementById('srvOpenvpnDns2').value.trim();
+            obj.ipv6 = document.getElementById('srvOpenvpnIpv6').checked;
+            obj.ca = document.getElementById('srvOpenvpnCa').value.trim();
+            obj.cert = document.getElementById('srvOpenvpnCert').value.trim();
+            obj.key = document.getElementById('srvOpenvpnKey').value.trim();
+            obj.tls_crypt = document.getElementById('srvOpenvpnTlsCrypt').value.trim();
+            obj.tls_auth = document.getElementById('srvOpenvpnTlsAuth').value.trim();
+            obj.crl = document.getElementById('srvOpenvpnCrl').value.trim();
+            obj.wss = document.getElementById('srvOpenvpnWss').checked;
+            obj.wss_host = document.getElementById('srvOpenvpnWssHost').value.trim();
+            obj.wss_port = document.getElementById('srvOpenvpnWssPort').value.trim() || "443";
+            obj.wss_payload = document.getElementById('srvOpenvpnWssPayload').value;
+            obj.wss_tls = document.getElementById('srvOpenvpnWssTls').checked;
+            obj.wss_local_port = document.getElementById('srvOpenvpnWssLocalPort').value.trim() || "9393";
+            if (!obj.ovpn && !obj.server) {
+                showToast("Informe um perfil .ovpn ou o servidor OpenVPN", "error");
+                return;
+            }
+            if (obj.wss && !obj.wss_host) {
+                showToast("Informe wss_host/bughost para usar WSS", "error");
                 return;
             }
         } else if (!isXray) {
@@ -1119,7 +1233,9 @@
                 obj.xray_flow        = document.getElementById('srvXrayFlow').value;
                 obj.xray_pbk         = document.getElementById('srvXrayPbk').value;
                 obj.xray_sid         = document.getElementById('srvXraySid').value;
-                obj.xray_host        = obj.xray_sni || obj.xray_xhttp_host || "";
+                // Host de transporte é separado do SNI. O builder usa xray_host
+                // para WS/gRPC/H2/HTTP Upgrade e xray_xhttp_host para XHTTP.
+                obj.xray_host        = obj.xray_xhttp_host || "";
                 obj.xray_mux               = document.getElementById('srvXrayMux').checked;
                 obj.use_fake_dns           = document.getElementById('srvXrayFakeDns').checked;
                 obj.xray_fragment_packets  = document.getElementById('srvXrayFragmentPackets').value.trim();
@@ -1131,6 +1247,77 @@
         }
         if (index === -1) serversArray.push(obj); else serversArray[index] = obj;
         closeModal('modal-server'); renderServers(); processForm();
+    }
+
+    function importOpenVpnFile() {
+        document.getElementById('srvOpenvpnFile').click();
+    }
+
+    function clearOpenVpnProfile() {
+        ['srvOpenvpnProfile','srvOpenvpnServer','srvOpenvpnPort','srvOpenvpnUser','srvOpenvpnPass',
+         'srvOpenvpnCipher','srvOpenvpnAuth','srvOpenvpnDns','srvOpenvpnDns2','srvOpenvpnCa',
+         'srvOpenvpnCert','srvOpenvpnKey','srvOpenvpnTlsCrypt','srvOpenvpnTlsAuth','srvOpenvpnCrl',
+         'srvOpenvpnWssHost','srvOpenvpnWssPayload'].forEach(id => {
+            const el = document.getElementById(id); if (el) el.value = '';
+        });
+        document.getElementById('srvOpenvpnPort').value = '443';
+        document.getElementById('srvOpenvpnProto').value = 'tcp-client';
+        document.getElementById('srvOpenvpnWss').checked = false;
+        document.getElementById('srvOpenvpnWssTls').checked = true;
+        document.getElementById('srvOpenvpnWssPort').value = '443';
+        document.getElementById('srvOpenvpnWssLocalPort').value = '9393';
+        onOpenVpnWssChange();
+    }
+
+    function readOpenVpnFile(input) {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            const text = String(e.target.result || '').trim();
+            document.getElementById('srvOpenvpnProfile').value = text;
+            parseOpenVpnProfile(text);
+            showToast('Perfil .ovpn importado!', 'success');
+        };
+        reader.onerror = () => showToast('Não foi possível ler o perfil .ovpn.', 'error');
+        reader.readAsText(file);
+        input.value = '';
+    }
+
+    function openVpnBlock(profile, name) {
+        const match = profile.match(new RegExp('<' + name + '>\\s*([\\s\\S]*?)\\s*</' + name + '>', 'i'));
+        return match ? match[1].trim() : '';
+    }
+
+    function parseOpenVpnProfile(profile) {
+        if (!profile) return;
+        const lines = profile.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+        const remote = lines.find(line => /^remote\s+/i.test(line));
+        if (remote) {
+            const parts = remote.split(/\s+/);
+            document.getElementById('srvOpenvpnServer').value = parts[1] || '';
+            document.getElementById('srvOpenvpnPort').value = parts[2] || '443';
+        }
+        const proto = lines.find(line => /^proto\s+/i.test(line));
+        if (proto) {
+            const value = proto.split(/\s+/)[1] || 'tcp-client';
+            document.getElementById('srvOpenvpnProto').value = value.toLowerCase() === 'tcp' ? 'tcp-client' : value.toLowerCase();
+        }
+        const cipher = lines.find(line => /^(data-ciphers|cipher)\s+/i.test(line));
+        if (cipher) document.getElementById('srvOpenvpnCipher').value = cipher.replace(/^(data-ciphers|cipher)\s+/i, '').trim();
+        const auth = lines.find(line => /^auth\s+/i.test(line));
+        if (auth) document.getElementById('srvOpenvpnAuth').value = auth.split(/\s+/)[1] || 'SHA256';
+        const dns = lines.filter(line => /^dhcp-option\s+DNS\s+/i.test(line)).map(line => line.split(/\s+/)[2]).filter(Boolean);
+        if (dns[0]) document.getElementById('srvOpenvpnDns').value = dns[0];
+        if (dns[1]) document.getElementById('srvOpenvpnDns2').value = dns[1];
+        const blocks = {
+            ca: 'srvOpenvpnCa', cert: 'srvOpenvpnCert', key: 'srvOpenvpnKey',
+            'tls-crypt': 'srvOpenvpnTlsCrypt', 'tls-auth': 'srvOpenvpnTlsAuth', 'crl-verify': 'srvOpenvpnCrl'
+        };
+        Object.entries(blocks).forEach(([name, id]) => {
+            const value = openVpnBlock(profile, name);
+            if (value) document.getElementById(id).value = value;
+        });
     }
 
     function importBase64ToFields() {
@@ -1330,6 +1517,7 @@
         const m = (info||"").toUpperCase();
         if (m === "XRAY") return `<span class="badge badge-xray">⚡ XRAY</span>`;
         if (m === "XHTTP" || m === "SSHXHTTP") return `<span class="badge badge-xhttp">🌐 XHTTP</span>`;
+        if (m === "OPENVPN" || m === "OVPN" || m === "OPENCONNECT") return `<span class="badge badge-ssh">🛡️ OPENVPN</span>`;
         if (["DIRECT","PROXY","SSL","TLSWS","WS","WSS"].includes(m))
             return `<span class="badge badge-ssh">🔒 SSH</span>`;
         return `<span class="badge badge-other">${m}</span>`;
@@ -1349,7 +1537,7 @@
             card.addEventListener('dragover', handleDragOver, false);
             card.addEventListener('drop', (e) => handleDrop.call(card, e, idx), false);
             card.addEventListener('dragend', handleDragEnd, false);
-            const detail = srv.ServerHost || srv.xhttpServer || srv.xray_address || '';
+            const detail = srv.ServerHost || srv.xhttpServer || srv.server || srv.xray_address || '';
             card.innerHTML = `
                 <span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span>
                 <div class="entity-info">
