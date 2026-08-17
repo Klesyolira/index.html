@@ -1,781 +1,589 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yoru Shield Gerador - Shihao Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config = { darkMode: 'class' }</script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        html.dark ::-webkit-scrollbar-track { background: #1e293b; }
-        html.dark ::-webkit-scrollbar-thumb { background: #475569; }
-        html.dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
-        .active-nav-btn { color: #4f46e5; background-color: #f5f3ff; border-radius: 12px; }
-        html.dark .active-nav-btn { color: #818cf8; background-color: #312e81; }
-        .tab-transition { transition: all 0.3s ease-in-out; }
-        .badge-ssh  { background:#1e40af22; color:#60a5fa; border:1px solid #1e40af44; }
-        .badge-xray { background:#7c3aed22; color:#a78bfa; border:1px solid #7c3aed44; }
-        .badge-xhttp{ background:#0e749022; color:#2dd4bf; border:1px solid #0e749044; }
-        .badge-other{ background:#06474422; color:#34d399; border:1px solid #06474444; }
-        #xray-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
-        #ssh-section  { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
-        #xhttp-section { border-top: 1px solid #334155; margin-top:12px; padding-top:12px; }
-
-        /* Preview da flag */
-        .flag-preview {
-            width: 32px; height: 24px; border-radius: 4px; object-fit: cover;
-            border: 1px solid #e2e8f0; background: #f8fafc; display: inline-block;
-        }
-        html.dark .flag-preview { border-color: #475569; background: #1e293b; }
-        .flag-preview[src=""], .flag-preview:not([src]) { display: none; }
-        .flag-input-group { position: relative; }
-        .flag-input-group .flag-preview { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); }
-        .flag-input-group input { padding-right: 48px; }
-
-        /* Drag and drop styles */
-        .dragging { opacity: 0.5; background-color: #eef2ff !important; }
-        html.dark .dragging { background-color: #1e1b4b !important; }
-        .sortable-row { cursor: grab; transition: background-color 0.2s; }
-        .sortable-row:active { cursor: grabbing; }
-
-        /* Modais mobile-friendly */
-        .modal-overlay {
-            align-items: flex-end;
-            padding: 0;
-            z-index: 60;
-        }
-        @media (min-width: 640px) {
-            .modal-overlay {
-                align-items: center;
-                padding: 1rem;
-            }
-        }
-        .modal-sheet {
-            width: 100%;
-            max-width: 42rem;
-            max-height: min(94vh, 100dvh);
-            border-radius: 1.25rem 1.25rem 0 0;
-            transform: translateY(12px) scale(1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        @media (min-width: 640px) {
-            .modal-sheet {
-                border-radius: 1rem;
-                max-height: 90vh;
-                transform: scale(0.98);
-            }
-        }
-        .modal-overlay[style*="opacity: 1"],
-        .modal-overlay.is-open {
-            opacity: 1 !important;
-            pointer-events: auto !important;
-        }
-        .modal-overlay.is-open .modal-sheet,
-        .modal-overlay[style*="opacity: 1"] .modal-sheet {
-            transform: translateY(0) scale(1) !important;
-        }
-        .modal-body {
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-            flex: 1 1 auto;
-            min-height: 0;
-            padding-bottom: 1.25rem;
-        }
-        .modal-footer {
-            flex-shrink: 0;
-            padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-        }
-        /* select nativo no mobile não corta */
-        select {
-            appearance: auto;
-            -webkit-appearance: menulist;
-            max-width: 100%;
-        }
-        /* evita conteúdo atrás da bottom nav */
-        .main-scroll-pad {
-            padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
-        }
-        @media (min-width: 768px) {
-            .main-scroll-pad { padding-bottom: 1.5rem; }
-        }
-        /* campos de formulário com toque melhor */
-        input, select, textarea, button {
-            font-size: 16px; /* evita zoom iOS */
-        }
-        @media (min-width: 640px) {
-            input, select, textarea, button { font-size: inherit; }
-        }
-        .field-hint {
-            font-size: 10px;
-            color: #94a3b8;
-            margin-top: 4px;
-            line-height: 1.3;
-        }
-        html.dark .field-hint { color: #64748b; }
-    </style>
-    <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else { document.documentElement.classList.remove('dark'); }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Yoru Shield Gerador</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1220;
+    --card: #121a2b;
+    --card2: #172033;
+    --line: #243044;
+    --text: #e8eef9;
+    --muted: #8b9bb4;
+    --accent: #6366f1;
+    --accent2: #8b5cf6;
+    --ok: #14b8a6;
+    --danger: #f43f5e;
+    --ssh: #3b82f6;
+    --xray: #a78bfa;
+    --xhttp: #2dd4bf;
+  }
+  html.light {
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --card2: #f8fafc;
+    --line: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  }
+  .app-header {
+    position: sticky; top: 0; z-index: 30;
+    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+    padding: .75rem 1rem;
+  }
+  .brand {
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .brand-mark {
+    width: 2.5rem; height: 2.5rem; border-radius: .9rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: grid; place-items: center; color: #fff; font-weight: 700;
+    box-shadow: 0 8px 24px #6366f155;
+  }
+  .chip {
+    font-size: 10px; font-weight: 700; padding: .15rem .45rem; border-radius: 999px;
+    background: #6366f122; color: #a5b4fc;
+  }
+  .layout {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 1rem;
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 1024px) {
+    .layout { grid-template-columns: 1.4fr .9fr; align-items: start; }
+  }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 1.1rem;
+    padding: 1rem;
+  }
+  .panel-head {
+    display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+    margin-bottom: .85rem;
+  }
+  .panel-title {
+    font-size: .95rem; font-weight: 800; display: flex; align-items: center; gap: .5rem;
+  }
+  .btn {
+    border: 0; border-radius: .8rem; font-weight: 700; cursor: pointer;
+    padding: .55rem .9rem; font-size: .8rem;
+    display: inline-flex; align-items: center; gap: .4rem;
+    transition: .15s ease;
+  }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost {
+    background: var(--card2); color: var(--text); border: 1px solid var(--line);
+  }
+  .btn-danger { background: #f43f5e22; color: #fb7185; border: 1px solid #f43f5e44; }
+  .field { margin-bottom: .75rem; }
+  .field label {
+    display: block; font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .04em; margin-bottom: .3rem;
+  }
+  .field input, .field select, .field textarea {
+    width: 100%; border-radius: .8rem; border: 1px solid var(--line);
+    background: var(--card2); color: var(--text);
+    padding: .65rem .8rem; font-size: 16px; outline: none;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: #6366f188; box-shadow: 0 0 0 3px #6366f122;
+  }
+  .grid-2 { display: grid; gap: .75rem; }
+  @media (min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  .search-box {
+    position: relative; margin-bottom: .75rem;
+  }
+  .search-box i {
+    position: absolute; left: .85rem; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: .85rem;
+  }
+  .search-box input {
+    width: 100%; padding: .7rem .85rem .7rem 2.3rem;
+    border-radius: .9rem; border: 1px solid var(--line);
+    background: var(--card2); color: var(--text); font-size: 16px;
+  }
+  .server-list { display: flex; flex-direction: column; gap: .55rem; }
+  .server-card {
+    background: var(--card2);
+    border: 1px solid var(--line);
+    border-radius: .95rem;
+    padding: .7rem .75rem;
+    display: flex; flex-direction: column; gap: .55rem;
+  }
+  .server-card-main {
+    display: flex; align-items: center; gap: .65rem; min-width: 0;
+  }
+  .server-card-info { flex: 1; min-width: 0; }
+  .server-card-title {
+    font-weight: 800; font-size: .85rem; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .server-card-sub {
+    font-size: .72rem; color: var(--muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .server-card-actions {
+    display: flex; gap: .35rem; justify-content: flex-end; flex-wrap: wrap;
+  }
+  .drag-handle { color: var(--muted); cursor: grab; padding: .2rem; }
+  .icon-btn {
+    width: 2rem; height: 2rem; border-radius: .65rem; border: 1px solid var(--line);
+    background: var(--card); color: var(--muted); cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .icon-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .icon-edit { color: #818cf8; }
+  .icon-del { color: #fb7185; }
+  .badge {
+    font-size: 10px; font-weight: 800; padding: .2rem .45rem; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .badge-ssh { background: #1e40af22; color: #60a5fa; border: 1px solid #1e40af44; }
+  .badge-xray { background: #7c3aed22; color: #a78bfa; border: 1px solid #7c3aed44; }
+  .badge-xhttp { background: #0e749022; color: #2dd4bf; border: 1px solid #0e749044; }
+  .badge-other { background: #33415555; color: #94a3b8; border: 1px solid #47556966; }
+  .empty-state {
+    text-align: center; color: var(--muted); font-size: .8rem;
+    padding: 1.25rem .5rem; border: 1px dashed var(--line); border-radius: .9rem;
+  }
+  .console {
+    background: #070b14; border: 1px solid var(--line); border-radius: .95rem;
+    color: #c7d2fe; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px; line-height: 1.45; padding: .85rem;
+    min-height: 220px; max-height: 42vh; overflow: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  html.light .console { background: #0f172a; }
+  .bottom-nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    background: color-mix(in srgb, var(--card) 92%, transparent);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding: .45rem .6rem calc(.45rem + env(safe-area-inset-bottom));
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: .25rem;
+  }
+  .nav-item {
+    border: 0; background: transparent; color: var(--muted);
+    border-radius: .85rem; padding: .45rem .2rem; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: .15rem;
+    font-size: 10px; font-weight: 700;
+  }
+  .nav-item i { font-size: 1.05rem; }
+  .nav-item.active {
+    color: #c7d2fe; background: #6366f122;
+  }
+  /* Modal sheet */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 70;
+    background: #020617cc; backdrop-filter: blur(8px);
+    display: flex; justify-content: center; align-items: flex-end;
+    opacity: 0; pointer-events: none; transition: .2s ease;
+  }
+  .modal-overlay.is-open { opacity: 1; pointer-events: auto; }
+  .modal-sheet {
+    width: min(42rem, 100%);
+    max-height: min(94vh, 100dvh);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 1.2rem 1.2rem 0 0;
+    display: flex; flex-direction: column; overflow: hidden;
+    transform: translateY(18px); transition: .22s ease;
+  }
+  .modal-overlay.is-open .modal-sheet { transform: translateY(0); }
+  @media (min-width: 640px) {
+    .modal-overlay { align-items: center; padding: 1rem; }
+    .modal-sheet { border-radius: 1.1rem; max-height: 90vh; }
+  }
+  .modal-head, .modal-footer {
+    flex-shrink: 0; padding: .9rem 1rem;
+    border-color: var(--line);
+  }
+  .modal-head { border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+  .modal-footer { border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: .5rem; padding-bottom: max(.9rem, env(safe-area-inset-bottom)); }
+  .modal-body {
+    overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    padding: 1rem; min-height: 0; flex: 1;
+  }
+  .section-box {
+    border-top: 1px solid var(--line); margin-top: .85rem; padding-top: .85rem;
+  }
+  .hint { font-size: 10px; color: var(--muted); margin-top: .25rem; line-height: 1.35; }
+  .check-row {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .7rem .8rem; border-radius: .8rem; border: 1px solid var(--line);
+    background: var(--card2); cursor: pointer;
+  }
+  .toast-wrap {
+    position: fixed; top: 1rem; right: 1rem; z-index: 90;
+    display: flex; flex-direction: column; gap: .5rem; pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto; background: #4f46e5; color: #fff;
+    padding: .7rem .95rem; border-radius: .8rem; font-size: .75rem; font-weight: 700;
+    box-shadow: 0 10px 30px #0006;
+  }
+  .toast.err { background: #e11d48; }
+  .flag-preview {
+    width: 28px; height: 20px; border-radius: 4px; object-fit: cover;
+    border: 1px solid var(--line); position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  }
+  .rel { position: relative; }
+  .hidden { display: none !important; }
+  .tab-transition { animation: fade .18s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px);} to { opacity:1; transform:none;} }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+</style>
+<script>
+  if (localStorage.theme === 'light') document.documentElement.classList.add('light');
+  else document.documentElement.classList.add('dark');
+</script>
 </head>
-<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans min-h-screen flex flex-col main-scroll-pad transition-colors duration-300">
-
-    <!-- LOGIN -->
-    <div id="login-screen" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-500">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-200 dark:border-slate-700">
-            <div class="bg-gradient-to-r from-indigo-600 to-violet-700 p-6 text-white text-center">
-                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 shadow-inner">
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold">Yoru Shield Panel</h2>
-                <p class="text-indigo-100 text-xs mt-1">Conecte seu repositório de forma 100% segura e isolada no seu navegador.</p>
-            </div>
-            <div class="p-6 space-y-4">
-                <div class="bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-500 p-3 rounded text-xs text-amber-800 dark:text-amber-200">
-                    <i class="fa-solid fa-shield-halved mr-1"></i> Seus dados e tokens ficam salvos apenas localmente em seu navegador.
-                </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">GitHub Personal Access Token (PAT)</label>
-                    <div class="relative mt-1">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-key"></i></span>
-                        <input type="password" id="loginToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" class="w-full pl-9 pr-4 py-2.5 bg-transparent dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Owner</label>
-                        <input type="text" id="loginOwner" placeholder="Ex: LUGH" class="w-full mt-1 px-3 py-2.5 bg-transparent dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Repositório</label>
-                        <input type="text" id="loginRepo" placeholder="Ex: Lugh-LT" class="w-full mt-1 px-3 py-2.5 bg-transparent dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                    </div>
-                </div>
-                <div class="border-t border-slate-200 dark:border-slate-700 pt-3">
-                    <label class="block text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-1">Estrutura de Pastas</label>
-                    <input type="text" id="loginFolder" placeholder="Ex: painel/dados/" class="w-full px-3 py-2 bg-transparent dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
-                </div>
-                <button onclick="saveCloudConnection()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-circle-check"></i> Inicializar Painel
-                </button>
-            </div>
+<body>
+  <header class="app-header">
+    <div style="width:min(1100px,100%);margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:.75rem">
+      <div class="brand">
+        <div class="brand-mark"><i class="fa-solid fa-terminal"></i></div>
+        <div>
+          <div style="font-weight:800;line-height:1.1">Yoru Gerador</div>
+          <span class="chip">V3.2 · LUGH LT</span>
         </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <button class="icon-btn" onclick="toggleDarkMode()" title="Tema"><i id="theme-toggle-icon" class="fa-solid fa-sun"></i></button>
+        <div id="user-profile-card" onclick="openProfileModal()" style="display:flex;align-items:center;gap:.5rem;cursor:pointer;padding:.25rem .5rem .25rem .25rem;border-radius:999px;border:1px solid var(--line);background:var(--card2)">
+          <img id="user-avatar" alt="" style="width:1.9rem;height:1.9rem;border-radius:999px;object-fit:cover" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'><circle cx='12' cy='12' r='10'/></svg>">
+          <div class="hidden sm:block" style="line-height:1.1">
+            <div id="user-name" style="font-size:11px;font-weight:800">Conectar</div>
+            <div id="user-repo-name" style="font-size:9px;color:var(--muted)">GitHub</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <!-- HEADER -->
-    <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-20 shadow-sm px-4 py-3 transition-colors duration-300">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md">
-                    <i class="fa-solid fa-terminal text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Yoru Gerador</h1>
-                    <span class="text-[10px] bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-1.5 py-0.5 rounded-full font-bold">V3.1 LUGH LT</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-3">
-                <button onclick="toggleDarkMode()" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-amber-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center justify-center">
-                    <i id="theme-toggle-icon" class="fa-solid fa-moon"></i>
-                </button>
-                <div id="user-profile-card" class="flex items-center gap-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 p-1.5 pr-3 rounded-full cursor-pointer transition-all" onclick="openProfileModal()">
-                    <img id="user-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'><circle cx='12' cy='12' r='10'/></svg>" alt="Perfil" class="w-8 h-8 rounded-full border border-white dark:border-slate-600 object-cover">
-                    <div class="text-left hidden sm:block">
-                        <div id="user-name" class="text-xs font-bold text-slate-800 dark:text-white leading-none">Conectando...</div>
-                        <div id="user-repo-name" class="text-[9px] text-slate-500 dark:text-slate-300 leading-none mt-1">Carregando repo...</div>
-                    </div>
-                    <i class="fa-solid fa-chevron-down text-slate-400 dark:text-slate-300 text-xs ml-1 hidden sm:block"></i>
-                </div>
-            </div>
+  <!-- LOGIN -->
+  <div id="login-screen" class="modal-overlay is-open" style="z-index:100">
+    <div class="modal-sheet" style="max-width:26rem">
+      <div class="modal-head" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:0">
+        <div>
+          <div style="font-weight:800;font-size:1.05rem">Yoru Shield Panel</div>
+          <div style="font-size:11px;opacity:.85">Token fica só no seu navegador</div>
         </div>
-    </header>
-
-    <!-- MAIN -->
-    <main class="container mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-grow flex flex-col lg:flex-row gap-4 sm:gap-6 w-full max-w-full overflow-x-hidden">
-
-        <!-- Coluna Esquerda -->
-        <div class="w-full lg:w-2/3 min-w-0 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700 p-5 md:p-6 transition-colors duration-300">
-
-            <!-- Versão geral -->
-            <div class="mb-6 pb-6 border-b border-slate-100 dark:border-slate-700 flex items-center gap-4">
-                <div class="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center">
-                    <i class="fa-solid fa-code-compare"></i>
-                </div>
-                <div class="flex-grow">
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Versão Geral do Projeto</label>
-                    <input type="text" id="inputVersion" placeholder="Ex: 1.0" value="1.0" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" oninput="processForm()">
-                </div>
-            </div>
-
-            <!-- ABA CONFIG -->
-            <div id="section-config" class="tab-transition">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-extrabold text-slate-800 dark:text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded"></span>Ajustes de Configuração</h2>
-                    <span class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md font-semibold">Config.json</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Modo UI</label>
-                        <input type="text" id="inputUIMode" placeholder="nativo" class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                    </div>
-                    <div class="md:col-span-2 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-200 dark:border-indigo-800 p-3 rounded-xl">
-                        <label class="block text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase">
-                            <i class="fa-solid fa-key mr-1"></i> NativeAnchor (Chave de Genuinidade)
-                        </label>
-                        <input type="text" id="inputNativeAnchor" value="4affa1f54a40194f" class="w-full mt-1 p-2.5 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                        <p class="text-[10px] text-indigo-400 dark:text-indigo-300 mt-1">Valor padrão. Altere aqui se modificar a key no código-fonte do app.</p>
-                    </div>
-                    <div class="flex items-center md:mt-5">
-                        <label class="flex items-center cursor-pointer bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 w-full p-2.5 rounded-xl transition-all">
-                            <input type="checkbox" id="checkAds" class="w-5 h-5 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 cursor-pointer" onchange="processForm()">
-                            <span class="ml-3 text-sm text-slate-700 dark:text-slate-200 font-medium">Ativar Anúncios (Ads)</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="flex items-center cursor-pointer bg-violet-50 dark:bg-violet-900/20 hover:bg-violet-100 dark:hover:bg-violet-900/30 border border-violet-200 dark:border-violet-800 w-full p-2.5 rounded-xl transition-all">
-                            <input type="checkbox" id="checkHybridMode" class="w-5 h-5 text-violet-600 border-violet-300 rounded focus:ring-violet-500 cursor-pointer" onchange="processForm()">
-                            <span class="ml-3 text-sm text-violet-700 dark:text-violet-300 font-medium flex items-center gap-1.5">
-                                <i class="fa-solid fa-flask text-xs"></i> Modo Híbrido (Servidores Offline VIP)
-                            </span>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">URL UI HTML</label>
-                        <input type="text" id="inputHtmlUiUrl" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">URL de Atualização</label>
-                        <input type="text" id="inputUpdateUrl" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Notas de Lançamento</label>
-                        <input type="text" id="inputReleaseNotes" placeholder="Novidades da versão..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">URL do Tema</label>
-                        <input type="text" id="inputThemeUrl" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Fundo / Wallpaper</label>
-                        <input type="text" id="inputConfigFundo" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()">
-                    </div>
-                </div>
-
-                <!-- Lista Servidores -->
-                <div class="mb-6 bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-inner">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-extrabold text-sm text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-server text-indigo-500"></i>Servidores</h3>
-                        <button onclick="openServerModal(-1)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-2 rounded-xl transition-colors shadow-md">
-                            <i class="fa-solid fa-plus mr-1"></i> Adicionar
-                        </button>
-                    </div>
-                    <div class="overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-100 dark:bg-slate-700/50">
-                                <tr>
-                                    <th class="px-3 py-2 w-8"></th>
-                                    <th class="px-3 py-2">Nome</th>
-                                    <th class="px-3 py-2">Modo</th>
-                                    <th class="px-3 py-2 text-right">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="serversList" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300"></tbody>
-                        </table>
-                        <div id="serversEmpty" class="text-center py-6 text-slate-400 text-xs italic">Nenhum servidor configurado.</div>
-                    </div>
-                </div>
-
-                <!-- Lista MultiServs -->
-                <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-700 shadow-inner">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-extrabold text-sm text-slate-700 dark:text-slate-200 flex items-center gap-1.5"><i class="fa-solid fa-network-wired text-indigo-500"></i>MultiServs (Premium)</h3>
-                        <button onclick="openMultiServModal(-1)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-2 rounded-xl transition-colors shadow-md">
-                            <i class="fa-solid fa-plus mr-1"></i> Adicionar
-                        </button>
-                    </div>
-                    <div class="overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl">
-                        <table class="w-full text-sm text-left">
-                            <thead class="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-100 dark:bg-slate-700/50">
-                                <tr>
-                                    <th class="px-3 py-2 w-8"></th>
-                                    <th class="px-3 py-2">Grupo</th>
-                                    <th class="px-3 py-2">Categoria</th>
-                                    <th class="px-3 py-2 text-right">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="multiServsList" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300"></tbody>
-                        </table>
-                        <div id="multiServsEmpty" class="text-center py-6 text-slate-400 text-xs italic">Nenhum grupo MultiServ configurado.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ABA TEMA -->
-            <div id="section-theme" class="tab-transition hidden">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-extrabold text-slate-800 dark:text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded"></span>Ajustes de Tema</h2>
-                    <span class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md font-semibold">theme_cache.json</span>
-                </div>
-                <div class="space-y-4">
-                    <div><label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Wallpaper URL</label><input type="text" id="inputWallpaper" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()"></div>
-                    <div><label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Logo URL</label><input type="text" id="inputLogo" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()"></div>
-                    <div><label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Banner Image URL</label><input type="text" id="inputBanner" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()"></div>
-                    <div><label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Banner Link</label><input type="text" id="inputBannerLink" placeholder="https://..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()"></div>
-                    <div><label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Mensagem do Banner</label><input type="text" id="inputBannerMsg" placeholder="Aviso importante..." class="w-full mt-1 p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" oninput="processForm()"></div>
-                </div>
-            </div>
-
-            <!-- ABA HTML CONVERTER -->
-            <div id="section-html" class="tab-transition hidden">
-                <div class="flex items-center justify-between mb-2">
-                    <h2 class="text-lg font-extrabold text-slate-800 dark:text-white flex items-center gap-2"><span class="w-1.5 h-6 bg-indigo-600 rounded"></span>HTML Converter</h2>
-                    <span class="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-md font-semibold">HTML.json</span>
-                </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Transforme designs HTML completos em blocos JSON nativos do app Yoru (@).</p>
-                <div class="mb-4">
-                    <div class="flex justify-between items-end mb-1">
-                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Código HTML Raw</label>
-                        <div class="space-x-3">
-                            <button onclick="clearHtml()" class="text-xs text-red-500 hover:text-red-600 font-semibold"><i class="fa-solid fa-eraser"></i> Limpar</button>
-                            <button onclick="document.getElementById('htmlFileInput').click()" class="text-xs text-indigo-500 hover:text-indigo-600 font-semibold"><i class="fa-solid fa-folder-open"></i> Importar arquivo</button>
-                        </div>
-                    </div>
-                    <textarea id="inputHtmlRaw" rows="10" class="w-full p-3 font-mono text-xs border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-y" placeholder="<!DOCTYPE html><html>..."></textarea>
-                    <input type="file" id="htmlFileInput" class="hidden" accept=".html,.txt">
-                </div>
-                <div class="flex flex-wrap gap-2 mb-4">
-                    <button onclick="convertHtml()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-4 py-2.5 rounded-xl shadow-md font-bold flex items-center gap-1.5 transition-colors"><i class="fa-solid fa-rotate"></i> Gerar JSON HTML (@)</button>
-                    <button onclick="previewHtml()" class="bg-teal-500 hover:bg-teal-600 text-white text-xs px-4 py-2.5 rounded-xl shadow-md font-bold flex items-center gap-1.5 transition-colors"><i class="fa-regular fa-eye"></i> Visualizar Render</button>
-                </div>
-                <div class="mt-4">
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Resultado JSON</label>
-                    <textarea id="outputHtmlJson" rows="5" readonly class="w-full p-3 font-mono text-xs text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/50 dark:bg-emerald-900/20 rounded-xl outline-none resize-y"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
-                    <button onclick="pullCurrentFileFromCloud()" class="bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-400 py-3 rounded-xl text-xs font-bold transition-all border border-indigo-200 dark:border-indigo-800 flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-down"></i> Importar da Nuvem</button>
-                    <button onclick="executeCloudDeploy()" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl text-xs font-extrabold transition-all shadow-md flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-sm"></i> Commit & Push</button>
-                </div>
-            </div>
+      </div>
+      <div class="modal-body">
+        <div class="field"><label>GitHub PAT</label><input type="password" id="loginToken" placeholder="ghp_..."></div>
+        <div class="grid-2">
+          <div class="field"><label>Owner</label><input type="text" id="loginOwner" placeholder="user"></div>
+          <div class="field"><label>Repositório</label><input type="text" id="loginRepo" placeholder="repo"></div>
         </div>
-
-        <!-- Coluna Direita: Console -->
-        <div class="w-full lg:w-1/3 flex flex-col gap-4 min-w-0">
-            <div id="action-panel" class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200/80 dark:border-slate-700 p-5 flex flex-col h-full min-h-[450px]">
-                <div class="flex justify-between items-center mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
-                    <h2 class="text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wide flex items-center gap-1.5"><i class="fa-solid fa-code text-indigo-500"></i>Console JSON</h2>
-                    <button onclick="processForm()" class="w-7 h-7 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-600 dark:text-slate-300 rounded-lg flex items-center justify-center transition-colors" title="Re-compilar">
-                        <i class="fa-solid fa-arrows-rotate text-xs"></i>
-                    </button>
-                </div>
-                <textarea id="outputJson" class="w-full flex-grow min-h-[250px] p-3 font-mono text-xs border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/80 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none resize-y whitespace-pre" spellcheck="false" oninput="saveDraftToLocalStorage()"></textarea>
-                <div class="grid grid-cols-2 gap-2 mt-4">
-                    <button onclick="loadFromJson()" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-1"><i class="fa-solid fa-code-pull-request"></i> Ler Console</button>
-                    <button onclick="document.getElementById('jsonFileInput').click()" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-1"><i class="fa-solid fa-folder-open"></i> Upload Local</button>
-                    <input type="file" id="jsonFileInput" class="hidden" accept=".json">
-                    <button onclick="pullCurrentFileFromCloud()" class="bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-400 py-2.5 rounded-xl text-xs font-bold transition-all border border-indigo-200 dark:border-indigo-800 flex items-center justify-center gap-1"><i class="fa-solid fa-cloud-arrow-down"></i> Importar Nuvem</button>
-                    <button onclick="downloadJson()" class="bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-slate-600 flex items-center justify-center gap-1"><i class="fa-solid fa-file-arrow-down"></i> Baixar Local</button>
-                    <button onclick="executeCloudDeploy()" class="bg-emerald-600 hover:bg-emerald-700 text-white py-3 mt-1 rounded-xl text-xs font-extrabold transition-all shadow-md col-span-2 flex items-center justify-center gap-2"><i class="fa-solid fa-cloud-arrow-up text-sm"></i> Commit & Push para Nuvem</button>
-                </div>
-            </div>
-            <div id="html-preview-panel" class="hidden bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 flex flex-col h-full min-h-[450px]">
-                <div class="flex items-center gap-2 mb-3 pb-3 border-b border-slate-100 dark:border-slate-700">
-                    <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <h2 class="text-sm font-extrabold text-slate-800 dark:text-white uppercase tracking-wide">Live Preview</h2>
-                </div>
-                <iframe id="htmlPreviewFrame" class="w-full flex-grow border border-slate-200 dark:border-slate-600 rounded-xl bg-white overflow-auto"></iframe>
-            </div>
-        </div>
-    </main>
-
-    <!-- NAV BOTTOM -->
-    <nav class="fixed bottom-0 inset-x-0 bg-white dark:bg-slate-800 border-t border-slate-200/80 dark:border-slate-700 shadow-2xl px-4 sm:px-6 py-2.5 sm:py-3 z-40 flex justify-around items-center md:justify-center md:gap-12 transition-colors duration-300">
-        <button id="nav-config" onclick="switchTab('config')" class="flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-all p-2 active-nav-btn px-4"><i class="fa-solid fa-gears text-lg"></i><span class="text-[10px] font-bold">Config</span></button>
-        <button id="nav-theme" onclick="switchTab('theme')" class="flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-all p-2 px-4"><i class="fa-solid fa-palette text-lg"></i><span class="text-[10px] font-bold">Tema</span></button>
-        <button id="nav-html" onclick="switchTab('html')" class="flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-all p-2 px-4"><i class="fa-brands fa-html5 text-lg"></i><span class="text-[10px] font-bold">HTML Conv</span></button>
-        <button onclick="openProfileModal()" class="flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-indigo-600 transition-all p-2 px-4"><i class="fa-solid fa-cloud text-lg"></i><span class="text-[10px] font-bold">Nuvem</span></button>
-    </nav>
-
-    <!-- MODAL PERFIL/NUVEM -->
-    <div id="modal-profile" class="modal-overlay fixed inset-0 z-[60] bg-slate-950/70 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex justify-center">
-        <div class="modal-sheet bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300" style="max-width:24rem">
-            <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-gradient-to-r from-indigo-600 to-violet-700 text-white flex-shrink-0">
-                <div class="flex items-center gap-3">
-                    <img id="modal-user-avatar" src="" class="w-10 h-10 rounded-full border-2 border-white/50 object-cover">
-                    <div>
-                        <div id="modal-user-name" class="font-bold text-sm">Carregando...</div>
-                        <div id="modal-user-login" class="text-xs text-indigo-200"></div>
-                        <div id="modal-user-repo" class="text-[10px] text-indigo-300 mt-0.5"></div>
-                    </div>
-                </div>
-                <button onclick="closeModal('modal-profile')" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="modal-body p-4 space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-1">Pasta do Projeto</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="configFolder" placeholder="Ex: pasta/ ou vazio" class="w-full p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none focus:ring-2 focus:ring-indigo-500">
-                        <button onclick="updateCloudPath()" class="bg-slate-800 dark:bg-slate-700 hover:bg-slate-900 text-white px-3 rounded-lg text-xs font-bold transition-all whitespace-nowrap"><i class="fa-solid fa-check"></i></button>
-                    </div>
-                </div>
-                <div class="border-t border-slate-100 dark:border-slate-700 pt-3">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="text-xs font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-folder-tree"></i> Arquivos na Nuvem</h4>
-                        <button onclick="fetchCloudFiles()" class="text-indigo-500 hover:text-indigo-700 text-xs font-bold bg-indigo-50 dark:bg-indigo-900/30 px-2 py-1 rounded"><i class="fa-solid fa-rotate-right mr-1"></i>Atualizar</button>
-                    </div>
-                    <div id="cloud-files-container" class="space-y-2 bg-slate-50 dark:bg-slate-900/50 p-2 rounded-xl border border-slate-200 dark:border-slate-700 min-h-[80px] max-h-48 overflow-y-auto">
-                        <div class="text-center text-xs text-slate-400 py-4"><i class="fa-solid fa-spinner fa-spin"></i> Carregando...</div>
-                    </div>
-                </div>
-            </div>
-            <div class="p-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex-shrink-0">
-                <button onclick="clearCloudSession()" class="w-full bg-red-50 dark:bg-rose-900/20 hover:bg-red-100 text-red-600 dark:text-rose-400 text-xs font-bold py-2.5 rounded-xl transition-all border border-red-200 dark:border-rose-800 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-sign-out"></i> Desconectar GitHub
-                </button>
-            </div>
-        </div>
+        <div class="field"><label>Pasta</label><input type="text" id="loginFolder" placeholder="painel/dados/"></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:.85rem" onclick="saveCloudConnection()">
+          <i class="fa-solid fa-circle-check"></i> Inicializar Painel
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- MODAL SERVIDOR -->
-    <div id="modal-server" class="modal-overlay fixed inset-0 z-[60] bg-slate-950/70 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex justify-center">
-        <div class="modal-sheet bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/80 flex-shrink-0">
-                <h3 class="font-bold text-base text-indigo-700 dark:text-indigo-400" id="serverModalTitle">Adicionar Servidor</h3>
-                <button type="button" onclick="closeModal('modal-server')" class="text-slate-400 hover:text-slate-600 p-2 -mr-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="modal-body p-4 sm:p-6">
-                <input type="hidden" id="srvIndex">
-
-                <!-- Campos comuns -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Nome do Servidor</label>
-                        <input type="text" id="srvName" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Modo (Info)</label>
-                        <select id="srvInfo" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" onchange="onModeChange()">
-                            <option value="DIRECT">DIRECT</option>
-                            <option value="PROXY">PROXY</option>
-                            <option value="SSL">SSL</option>
-                            <option value="TLSWS">TLSWS</option>
-                            <option value="WS">WS</option>
-                            <option value="WSS">WSS</option>
-                            <option value="XHTTP">XHTTP (SSH)</option>
-                            <option value="XRAY">XRAY</option>
-                        </select>
-                        <p class="field-hint">Troque o modo para revelar os campos SSH, XHTTP ou XRay. Role o modal se não aparecer tudo.</p>
-                    </div>
-                    <div>
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Sigla País (Flag)</label>
-                        <input type="text" id="srvFlag" placeholder="Ex: br, us" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                    </div>
-                    <div class="flag-input-group">
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">URL Ícone (FlagUrl)</label>
-                        <div class="relative mt-1">
-                            <input type="text" id="srvFlagUrl" class="w-full p-2 pr-12 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" oninput="updateFlagPreview('srvFlagUrl', 'srvFlagPreview')">
-                            <img id="srvFlagPreview" class="flag-preview" src="" alt="Flag Preview" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%);">
-                        </div>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">CheckUser URL</label>
-                        <input type="text" id="srvCheckUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                    </div>
-                </div>
-
-                <!-- Seção SSH -->
-                <div id="ssh-section">
-                    <p class="text-xs font-extrabold text-blue-400 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-terminal"></i> Configurações SSH</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host (ServerHost)</label>
-                            <input type="text" id="srvHost" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Porta SSH (ServerPort)</label>
-                            <input type="text" id="srvPort" placeholder="22" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Porta SSL (SSLPort)</label>
-                            <input type="text" id="srvSSLPort" placeholder="443" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Proxy Host (ProxyHost)</label>
-                            <input type="text" id="srvProxyHost" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Proxy Port</label>
-                            <input type="text" id="srvProxyPort" placeholder="80" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Usuário SSH (USER)</label>
-                            <input type="text" id="srvUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Senha SSH (PASS)</label>
-                            <input type="text" id="srvPass" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SNI</label>
-                            <input type="text" id="srvSni" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Payload</label>
-                            <textarea id="srvPayload" rows="2" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção SSH-XHTTP -->
-                <div id="xhttp-section" class="hidden">
-                    <p class="text-xs font-extrabold text-teal-400 mb-3 flex items-center gap-1.5"><i class="fa-solid fa-globe"></i> Transporte SSH-XHTTP</p>
-                    <div class="mb-3 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-xl p-3 text-[11px] text-teal-700 dark:text-teal-300">
-                        <i class="fa-solid fa-info-circle mr-1"></i>
-                        XHTTP é o <b>transporte</b> do SSH (não usa core Xray). Preencha o endpoint HTTP/2 + SNI/Host/Path. USER/PASS continuam sendo credenciais SSH.
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpServer (IP/Host endpoint)</label>
-                            <input type="text" id="srvXhttpServer" placeholder="179.191.168.49" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpPort</label>
-                            <input type="text" id="srvXhttpPort" placeholder="443" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpHost (Header Host / CDN)</label>
-                            <input type="text" id="srvXhttpHost" placeholder="br5.azion.app" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpSni (SNI TLS)</label>
-                            <input type="text" id="srvXhttpSni" placeholder="app.p.com.br" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">xhttpPath</label>
-                            <input type="text" id="srvXhttpPath" placeholder="/ssh" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div class="flex items-end">
-                            <label class="flex items-center cursor-pointer bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 w-full p-2.5 rounded-xl">
-                                <input type="checkbox" id="srvXhttpTls" checked class="w-5 h-5 text-teal-600 border-slate-300 rounded focus:ring-teal-500 cursor-pointer">
-                                <span class="ml-3 text-sm text-slate-700 dark:text-slate-200 font-medium">xhttpTls (HTTPS)</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SSH Host destino (ServerHost) — opcional</label>
-                            <input type="text" id="srvXhttpSshHost" placeholder="mesmo do xhttpServer se vazio" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SSH Port destino (ServerPort)</label>
-                            <input type="text" id="srvXhttpSshPort" placeholder="22" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Usuário SSH (USER)</label>
-                            <input type="text" id="srvXhttpUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Senha SSH (PASS)</label>
-                            <input type="text" id="srvXhttpPass" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção XRay -->
-                <div id="xray-section" class="hidden">
-                    <div class="flex items-center justify-between mb-3">
-                        <p class="text-xs font-extrabold text-violet-400 flex items-center gap-1.5"><i class="fa-solid fa-bolt"></i> Configurações XRay</p>
-                        <button onclick="importBase64ToFields()" class="bg-violet-600 hover:bg-violet-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition-colors">
-                            <i class="fa-solid fa-qrcode"></i> Importar vmess:// vless://
-                        </button>
-                    </div>
-
-                    <div class="mb-4 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-xl p-3">
-                        <label class="text-xs text-violet-600 dark:text-violet-400 font-bold">Cole aqui o link vmess:// ou vless:// (ou UUID direto)</label>
-                        <div class="flex gap-2 mt-1">
-                            <input type="text" id="srvXrayImportLink" placeholder="vmess://... ou vless://... ou UUID" class="flex-grow p-2 border border-violet-300 dark:border-violet-700 rounded-xl text-xs bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-violet-500 outline-none">
-                            <button onclick="importBase64ToFields()" class="bg-violet-600 hover:bg-violet-700 text-white text-xs px-3 rounded-xl font-bold transition-colors whitespace-nowrap">Importar</button>
-                        </div>
-                        <p class="text-[10px] text-violet-400 mt-1">Ao importar, os campos abaixo são preenchidos automaticamente.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Protocolo</label>
-                            <select id="srvXrayProtocol" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                                <option value="vmess">VMess</option>
-                                <option value="vless">VLess</option>
-                                <option value="trojan">Trojan</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Network</label>
-                            <select id="srvXrayNetwork" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" onchange="onXrayNetworkChange()">
-                                <option value="tcp">TCP</option>
-                                <option value="ws">WebSocket (WS)</option>
-                                <option value="grpc">gRPC</option>
-                                <option value="xhttp">XHTTP</option>
-                                <option value="h2">HTTP/2</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Address</label>
-                            <input type="text" id="srvXrayAddress" placeholder="servidor.example.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Port</label>
-                            <input type="text" id="srvXrayPort" placeholder="443" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">UUID / Password</label>
-                            <input type="text" id="srvXrayUuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Path</label>
-                            <input type="text" id="srvXrayPath" placeholder="/ws" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xrayModeWrap">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Mode</label>
-                            <select id="srvXrayMode" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                                <option value="auto">Auto</option>
-                                <option value="manual">Manual</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SNI</label>
-                            <input type="text" id="srvXraySni" placeholder="server.name.com" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xrayXhttpHostWrap">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Host / XHTTP Host</label>
-                            <input type="text" id="srvXrayXhttpHost" placeholder="Host header" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Security (TLS)</label>
-                            <select id="srvXraySecurity" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" onchange="onXraySecurityChange()">
-                                <option value="none">None</option>
-                                <option value="tls">TLS</option>
-                                <option value="reality">Reality</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fingerprint</label>
-                            <input type="text" id="srvXrayFingerprint" placeholder="chrome" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xrayFlowWrap">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Flow</label>
-                            <input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xrayPbkWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Public Key (pbk)</label>
-                            <input type="text" id="srvXrayPbk" placeholder="Chave pública" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div id="xraySidWrap" class="hidden">
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Short ID (sid)</label>
-                            <input type="text" id="srvXraySid" placeholder="abcdef" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                        <div class="flex items-center gap-4">
-                            <label class="flex items-center cursor-pointer gap-2">
-                                <input type="checkbox" id="srvXrayMux" class="w-4 h-4 text-violet-600 rounded">
-                                <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">Mux (Multiplexação)</span>
-                            </label>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <label class="flex items-center cursor-pointer gap-2">
-                                <input type="checkbox" id="srvXrayFakeDns" class="w-4 h-4 text-violet-600 rounded">
-                                <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">Fake DNS</span>
-                            </label>
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fragment Packets</label>
-                            <input type="text" id="srvXrayFragmentPackets" placeholder="tlshello" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fragment Length</label>
-                            <input type="text" id="srvXrayFragmentLength" placeholder="100-200" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                        <div>
-                            <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Fragment Interval</label>
-                            <input type="text" id="srvXrayFragmentInterval" placeholder="10-30" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">JSON XRay Completo (opcional — sobrepõe campos acima)</label>
-                        <textarea id="srvXrayJson" rows="3" placeholder='{"log":{"loglevel":"warning"},...}' class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-xs bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-mono"></textarea>
-                        <p class="text-[10px] text-slate-400 mt-1">Se preenchido, este JSON será usado diretamente no campo "xray" do servidor.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end gap-3">
-                <button type="button" onclick="closeModal('modal-server')" class="px-4 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-bold rounded-xl border border-slate-200 dark:border-slate-600">Cancelar</button>
-                <button type="button" onclick="saveServer()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-md">Salvar Servidor</button>
-            </div>
+  <main class="layout">
+    <section>
+      <!-- CONFIG -->
+      <div id="section-config" class="tab-transition">
+        <div class="panel" style="margin-bottom:1rem">
+          <div class="panel-title" style="margin-bottom:.75rem"><i class="fa-solid fa-sliders" style="color:var(--accent)"></i> Configuração geral</div>
+          <div class="grid-2">
+            <div class="field"><label>Versão</label><input type="text" id="inputVersion" value="1.0" oninput="processForm()"></div>
+            <div class="field"><label>Modo UI</label><input type="text" id="inputUIMode" placeholder="nativo / html" oninput="processForm()"></div>
+            <div class="field" style="grid-column:1/-1"><label>NativeAnchor</label><input type="text" id="inputNativeAnchor" value="4affa1f54a40194f" oninput="processForm()"></div>
+            <label class="check-row"><input type="checkbox" id="checkAds" onchange="processForm()"><span>Ativar anúncios (Ads)</span></label>
+            <label class="check-row"><input type="checkbox" id="checkHybridMode" onchange="processForm()"><span>Modo híbrido (offline VIP)</span></label>
+            <div class="field"><label>URL UI HTML</label><input type="text" id="inputHtmlUiUrl" oninput="processForm()"></div>
+            <div class="field"><label>URL atualização</label><input type="text" id="inputUpdateUrl" oninput="processForm()"></div>
+            <div class="field" style="grid-column:1/-1"><label>Release notes</label><input type="text" id="inputReleaseNotes" oninput="processForm()"></div>
+            <div class="field"><label>URL tema</label><input type="text" id="inputThemeUrl" oninput="processForm()"></div>
+            <div class="field"><label>Fundo</label><input type="text" id="inputConfigFundo" oninput="processForm()"></div>
+          </div>
         </div>
-    </div>
 
-    <!-- MODAL MULTISERV -->
-    <div id="modal-multiserv" class="modal-overlay fixed inset-0 z-[60] bg-slate-950/70 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 flex justify-center">
-        <div class="modal-sheet bg-white dark:bg-slate-800 shadow-2xl border border-slate-200 dark:border-slate-700 transition-all duration-300" style="max-width:32rem">
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800/80 flex-shrink-0">
-                <h3 class="font-bold text-base text-indigo-700 dark:text-indigo-400" id="multiServModalTitle">Adicionar MultiServ</h3>
-                <button type="button" onclick="closeModal('modal-multiserv')" class="text-slate-400 hover:text-slate-600 p-2 -mr-1"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="modal-body p-4 sm:p-6">
-                <input type="hidden" id="msIndex">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Nome Grupo</label><input type="text" id="msName" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">Categoria (TYPE)</label><input type="text" id="msType" placeholder="Ex: premium" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">FLAG</label><input type="text" id="msFlag" placeholder="Ex: br" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div class="flag-input-group">
-                        <label class="text-xs text-slate-500 dark:text-slate-400 font-bold">FlagUrl</label>
-                        <div class="relative mt-1">
-                            <input type="text" id="msFlagUrl" class="w-full p-2 pr-12 border border-slate-200 dark:border-slate-600 rounded-xl text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100" oninput="updateFlagPreview('msFlagUrl', 'msFlagPreview')">
-                            <img id="msFlagPreview" class="flag-preview" src="" alt="Flag Preview" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%);">
-                        </div>
-                    </div>
-                    <div class="sm:col-span-2"><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">ServerIP</label><input type="text" id="msServerIP" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div class="sm:col-span-2"><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">CheckUser</label><input type="text" id="msCheckUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">ServerPort</label><input type="text" id="msPort" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">SSLPort</label><input type="text" id="msSSLPort" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">USER</label><input type="text" id="msUser" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                    <div><label class="text-xs text-slate-500 dark:text-slate-400 font-bold">PASS</label><input type="text" id="msPass" class="w-full p-2 border border-slate-200 dark:border-slate-600 rounded-xl mt-1 text-sm bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100"></div>
-                </div>
-            </div>
-            <div class="modal-footer px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 flex justify-end gap-3">
-                <button type="button" onclick="closeModal('modal-multiserv')" class="px-4 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-bold rounded-xl border border-slate-200 dark:border-slate-600">Cancelar</button>
-                <button type="button" onclick="saveMultiServ()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-md">Salvar Grupo</button>
-            </div>
+        <div class="panel" style="margin-bottom:1rem">
+          <div class="panel-head">
+            <div class="panel-title"><i class="fa-solid fa-server" style="color:var(--accent)"></i> Servidores <span id="serversCount" class="chip">0</span></div>
+            <button class="btn btn-primary" onclick="openServerModal(-1)"><i class="fa-solid fa-plus"></i> Adicionar</button>
+          </div>
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" id="serverSearch" placeholder="Buscar por nome, modo, host..." oninput="filterServers()" enterkeyhint="search">
+          </div>
+          <div id="serversList" class="server-list"></div>
+          <div id="serversEmpty" class="empty-state">Nenhum servidor ainda. Toque em + Adicionar.</div>
         </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title"><i class="fa-solid fa-network-wired" style="color:var(--accent)"></i> MultiServs <span id="multiCount" class="chip">0</span></div>
+            <button class="btn btn-primary" onclick="openMultiServModal(-1)"><i class="fa-solid fa-plus"></i> Adicionar</button>
+          </div>
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" id="multiSearch" placeholder="Buscar MultiServ..." oninput="filterMultiServs()">
+          </div>
+          <div id="multiServsList" class="server-list"></div>
+          <div id="multiServsEmpty" class="empty-state">Nenhum MultiServ.</div>
+        </div>
+      </div>
+
+      <!-- THEME -->
+      <div id="section-theme" class="tab-transition hidden">
+        <div class="panel">
+          <div class="panel-title" style="margin-bottom:.75rem"><i class="fa-solid fa-palette" style="color:var(--accent)"></i> Tema</div>
+          <div class="field"><label>Wallpaper</label><input type="text" id="inputWallpaper" oninput="processForm()"></div>
+          <div class="field"><label>Logo</label><input type="text" id="inputLogo" oninput="processForm()"></div>
+          <div class="field"><label>Banner</label><input type="text" id="inputBanner" oninput="processForm()"></div>
+          <div class="field"><label>Banner link</label><input type="text" id="inputBannerLink" oninput="processForm()"></div>
+          <div class="field"><label>Mensagem banner</label><input type="text" id="inputBannerMsg" oninput="processForm()"></div>
+        </div>
+      </div>
+
+      <!-- HTML -->
+      <div id="section-html" class="tab-transition hidden">
+        <div class="panel">
+          <div class="panel-title" style="margin-bottom:.75rem"><i class="fa-solid fa-code" style="color:var(--accent)"></i> Conversor HTML</div>
+          <div class="field"><label>HTML bruto</label><textarea id="inputHtmlRaw" rows="10" style="font-family:ui-monospace,monospace;font-size:12px"></textarea></div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <button class="btn btn-primary" onclick="convertHtml()"><i class="fa-solid fa-wand-magic-sparkles"></i> Converter</button>
+            <button class="btn btn-ghost" onclick="previewHtml()"><i class="fa-solid fa-eye"></i> Preview</button>
+            <button class="btn btn-ghost" onclick="clearHtml()"><i class="fa-solid fa-eraser"></i> Limpar</button>
+          </div>
+          <div class="field"><label>HTML.json</label><textarea id="outputHtmlJson" rows="6" class="console" style="min-height:140px"></textarea></div>
+          <iframe id="htmlPreviewFrame" title="preview" style="width:100%;height:220px;border:1px solid var(--line);border-radius:.9rem;background:#fff"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <aside>
+      <div class="panel" style="position:sticky;top:4.5rem">
+        <div class="panel-head">
+          <div class="panel-title"><i class="fa-solid fa-brackets-curly"></i> Console JSON</div>
+          <div style="display:flex;gap:.35rem">
+            <button class="icon-btn" onclick="processForm()" title="Recompilar"><i class="fa-solid fa-rotate"></i></button>
+            <button class="icon-btn" onclick="loadFromJson()" title="Ler console"><i class="fa-solid fa-file-import"></i></button>
+          </div>
+        </div>
+        <textarea id="outputJson" class="console" style="width:100%;border:0;resize:vertical" spellcheck="false"></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.75rem">
+          <button class="btn btn-ghost" onclick="downloadJson()"><i class="fa-solid fa-download"></i> Baixar</button>
+          <button class="btn btn-primary" onclick="executeCloudDeploy()"><i class="fa-solid fa-cloud-arrow-up"></i> Deploy</button>
+        </div>
+        <input type="file" id="jsonFileInput" accept="application/json,.json" class="hidden">
+        <input type="file" id="htmlFileInput" accept=".html,.json,text/html" class="hidden">
+        <div style="display:flex;gap:.5rem;margin-top:.5rem">
+          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="document.getElementById('jsonFileInput').click()"><i class="fa-solid fa-upload"></i> Import JSON</button>
+          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="document.getElementById('htmlFileInput').click()"><i class="fa-solid fa-file-code"></i> Import HTML</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <nav class="bottom-nav">
+    <button type="button" id="nav-config" class="nav-item active" onclick="switchTab('config')"><i class="fa-solid fa-gears"></i>Config</button>
+    <button type="button" id="nav-theme" class="nav-item" onclick="switchTab('theme')"><i class="fa-solid fa-palette"></i>Tema</button>
+    <button type="button" id="nav-html" class="nav-item" onclick="switchTab('html')"><i class="fa-solid fa-code"></i>HTML</button>
+    <button type="button" id="nav-cloud" class="nav-item" onclick="executeCloudDeploy()"><i class="fa-solid fa-cloud"></i>Nuvem</button>
+  </nav>
+
+  <!-- MODAL SERVER -->
+  <div id="modal-server" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <h3 id="serverModalTitle" style="margin:0;font-size:1rem;font-weight:800;color:#a5b4fc">Servidor</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('modal-server')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="srvIndex">
+        <div class="grid-2">
+          <div class="field"><label>Nome</label><input type="text" id="srvName"></div>
+          <div class="field">
+            <label>Modo (Info)</label>
+            <select id="srvInfo" onchange="onModeChange()">
+              <option value="DIRECT">DIRECT</option>
+              <option value="PROXY">PROXY</option>
+              <option value="SSL">SSL</option>
+              <option value="TLSWS">TLSWS</option>
+              <option value="WS">WS</option>
+              <option value="WSS">WSS</option>
+              <option value="XHTTP">XHTTP (SSH)</option>
+              <option value="XRAY">XRAY</option>
+            </select>
+            <p class="hint">Troque o modo para ver os campos de SSH, XHTTP ou XRay.</p>
+          </div>
+          <div class="field"><label>Flag</label><input type="text" id="srvFlag" placeholder="br"></div>
+          <div class="field"><label>FlagUrl</label>
+            <div class="rel"><input type="text" id="srvFlagUrl" oninput="updateFlagPreview('srvFlagUrl','srvFlagPreview')"><img id="srvFlagPreview" class="flag-preview" alt=""></div>
+          </div>
+          <div class="field" style="grid-column:1/-1"><label>CheckUser URL</label><input type="text" id="srvCheckUser"></div>
+        </div>
+
+        <div id="ssh-section" class="section-box">
+          <div style="font-size:12px;font-weight:800;color:#60a5fa;margin-bottom:.6rem"><i class="fa-solid fa-terminal"></i> SSH</div>
+          <div class="grid-2">
+            <div class="field"><label>ServerHost</label><input type="text" id="srvHost"></div>
+            <div class="field"><label>ServerPort</label><input type="text" id="srvPort" placeholder="22"></div>
+            <div class="field"><label>SSLPort</label><input type="text" id="srvSSLPort" placeholder="443"></div>
+            <div class="field"><label>ProxyHost</label><input type="text" id="srvProxyHost"></div>
+            <div class="field"><label>ProxyPort</label><input type="text" id="srvProxyPort" placeholder="80"></div>
+            <div class="field"><label>SNI</label><input type="text" id="srvSni"></div>
+            <div class="field"><label>USER</label><input type="text" id="srvUser"></div>
+            <div class="field"><label>PASS</label><input type="text" id="srvPass"></div>
+            <div class="field" style="grid-column:1/-1"><label>Payload</label><textarea id="srvPayload" rows="3"></textarea></div>
+          </div>
+        </div>
+
+        <div id="xhttp-section" class="section-box hidden">
+          <div style="font-size:12px;font-weight:800;color:#2dd4bf;margin-bottom:.6rem"><i class="fa-solid fa-globe"></i> SSH-XHTTP</div>
+          <p class="hint" style="margin-bottom:.6rem">Transporte HTTP/2 do SSH (não usa core Xray). USER/PASS continuam sendo SSH.</p>
+          <div class="grid-2">
+            <div class="field"><label>xhttpServer</label><input type="text" id="srvXhttpServer" placeholder="IP do endpoint"></div>
+            <div class="field"><label>xhttpPort</label><input type="text" id="srvXhttpPort" placeholder="443"></div>
+            <div class="field"><label>xhttpHost</label><input type="text" id="srvXhttpHost" placeholder="cdn.exemplo.com"></div>
+            <div class="field"><label>xhttpSni</label><input type="text" id="srvXhttpSni"></div>
+            <div class="field"><label>xhttpPath</label><input type="text" id="srvXhttpPath" placeholder="/ssh"></div>
+            <label class="check-row"><input type="checkbox" id="srvXhttpTls" checked><span>xhttpTls (HTTPS)</span></label>
+            <div class="field"><label>SSH Host destino</label><input type="text" id="srvXhttpSshHost" placeholder="opcional"></div>
+            <div class="field"><label>SSH Port destino</label><input type="text" id="srvXhttpSshPort" placeholder="22"></div>
+            <div class="field"><label>USER SSH</label><input type="text" id="srvXhttpUser"></div>
+            <div class="field"><label>PASS SSH</label><input type="text" id="srvXhttpPass"></div>
+          </div>
+        </div>
+
+        <div id="xray-section" class="section-box hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;gap:.5rem;flex-wrap:wrap">
+            <div style="font-size:12px;font-weight:800;color:#a78bfa"><i class="fa-solid fa-bolt"></i> XRay</div>
+            <button type="button" class="btn btn-primary" onclick="importBase64ToFields()" style="padding:.4rem .7rem"><i class="fa-solid fa-file-import"></i> Importar link</button>
+          </div>
+          <div class="field"><label>vmess:// vless:// ou UUID</label><input type="text" id="srvXrayImportLink" placeholder="vless://..."></div>
+          <div class="grid-2">
+            <div class="field"><label>Protocolo</label>
+              <select id="srvXrayProtocol"><option value="vmess">VMess</option><option value="vless">VLess</option><option value="trojan">Trojan</option></select>
+            </div>
+            <div class="field"><label>Address</label><input type="text" id="srvXrayAddress"></div>
+            <div class="field"><label>Port</label><input type="text" id="srvXrayPort" placeholder="443"></div>
+            <div class="field"><label>UUID</label><input type="text" id="srvXrayUuid"></div>
+            <div class="field"><label>Network</label>
+              <select id="srvXrayNetwork" onchange="onXrayNetworkChange()">
+                <option value="tcp">tcp</option><option value="ws">ws</option><option value="grpc">grpc</option>
+                <option value="h2">h2</option><option value="xhttp">xhttp</option>
+              </select>
+            </div>
+            <div class="field"><label>Path</label><input type="text" id="srvXrayPath"></div>
+            <div class="field" id="xrayModeWrap" class="hidden"><label>XHTTP mode</label>
+              <select id="srvXrayMode"><option value="auto">auto</option><option value="packet-up">packet-up</option><option value="stream-up">stream-up</option><option value="stream-one">stream-one</option></select>
+            </div>
+            <div class="field" id="xrayXhttpHostWrap" class="hidden"><label>xhttp host</label><input type="text" id="srvXrayXhttpHost"></div>
+            <div class="field"><label>Security</label>
+              <select id="srvXraySecurity" onchange="onXraySecurityChange()">
+                <option value="none">none</option><option value="tls">tls</option><option value="reality">reality</option>
+              </select>
+            </div>
+            <div class="field"><label>Fingerprint</label><input type="text" id="srvXrayFingerprint" value="chrome"></div>
+            <div class="field"><label>SNI</label><input type="text" id="srvXraySni"></div>
+            <div class="field" id="xrayFlowWrap" class="hidden"><label>Flow</label><input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision"></div>
+            <div class="field" id="xrayPbkWrap" class="hidden"><label>pbk</label><input type="text" id="srvXrayPbk"></div>
+            <div class="field" id="xraySidWrap" class="hidden"><label>sid</label><input type="text" id="srvXraySid"></div>
+            <label class="check-row"><input type="checkbox" id="srvXrayMux"><span>Mux</span></label>
+            <label class="check-row"><input type="checkbox" id="srvXrayFakeDns"><span>Fake DNS</span></label>
+            <div class="field"><label>Fragment packets</label><input type="text" id="srvXrayFragmentPackets"></div>
+            <div class="field"><label>Fragment length</label><input type="text" id="srvXrayFragmentLength"></div>
+            <div class="field"><label>Fragment interval</label><input type="text" id="srvXrayFragmentInterval"></div>
+            <div class="field" style="grid-column:1/-1"><label>JSON XRay completo (opcional)</label><textarea id="srvXrayJson" rows="3" style="font-family:ui-monospace,monospace;font-size:12px"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('modal-server')">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="saveServer()">Salvar</button>
+      </div>
     </div>
+  </div>
 
-    <div id="toast-container" class="fixed bottom-20 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+  <!-- MODAL MULTISERV -->
+  <div id="modal-multiserv" class="modal-overlay">
+    <div class="modal-sheet" style="max-width:32rem">
+      <div class="modal-head">
+        <h3 id="multiServModalTitle" style="margin:0;font-size:1rem;font-weight:800;color:#a5b4fc">MultiServ</h3>
+        <button type="button" class="icon-btn" onclick="closeModal('modal-multiserv')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="msIndex">
+        <div class="grid-2">
+          <div class="field"><label>Name</label><input type="text" id="msName"></div>
+          <div class="field"><label>TYPE</label><input type="text" id="msType" placeholder="premium"></div>
+          <div class="field"><label>FLAG</label><input type="text" id="msFlag"></div>
+          <div class="field"><label>FlagUrl</label>
+            <div class="rel"><input type="text" id="msFlagUrl" oninput="updateFlagPreview('msFlagUrl','msFlagPreview')"><img id="msFlagPreview" class="flag-preview" alt=""></div>
+          </div>
+          <div class="field"><label>ServerIP</label><input type="text" id="msServerIP"></div>
+          <div class="field"><label>CheckUser</label><input type="text" id="msCheckUser"></div>
+          <div class="field"><label>ServerPort</label><input type="text" id="msPort"></div>
+          <div class="field"><label>SSLPort</label><input type="text" id="msSSLPort"></div>
+          <div class="field"><label>USER</label><input type="text" id="msUser"></div>
+          <div class="field"><label>PASS</label><input type="text" id="msPass"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('modal-multiserv')">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="saveMultiServ()">Salvar</button>
+      </div>
+    </div>
+  </div>
 
-    <script>
-    // ── DARK MODE ─────────────────────────────────────────────────────────────
-    function toggleDarkMode() {
-        const html = document.documentElement;
-        html.classList.toggle('dark');
-        localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
-        updateThemeIcon();
-    }
-    function updateThemeIcon() {
-        const isDark = document.documentElement.classList.contains('dark');
-        const icon = document.getElementById('theme-toggle-icon');
-        if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-    }
-    document.addEventListener('DOMContentLoaded', updateThemeIcon);
+  <!-- MODAL PROFILE -->
+  <div id="modal-profile" class="modal-overlay">
+    <div class="modal-sheet" style="max-width:24rem">
+      <div class="modal-head" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:0">
+        <div style="display:flex;gap:.65rem;align-items:center">
+          <img id="modal-user-avatar" alt="" style="width:2.4rem;height:2.4rem;border-radius:999px;object-fit:cover;border:2px solid #fff6">
+          <div>
+            <div id="modal-user-name" style="font-weight:800;font-size:.9rem">...</div>
+            <div id="modal-user-login" style="font-size:11px;opacity:.85"></div>
+            <div id="modal-user-repo" style="font-size:10px;opacity:.75"></div>
+          </div>
+        </div>
+        <button type="button" class="icon-btn" style="background:transparent;border-color:#fff3;color:#fff" onclick="closeModal('modal-profile')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="field"><label>Pasta do projeto</label><input type="text" id="profileFolder" onchange="updateCloudPath && updateCloudPath()"></div>
+        <div id="cloud-files-container" class="server-list" style="margin:.5rem 0 1rem" style="margin:.5rem 0 1rem"></div>
+        <button class="btn btn-danger" style="width:100%;justify-content:center" onclick="clearCloudSession()"><i class="fa-solid fa-right-from-bracket"></i> Desconectar</button>
+      </div>
+    </div>
+  </div>
 
-    // ── ESTADO ────────────────────────────────────────────────────────────────
-    let currentTab      = 'config';
+  <div id="toast-container" class="toast-wrap"></div>
+
+  <!-- keep ids used by old JS that may reference action/preview panels -->
+  <div id="action-panel" class="hidden"></div>
+  <div id="html-preview-panel" class="hidden"></div>
+
+<script>
     let serversArray    = [];
     let multiServsArray = [];
     let githubConfig    = { token: "", owner: "", repo: "", folder: "" };
@@ -792,13 +600,13 @@
         const saved = localStorage.getItem('yumeko_github_config');
         if (saved) {
             githubConfig = JSON.parse(saved);
-            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.add('hidden'); document.getElementById('login-screen').classList.remove('is-open');
             document.getElementById('configFolder').value = githubConfig.folder || "";
             loadState();
             fetchGitHubProfile();
             setTimeout(() => { autoLoadCurrentTabFromCloud(); }, 500);
         } else {
-            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-screen').classList.remove('hidden'); document.getElementById('login-screen').classList.add('is-open');
         }
     }
 
@@ -811,7 +619,7 @@
         if (folder && !folder.endsWith('/')) folder += '/';
         githubConfig = { token, owner, repo, folder };
         localStorage.setItem('yumeko_github_config', JSON.stringify(githubConfig));
-        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('login-screen').classList.add('hidden'); document.getElementById('login-screen').classList.remove('is-open');
         document.getElementById('configFolder').value = folder;
         showToast("Conexão estabelecida!", "success");
         fetchGitHubProfile();
@@ -1428,74 +1236,127 @@
     }
 
     // ── RENDERS ───────────────────────────────────────────────────────────────
+    
     function modeBadge(info) {
         const m = (info||"").toUpperCase();
-        if (m === "XRAY") return `<span class="badge-xray text-[10px] px-1.5 py-0.5 rounded-full font-bold">⚡ XRAY</span>`;
-        if (m === "XHTTP" || m === "SSHXHTTP") return `<span class="badge-xhttp text-[10px] px-1.5 py-0.5 rounded-full font-bold">🌐 XHTTP</span>`;
+        if (m === "XRAY") return `<span class="badge badge-xray">⚡ XRAY</span>`;
+        if (m === "XHTTP" || m === "SSHXHTTP") return `<span class="badge badge-xhttp">🌐 XHTTP</span>`;
         if (["DIRECT","PROXY","SSL","TLSWS","WS","WSS"].includes(m))
-            return `<span class="badge-ssh text-[10px] px-1.5 py-0.5 rounded-full font-bold">🔒 SSH</span>`;
-        return `<span class="badge-other text-[10px] px-1.5 py-0.5 rounded-full font-bold">${m}</span>`;
+            return `<span class="badge badge-ssh">🔒 ${m}</span>`;
+        return `<span class="badge badge-other">${m||"—"}</span>`;
+    }
+
+    let serverSearchQuery = "";
+    let multiSearchQuery = "";
+
+    function filterServers() {
+        serverSearchQuery = (document.getElementById('serverSearch')?.value || "").trim().toLowerCase();
+        renderServers();
+    }
+    function filterMultiServs() {
+        multiSearchQuery = (document.getElementById('multiSearch')?.value || "").trim().toLowerCase();
+        renderMultiServs();
     }
 
     function renderServers() {
-        const tbody = document.getElementById('serversList');
+        const list = document.getElementById('serversList');
         const empty = document.getElementById('serversEmpty');
-        tbody.innerHTML = '';
-        if (serversArray.length === 0) { empty.classList.remove('hidden'); return; }
-        empty.classList.add('hidden');
-        serversArray.forEach((srv, idx) => {
-            const tr = document.createElement('tr');
-            tr.className = "sortable-row hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-colors border-b border-slate-100 dark:border-slate-700/50";
-            tr.setAttribute('draggable', 'true');
-            tr.addEventListener('dragstart', (e) => handleDragStart.call(tr, e, idx), false);
-            tr.addEventListener('dragover', handleDragOver, false);
-            tr.addEventListener('drop', (e) => handleDrop.call(tr, e, idx), false);
-            tr.addEventListener('dragend', handleDragEnd, false);
-            tr.innerHTML = `
-                <td class="px-2 py-3 text-slate-400 dark:text-slate-500 cursor-grab" draggable="true">
-                    <i class="fa-solid fa-grip-vertical text-xs"></i>
-                </td>
-                <td class="px-3 py-3 font-bold text-slate-800 dark:text-slate-200 text-xs">${srv.Name||'Sem Nome'}</td>
-                <td class="px-3 py-3 text-xs">${modeBadge(srv.Info)}</td>
-                <td class="px-3 py-3 text-right whitespace-nowrap">
-                    <button onclick="moveServerUp(${idx})" ${idx===0?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para cima"><i class="fa-solid fa-chevron-up text-xs"></i></button>
-                    <button onclick="moveServerDown(${idx})" ${idx===serversArray.length-1?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para baixo"><i class="fa-solid fa-chevron-down text-xs"></i></button>
-                    <button onclick="openServerModal(${idx})" class="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-700 p-1.5 rounded"><i class="fa-solid fa-pen"></i></button>
-                    <button onclick="deleteServer(${idx})" class="text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-slate-700 p-1.5 ml-1 rounded"><i class="fa-solid fa-trash"></i></button>
-                </td>`;
-            tbody.appendChild(tr);
+        const countEl = document.getElementById('serversCount');
+        if (!list) return;
+        list.innerHTML = '';
+        const q = serverSearchQuery;
+        const filtered = serversArray.map((srv, idx) => ({ srv, idx })).filter(({ srv }) => {
+            if (!q) return true;
+            const blob = [srv.Name, srv.Info, srv.ServerHost, srv.xhttpServer, srv.xray_address, srv.Flag, srv.CheckUser]
+                .map(x => (x||"").toString().toLowerCase()).join(" ");
+            return blob.includes(q);
+        });
+        if (countEl) countEl.textContent = String(serversArray.length);
+        if (filtered.length === 0) {
+            empty?.classList.remove('hidden');
+            empty && (empty.textContent = serversArray.length === 0 ? "Nenhum servidor ainda. Toque em + Adicionar." : "Nenhum resultado para a busca.");
+            return;
+        }
+        empty?.classList.add('hidden');
+        filtered.forEach(({ srv, idx }) => {
+            const card = document.createElement('div');
+            card.className = "server-card";
+            card.setAttribute('draggable', 'true');
+            card.addEventListener('dragstart', (e) => handleDragStart.call(card, e, idx), false);
+            card.addEventListener('dragover', handleDragOver, false);
+            card.addEventListener('drop', (e) => handleDrop.call(card, e, idx), false);
+            card.addEventListener('dragend', handleDragEnd, false);
+            const sub = srv.ServerHost || srv.xhttpServer || srv.xray_address || srv.ProxyHost || "";
+            card.innerHTML = `
+                <div class="server-card-main">
+                    <div class="drag-handle" title="Arrastar"><i class="fa-solid fa-grip-vertical"></i></div>
+                    <div class="server-card-info">
+                        <div class="server-card-title">${escapeHtml(srv.Name||'Sem Nome')}</div>
+                        <div class="server-card-sub">${escapeHtml(sub)}</div>
+                    </div>
+                    <div class="server-card-badge">${modeBadge(srv.Info)}</div>
+                </div>
+                <div class="server-card-actions">
+                    <button type="button" class="icon-btn" onclick="moveServerUp(${idx})" ${idx===0?'disabled':''} title="Subir"><i class="fa-solid fa-chevron-up"></i></button>
+                    <button type="button" class="icon-btn" onclick="moveServerDown(${idx})" ${idx===serversArray.length-1?'disabled':''} title="Descer"><i class="fa-solid fa-chevron-down"></i></button>
+                    <button type="button" class="icon-btn icon-edit" onclick="openServerModal(${idx})" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button type="button" class="icon-btn icon-del" onclick="deleteServer(${idx})" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            list.appendChild(card);
         });
     }
 
     function renderMultiServs() {
-        const tbody = document.getElementById('multiServsList');
+        const list = document.getElementById('multiServsList');
         const empty = document.getElementById('multiServsEmpty');
-        tbody.innerHTML = '';
-        if (multiServsArray.length === 0) { empty.classList.remove('hidden'); return; }
-        empty.classList.add('hidden');
-        multiServsArray.forEach((ms, idx) => {
-            const tr = document.createElement('tr');
-            tr.className = "sortable-row hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-colors border-b border-slate-100 dark:border-slate-700/50";
-            tr.setAttribute('draggable', 'true');
-            tr.addEventListener('dragstart', (e) => handleMultiDragStart.call(tr, e, idx), false);
-            tr.addEventListener('dragover', handleMultiDragOver, false);
-            tr.addEventListener('drop', (e) => handleMultiDrop.call(tr, e, idx), false);
-            tr.addEventListener('dragend', handleMultiDragEnd, false);
-            tr.innerHTML = `
-                <td class="px-2 py-3 text-slate-400 dark:text-slate-500 cursor-grab" draggable="true">
-                    <i class="fa-solid fa-grip-vertical text-xs"></i>
-                </td>
-                <td class="px-3 py-3 font-bold text-slate-800 dark:text-slate-200 text-xs">${ms.Name||'Sem Nome'}</td>
-                <td class="px-3 py-3 text-slate-500 dark:text-slate-400 text-[11px]">${ms.TYPE||'-'}</td>
-                <td class="px-3 py-3 text-right whitespace-nowrap">
-                    <button onclick="moveMultiServUp(${idx})" ${idx===0?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para cima"><i class="fa-solid fa-chevron-up text-xs"></i></button>
-                    <button onclick="moveMultiServDown(${idx})" ${idx===multiServsArray.length-1?'disabled':''} class="text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed p-1" title="Mover para baixo"><i class="fa-solid fa-chevron-down text-xs"></i></button>
-                    <button onclick="openMultiServModal(${idx})" class="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-slate-700 p-1.5 rounded"><i class="fa-solid fa-pen"></i></button>
-                    <button onclick="deleteMultiServ(${idx})" class="text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-slate-700 p-1.5 ml-1 rounded"><i class="fa-solid fa-trash"></i></button>
-                </td>`;
-            tbody.appendChild(tr);
+        const countEl = document.getElementById('multiCount');
+        if (!list) return;
+        list.innerHTML = '';
+        const q = multiSearchQuery;
+        const filtered = multiServsArray.map((ms, idx) => ({ ms, idx })).filter(({ ms }) => {
+            if (!q) return true;
+            const blob = [ms.Name, ms.TYPE, ms.ServerIP, ms.CheckUser, ms.FLAG]
+                .map(x => (x||"").toString().toLowerCase()).join(" ");
+            return blob.includes(q);
+        });
+        if (countEl) countEl.textContent = String(multiServsArray.length);
+        if (filtered.length === 0) {
+            empty?.classList.remove('hidden');
+            empty && (empty.textContent = multiServsArray.length === 0 ? "Nenhum MultiServ. Toque em + Adicionar." : "Nenhum resultado para a busca.");
+            return;
+        }
+        empty?.classList.add('hidden');
+        filtered.forEach(({ ms, idx }) => {
+            const card = document.createElement('div');
+            card.className = "server-card";
+            card.setAttribute('draggable', 'true');
+            card.addEventListener('dragstart', (e) => handleMultiDragStart.call(card, e, idx), false);
+            card.addEventListener('dragover', handleMultiDragOver, false);
+            card.addEventListener('drop', (e) => handleMultiDrop.call(card, e, idx), false);
+            card.addEventListener('dragend', handleMultiDragEnd, false);
+            card.innerHTML = `
+                <div class="server-card-main">
+                    <div class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></div>
+                    <div class="server-card-info">
+                        <div class="server-card-title">${escapeHtml(ms.Name||'Sem Nome')}</div>
+                        <div class="server-card-sub">${escapeHtml(ms.TYPE||'—')} · ${escapeHtml(ms.ServerIP||'')}</div>
+                    </div>
+                    <div class="server-card-badge"><span class="badge badge-other">${escapeHtml(ms.TYPE||'premium')}</span></div>
+                </div>
+                <div class="server-card-actions">
+                    <button type="button" class="icon-btn" onclick="moveMultiServUp(${idx})" ${idx===0?'disabled':''}><i class="fa-solid fa-chevron-up"></i></button>
+                    <button type="button" class="icon-btn" onclick="moveMultiServDown(${idx})" ${idx===multiServsArray.length-1?'disabled':''}><i class="fa-solid fa-chevron-down"></i></button>
+                    <button type="button" class="icon-btn icon-edit" onclick="openMultiServModal(${idx})"><i class="fa-solid fa-pen"></i></button>
+                    <button type="button" class="icon-btn icon-del" onclick="deleteMultiServ(${idx})"><i class="fa-solid fa-trash"></i></button>
+                </div>`;
+            list.appendChild(card);
         });
     }
+
+    function escapeHtml(s) {
+        return String(s||"").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
 
     // ── HTML CONVERTER ────────────────────────────────────────────────────────
     function clearHtml() { document.getElementById('inputHtmlRaw').value=""; document.getElementById('outputHtmlJson').value=""; document.getElementById('htmlPreviewFrame').srcdoc=""; }
@@ -1659,6 +1520,89 @@
         setTimeout(() => toast.classList.remove('translate-y-4','opacity-0'), 10);
         setTimeout(() => { toast.classList.add('opacity-0','translate-y-4'); setTimeout(() => toast.remove(), 300); }, 3500);
     }
-    </script>
+    
+
+    // ── UI helpers (override / extend) ───────────────────────────────────────
+    function toggleDarkMode() {
+        const root = document.documentElement;
+        const light = root.classList.contains('light');
+        root.classList.toggle('light', !light);
+        root.classList.toggle('dark', light);
+        localStorage.theme = light ? 'dark' : 'light';
+        const icon = document.getElementById('theme-toggle-icon');
+        if (icon) icon.className = light ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    // redefine open/close for new modal classes
+    function openModal(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.add('is-open');
+        el.style.opacity = '1';
+        el.style.pointerEvents = 'auto';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('is-open');
+        el.style.opacity = '0';
+        el.style.pointerEvents = 'none';
+        if (!document.querySelector('.modal-overlay.is-open')) document.body.style.overflow = '';
+    }
+
+    const _switchTab = switchTab;
+    switchTab = function(tab) {
+        currentTab = tab;
+        ['config','theme','html'].forEach(t => {
+            const sec = document.getElementById('section-' + t);
+            const nav = document.getElementById('nav-' + t);
+            if (sec) sec.classList.toggle('hidden', t !== tab);
+            if (nav) nav.classList.toggle('active', t === tab);
+        });
+        // compat com lógica antiga
+        document.querySelectorAll('.active-nav-btn').forEach(e => e.classList.remove('active-nav-btn'));
+        const n = document.getElementById('nav-' + tab);
+        if (n) n.classList.add('active-nav-btn');
+        try {
+            if (typeof autoLoadCurrentTabFromCloud === 'function') autoLoadCurrentTabFromCloud();
+        } catch(e) {}
+        if (tab !== 'html') processForm();
+        else previewHtml();
+    };
+
+    // toast override more visible
+    function showToast(message, type="success") {
+        const container = document.getElementById('toast-container');
+        if (!container) return alert(message);
+        const toast = document.createElement('div');
+        toast.className = 'toast' + (type === 'error' || type === 'err' ? ' err' : '');
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3200);
+    }
+
+    // profile folder field sync if exists
+    const _openProfile = openProfileModal;
+    openProfileModal = function() {
+        openModal('modal-profile');
+        if (typeof fetchCloudFiles === 'function') fetchCloudFiles();
+        const pf = document.getElementById('profileFolder');
+        if (pf && typeof githubConfig !== 'undefined') pf.value = githubConfig.folder || '';
+    };
+    window.updateCloudPath = function() {
+        const pf = document.getElementById('profileFolder');
+        if (!pf || typeof githubConfig === 'undefined') return;
+        githubConfig.folder = pf.value;
+        localStorage.setItem('yumeko_github_config', JSON.stringify(githubConfig));
+        showToast('Pasta atualizada', 'success');
+    };
+
+    // hide login when session exists
+    document.addEventListener('DOMContentLoaded', () => {
+        const icon = document.getElementById('theme-toggle-icon');
+        if (icon) icon.className = document.documentElement.classList.contains('light') ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    });
+</script>
 </body>
 </html>
