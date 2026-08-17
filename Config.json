@@ -1,5 +1,5 @@
 {
-    "Version": "15.6",
+    "Version": "15.7",
     "Ads": "off",
     "UIMode": "nativo",
     "NativeAnchor": "4affa1f54a40194f",
@@ -199,7 +199,27 @@
             "xray_mux": false,
             "use_fake_dns": false,
             "xray_fragment_packets": ""
+        },
+
+{
+            "Name": "10 Yoru Xhttp",
+            "Info": "XHTTP",
+            "Flag": "Br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
+            "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "xhttpServer": "179.191.168.49",
+            "xhttpPort": "443",
+            "xhttpHost": "br5.azion.app",
+            "USER": "",
+            "PASS": "",
+            "xhttpSni": "app.tim.com.br",
+            "xhttpTls":"true",
+            "xhttpPath":"/ssh"
+            
         }
+
+
+        
     ],
     "MultiServs": [
         {
@@ -225,22 +245,6 @@
             "SSLPort": "443",
             "USER": "",
             "PASS": ""
-        },
-{
-            "Name": "10 Yoru Xhttp",
-            "Info": "XHTTP",
-            "Flag": "Br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
-            "CheckUser": "http://152.70.220.155:5959/checkUser",
-            "xhttpServer": "179.191.168.49",
-            "xhttpPort": "443",
-            "xhttpHost": "br5.azion.app",
-            "USER": "",
-            "PASS": "",
-            "xhttpSni": "app.tim.com.br",
-            "xhttpTls":"true",
-            "xhttpPath":"/ssh"
-            
         }
 
         
