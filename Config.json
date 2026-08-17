@@ -1,5 +1,5 @@
 {
-    "Version": "15.10",
+    "Version": "15.11",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -163,6 +163,32 @@
             "ServerPort": "22",
             "USER": "",
             "PASS": ""
+        },
+        {
+            "Name": "12 TIM XRAY",
+            "Info": "XRAY",
+            "Flag": "br",
+            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "xray_protocol": "vless",
+            "xray_address": "179.191.168.49",
+            "xray_port": "443",
+            "xray_uuid": "e80da181-c3f1-46fd-bc15-2b4d924c4e66",
+            "xray_network": "xhttp",
+            "xray_path": "/xhttp",
+            "xray_mode": "auto",
+            "xray_security": "tls",
+            "xray_tls": true,
+            "xray_fingerprint": "chrome",
+            "xray_sni": "app.tim.com.br",
+            "xray_xhttp_host": "br5.azion.app",
+            "xray_flow": "",
+            "xray_pbk": "",
+            "xray_sid": "",
+            "xray_host": "app.tim.com.br",
+            "xray_mux": false,
+            "use_fake_dns": false,
+            "xray_fragment_packets": ""
         }
     ],
     "MultiServs": [
