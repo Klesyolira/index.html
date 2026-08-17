@@ -675,24 +675,6 @@
     <div id="toast-container"></div>
 
     <script>
-    // ── UTF-8 Base64 helpers (sem escape/unescape depreciados) ─────────────────
-    function utf8ToBase64(str) {
-        const bytes = new TextEncoder().encode(str);
-        let binary = '';
-        const chunk = 0x8000;
-        for (let i = 0; i < bytes.length; i += chunk) {
-            binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
-        }
-        return btoa(binary);
-    }
-
-    function base64ToUtf8(b64) {
-        const binary = atob(b64.replace(/\n/g, ''));
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-        return new TextDecoder().decode(bytes);
-    }
-
     // ── DARK MODE ─────────────────────────────────────────────────────────────
     function toggleDarkMode() {
         const html = document.documentElement;
@@ -724,17 +706,12 @@
     function loadCloudSession() {
         const saved = localStorage.getItem('yumeko_github_config');
         if (saved) {
-            try {
-                githubConfig = JSON.parse(saved);
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('configFolder').value = githubConfig.folder || "";
-                loadState();
-                fetchGitHubProfile();
-                setTimeout(() => { autoLoadCurrentTabFromCloud(); }, 500);
-            } catch (e) {
-                localStorage.removeItem('yumeko_github_config');
-                document.getElementById('login-screen').classList.remove('hidden');
-            }
+            githubConfig = JSON.parse(saved);
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('configFolder').value = githubConfig.folder || "";
+            loadState();
+            fetchGitHubProfile();
+            setTimeout(() => { autoLoadCurrentTabFromCloud(); }, 500);
         } else {
             document.getElementById('login-screen').classList.remove('hidden');
         }
@@ -785,7 +762,7 @@
             );
             if (res.ok) {
                 const data = await res.json();
-                const decoded = base64ToUtf8(data.content);
+                const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
                 if (currentTab === 'html') document.getElementById('outputHtmlJson').value = decoded;
                 else document.getElementById('outputJson').value = decoded;
                 loadFromJson();
@@ -875,7 +852,7 @@
             const res = await fetch(`https://api.github.com/repos/${githubConfig.owner}/${githubConfig.repo}/contents/${githubConfig.folder||""}${filename}`, { headers: getGitHeaders() });
             if (!res.ok) throw new Error(res.status === 404 ? "Arquivo não existe na nuvem." : "Erro ao baixar.");
             const data = await res.json();
-            const decoded = base64ToUtf8(data.content);
+            const decoded = decodeURIComponent(escape(atob(data.content.replace(/\n/g,''))));
             if (filename === 'HTML.json') { switchTab('html'); document.getElementById('outputHtmlJson').value = decoded; }
             else { document.getElementById('outputJson').value = decoded; }
             loadFromJson();
@@ -1264,29 +1241,30 @@
         renderMultiServs(); processForm();
     }
 
-    // ── DRAG AND DROP (corrigido) ─────────────────────────────────────────────
+    // ── DRAG AND DROP ─────────────────────────────────────────────────────────
     function handleDragStart(e, index) {
         dragSrcIndex = index;
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', String(index));
-        e.currentTarget.classList.add('dragging');
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
     }
     function handleDragOver(e) {
-        e.preventDefault();
+        if (e.preventDefault) e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
+        return false;
     }
     function handleDrop(e, index) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e.stopPropagation) e.stopPropagation();
         if (dragSrcIndex !== null && dragSrcIndex !== index) {
             const item = serversArray.splice(dragSrcIndex, 1)[0];
             serversArray.splice(index, 0, item);
             renderServers(); processForm();
         }
         dragSrcIndex = null;
+        return false;
     }
-    function handleDragEnd(e) {
-        e.currentTarget.classList.remove('dragging');
+    function handleDragEnd() {
+        this.classList.remove('dragging');
         document.querySelectorAll('#serversList .entity-card').forEach(el => el.classList.remove('dragging'));
         dragSrcIndex = null;
     }
@@ -1294,25 +1272,26 @@
     function handleMultiDragStart(e, index) {
         dragSrcIndex = index;
         e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', String(index));
-        e.currentTarget.classList.add('dragging');
+        e.dataTransfer.setData('text/html', this.innerHTML);
+        this.classList.add('dragging');
     }
     function handleMultiDragOver(e) {
-        e.preventDefault();
+        if (e.preventDefault) e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
+        return false;
     }
     function handleMultiDrop(e, index) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e.stopPropagation) e.stopPropagation();
         if (dragSrcIndex !== null && dragSrcIndex !== index) {
             const item = multiServsArray.splice(dragSrcIndex, 1)[0];
             multiServsArray.splice(index, 0, item);
             renderMultiServs(); processForm();
         }
         dragSrcIndex = null;
+        return false;
     }
-    function handleMultiDragEnd(e) {
-        e.currentTarget.classList.remove('dragging');
+    function handleMultiDragEnd() {
+        this.classList.remove('dragging');
         document.querySelectorAll('#multiServsList .entity-card').forEach(el => el.classList.remove('dragging'));
         dragSrcIndex = null;
     }
@@ -1366,10 +1345,10 @@
             const card = document.createElement('div');
             card.className = "entity-card";
             card.setAttribute('draggable', 'true');
-            card.addEventListener('dragstart', (e) => handleDragStart(e, idx));
-            card.addEventListener('dragover', handleDragOver);
-            card.addEventListener('drop', (e) => handleDrop(e, idx));
-            card.addEventListener('dragend', handleDragEnd);
+            card.addEventListener('dragstart', (e) => handleDragStart.call(card, e, idx), false);
+            card.addEventListener('dragover', handleDragOver, false);
+            card.addEventListener('drop', (e) => handleDrop.call(card, e, idx), false);
+            card.addEventListener('dragend', handleDragEnd, false);
             const detail = srv.ServerHost || srv.xhttpServer || srv.xray_address || '';
             card.innerHTML = `
                 <span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span>
@@ -1400,10 +1379,10 @@
             const card = document.createElement('div');
             card.className = "entity-card";
             card.setAttribute('draggable', 'true');
-            card.addEventListener('dragstart', (e) => handleMultiDragStart(e, idx));
-            card.addEventListener('dragover', handleMultiDragOver);
-            card.addEventListener('drop', (e) => handleMultiDrop(e, idx));
-            card.addEventListener('dragend', handleMultiDragEnd);
+            card.addEventListener('dragstart', (e) => handleMultiDragStart.call(card, e, idx), false);
+            card.addEventListener('dragover', handleMultiDragOver, false);
+            card.addEventListener('drop', (e) => handleMultiDrop.call(card, e, idx), false);
+            card.addEventListener('dragend', handleMultiDragEnd, false);
             card.innerHTML = `
                 <span class="entity-drag"><i class="fa-solid fa-grip-vertical"></i></span>
                 <div class="entity-info">
@@ -1453,7 +1432,7 @@
             let sha = "";
             const getRes = await fetch(apiUrl, { headers: getGitHeaders() });
             if (getRes.ok) { const existing = await getRes.json(); sha = existing.sha; }
-            const body = { message: `Yoru Shield Deploy: ${filename} 🚀`, content: utf8ToBase64(dados) };
+            const body = { message: `Yoru Shield Deploy: ${filename} 🚀`, content: btoa(unescape(encodeURIComponent(dados))) };
             if (sha) body.sha = sha;
             const putRes = await fetch(apiUrl, { method:'PUT', headers:{...getGitHeaders(),'Content-Type':'application/json'}, body: JSON.stringify(body) });
             if (putRes.ok) showToast(`✅ ${filename} enviado!`, "success");
