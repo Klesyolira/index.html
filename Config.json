@@ -123,32 +123,6 @@
             "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Connection: Upgrade[crlf]Upgrade: Websocket[crlf][crlf]"
         },
         {
-            "Name": "08 Yoru Xray Canadá",
-            "Info": "XRAY",
-            "Flag": "ca",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/ca.png",
-            "CheckUser": "http://152.70.220.155:5656/checkUser",
-            "xray_protocol": "vless",
-            "xray_address": "ca.connfull.org",
-            "xray_port": "9443",
-            "xray_uuid": "",
-            "xray_network": "ws",
-            "xray_path": "/stream",
-            "xray_mode": "auto",
-            "xray_security": "tls",
-            "xray_tls": true,
-            "xray_fingerprint": "chrome",
-            "xray_sni": "ca.connfull.org",
-            "xray_xhttp_host": "ca.connfull.org",
-            "xray_flow": "",
-            "xray_pbk": "",
-            "xray_sid": "",
-            "xray_host": "ca.connfull.org",
-            "xray_mux": false,
-            "use_fake_dns": false,
-            "xray_fragment_packets": ""
-        },
-        {
             "Name": "09 Yoru OracleVPS Reality",
             "Info": "XRAY",
             "Flag": "br",
@@ -175,33 +149,6 @@
             "xray_fragment_packets": ""
         },
         {
-            "Name": "br5",
-            "Info": "XRAY",
-            "Flag": "br",
-            "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
-            "CheckUser": "http://152.70.220.155:5656/checkUser",
-            "xray_protocol": "vless",
-            "xray_address": "179.191.168.49",
-            "xray_port": "443",
-            "xray_uuid": "e80da181-c3f1-46fd-bc15-2b4d924c4e66",
-            "xray_network": "xhttp",
-            "xray_path": "/xhttp",
-            "xray_mode": "auto",
-            "xray_security": "tls",
-            "xray_tls": true,
-            "xray_fingerprint": "chrome",
-            "xray_sni": "app.tim.com.br",
-            "xray_xhttp_host": "br5.azion.app",
-            "xray_flow": "",
-            "xray_pbk": "",
-            "xray_sid": "",
-            "xray_host": "app.tim.com.br",
-            "xray_mux": false,
-            "use_fake_dns": false,
-            "xray_fragment_packets": ""
-        },
-
-{
             "Name": "10 Yoru Xhttp",
             "Info": "XHTTP",
             "Flag": "Br",
@@ -213,13 +160,9 @@
             "USER": "",
             "PASS": "",
             "xhttpSni": "app.tim.com.br",
-            "xhttpTls":"true",
-            "xhttpPath":"/ssh"
-            
+            "xhttpTls": "true",
+            "xhttpPath": "/ssh"
         }
-
-
-        
     ],
     "MultiServs": [
         {
@@ -246,7 +189,5 @@
             "USER": "",
             "PASS": ""
         }
-
-        
     ]
 }
