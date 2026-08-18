@@ -1,5 +1,5 @@
 {
-    "Version": "15.15.11",
+    "Version": "15.15.12",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -230,6 +230,27 @@
             "wss_payload": "",
             "wss_tls": true,
             "wss_local_port": "9393"
+        },
+        {
+            "Name": "14 WireGuard ",
+            "Info": "WIREGUARD",
+            "Flag": "us",
+            "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/5719695-japan-flag-official-colors-and-proportions-national-japan-flag-gratis-vetor.jpg",
+            "CheckUser": "http://152.70.220.155:5656/checkUser",
+            "Premium": false,
+            "wireguard": {
+                "config": "",
+                "private_key": "ELjPhtHDYR61O6Ww052S76sr/JWHkHwlH4hc5mY5alA=",
+                "address": "192.168.6.244/32",
+                "dns": "1.1.1.1",
+                "listen_port": "",
+                "mtu": "",
+                "peer_public_key": "T4BLZr9U24hn0Bdk7TcLUGOqaX+rD/sY8x3T1KwzFhg=",
+                "preshared_key": "",
+                "endpoint": "jp1.vpnjantit.com:1024",
+                "allowed_ips": "0.0.0.0/0, ::/0",
+                "keepalive": ""
+            }
         }
     ],
     "MultiServs": [
