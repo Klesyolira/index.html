@@ -532,6 +532,7 @@
                     <div><label class="field-label">Sigla país (flag)</label><input type="text" id="srvFlag" placeholder="Ex: br, us" class="field-input"></div>
                     <div class="flag-input-wrap"><label class="field-label">URL ícone (FlagUrl)</label><input type="text" id="srvFlagUrl" class="field-input" oninput="updateFlagPreview('srvFlagUrl','srvFlagPreview')"><img id="srvFlagPreview" class="flag-preview" alt=""></div>
                     <div class="sm:col-span-2"><label class="field-label">CheckUser URL</label><input type="text" id="srvCheckUser" class="field-input"></div>
+                    <label class="toggle-row sm:col-span-2"><input type="checkbox" id="srvPremium"><span class="toggle-track"><span class="toggle-thumb"></span></span><span class="toggle-label">Servidor Premium / VIP</span></label>
                 </div>
 
                 <!-- SSH -->
@@ -1121,6 +1122,7 @@
         document.getElementById('srvFlag').value      = obj.Flag      || "";
         document.getElementById('srvFlagUrl').value   = obj.FlagUrl   || "";
         document.getElementById('srvCheckUser').value = obj.CheckUser || "";
+        document.getElementById('srvPremium').checked = obj.Premium === true || obj.Premium === 1 || obj.Premium === '1' || String(obj.Premium || '').toLowerCase() === 'true' || String(obj.Category || obj.category || obj.TYPE || '').toLowerCase().indexOf('premium') >= 0 || String(obj.Name || '').toLowerCase().match(/\\b(premium|vip)\\b/) !== null;
         updateFlagPreview('srvFlagUrl', 'srvFlagPreview');
         document.getElementById('srvHost').value      = obj.ServerHost || "";
         document.getElementById('srvPort').value      = obj.ServerPort || "";
@@ -1233,7 +1235,8 @@
             Info:      isOpenVpn ? 'OPENVPN' : (isWireGuard ? 'WIREGUARD' : (isLightway ? 'LIGHTWAY' : (isXHttp ? 'XHTTP' : mode))),
             Flag:      document.getElementById('srvFlag').value,
             FlagUrl:   document.getElementById('srvFlagUrl').value,
-            CheckUser: document.getElementById('srvCheckUser').value
+            CheckUser: document.getElementById('srvCheckUser').value,
+            Premium:  document.getElementById('srvPremium').checked
         };
         if (isXHttp) {
             obj.xhttpServer = document.getElementById('srvXhttpServer').value.trim();
