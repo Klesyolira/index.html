@@ -1,5 +1,5 @@
 {
-    "Version": "16.0.1",
+    "Version": "16.0.2",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -134,7 +134,7 @@
             "xray_port": "443",
             "xray_uuid": "e80da181-c3f1-46fd-bc15-2b4d924c4e66",
             "xray_network": "xhttp",
-            "xray_path": "/xhttp",
+            "xray_path": "/",
             "xray_mode": "auto",
             "xray_security": "tls",
             "xray_tls": true,
