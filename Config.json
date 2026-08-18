@@ -1,5 +1,5 @@
 {
-    "Version": "15.15.8",
+    "Version": "15.15.9",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -101,6 +101,7 @@
             "Flag": "Br",
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/index.html/refs/heads/main/free.png",
             "CheckUser": "http://152.70.220.155:5959/checkUser",
+            "Premium": false,
             "ServerHost": "g.gugu55.online",
             "ServerPort": "22",
             "SSLPort": "443",
