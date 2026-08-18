@@ -523,6 +523,8 @@
                             <option value="WSS">WSS</option>
                             <option value="XHTTP">XHTTP (SSH)</option>
                             <option value="OPENVPN">OPENVPN</option>
+                            <option value="WIREGUARD">WIREGUARD</option>
+                            <option value="LIGHTWAY">LIGHTWAY</option>
                             <option value="XRAY">XRAY</option>
                         </select>
                         <p class="field-hint">Troque o modo para revelar os campos SSH, XHTTP ou XRay.</p>
@@ -620,6 +622,52 @@
                                 <div><label class="field-label">Porta local</label><input type="text" id="srvOpenvpnWssLocalPort" placeholder="9393" class="field-input font-mono"></div>
                             </div>
                         </details>
+                    </div>
+                </div>
+
+                <!-- WIREGUARD -->
+                <div id="wireguard-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-link"></i> WireGuard</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> O APK usa a biblioteca oficial WireGuard. Cole um perfil completo ou preencha a interface e o peer; as chaves ficam no Config JSON.</div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Config WireGuard completo (opcional)</label><textarea id="srvWireguardConfig" rows="6" placeholder="[Interface]\nPrivateKey = ...\nAddress = 10.0.0.2/32\n\n[Peer]\nPublicKey = ...\nEndpoint = vpn.example.com:51820\nAllowedIPs = 0.0.0.0/0" class="field-input font-mono text-xs"></textarea></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">PrivateKey</label><input type="password" id="srvWireguardPrivateKey" class="field-input font-mono"></div>
+                            <div><label class="field-label">Address</label><input type="text" id="srvWireguardAddress" placeholder="10.0.0.2/32" class="field-input font-mono"></div>
+                            <div><label class="field-label">DNS</label><input type="text" id="srvWireguardDns" placeholder="1.1.1.1" class="field-input font-mono"></div>
+                            <div><label class="field-label">ListenPort / MTU</label><div class="flex gap-2"><input type="text" id="srvWireguardListenPort" placeholder="51820" class="field-input font-mono"><input type="text" id="srvWireguardMtu" placeholder="1420" class="field-input font-mono"></div></div>
+                            <div><label class="field-label">Peer PublicKey</label><input type="text" id="srvWireguardPeerPublicKey" class="field-input font-mono"></div>
+                            <div><label class="field-label">PresharedKey</label><input type="password" id="srvWireguardPresharedKey" class="field-input font-mono"></div>
+                            <div><label class="field-label">Endpoint</label><input type="text" id="srvWireguardEndpoint" placeholder="vpn.example.com:51820" class="field-input font-mono"></div>
+                            <div><label class="field-label">AllowedIPs</label><input type="text" id="srvWireguardAllowedIps" value="0.0.0.0/0, ::/0" class="field-input font-mono"></div>
+                            <div><label class="field-label">PersistentKeepalive</label><input type="text" id="srvWireguardKeepalive" placeholder="25" class="field-input font-mono"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIGHTWAY -->
+                <div id="lightway-section" class="hidden mt-2">
+                    <div class="group-title"><i class="fa-solid fa-route"></i> Lightway Rust</div>
+                    <div class="callout callout-info mb-3"><i class="fa-solid fa-circle-info mr-1"></i> O core Android usa YAML internamente. Cole YAML completo ou preencha o endpoint, autenticação e CA PEM.</div>
+                    <div class="space-y-4">
+                        <div><label class="field-label">Config Lightway YAML completo (opcional)</label><textarea id="srvLightwayConfig" rows="6" placeholder="server: vpn.example.com:443\nmode: tcp\nserver_dn: vpn.example.com\nca_cert: |\n  -----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div><label class="field-label">Servidor</label><input type="text" id="srvLightwayServer" placeholder="vpn.example.com" class="field-input font-mono"></div>
+                            <div><label class="field-label">Porta</label><input type="text" id="srvLightwayPort" placeholder="443" class="field-input font-mono"></div>
+                            <div><label class="field-label">Modo</label><select id="srvLightwayMode" class="field-input"><option value="tcp">TCP</option><option value="udp">UDP</option></select></div>
+                            <div><label class="field-label">Server DN / SNI</label><input type="text" id="srvLightwayServerDn" class="field-input font-mono"></div>
+                            <div><label class="field-label">Cipher</label><input type="text" id="srvLightwayCipher" value="aes256" class="field-input font-mono"></div>
+                            <div><label class="field-label">Token (ou User/Password)</label><input type="text" id="srvLightwayToken" class="field-input"></div>
+                            <div><label class="field-label">User</label><input type="text" id="srvLightwayUser" class="field-input"></div>
+                            <div><label class="field-label">Password</label><input type="password" id="srvLightwayPassword" class="field-input"></div>
+                            <div class="sm:col-span-2"><label class="field-label">CA Cert PEM</label><textarea id="srvLightwayCa" rows="4" placeholder="-----BEGIN CERTIFICATE-----" class="field-input font-mono text-xs"></textarea></div>
+                            <div><label class="field-label">TUN local IP</label><input type="text" id="srvLightwayTunLocal" value="100.64.0.6" class="field-input font-mono"></div>
+                            <div><label class="field-label">TUN peer IP</label><input type="text" id="srvLightwayTunPeer" value="100.64.0.5" class="field-input font-mono"></div>
+                            <div><label class="field-label">TUN DNS IP</label><input type="text" id="srvLightwayTunDns" value="100.64.0.1" class="field-input font-mono"></div>
+                            <div><label class="field-label">Outside MTU</label><input type="text" id="srvLightwayMtu" placeholder="1500" class="field-input font-mono"></div>
+                            <div><label class="field-label">Keepalive interval</label><input type="text" id="srvLightwayKeepalive" placeholder="10s" class="field-input font-mono"></div>
+                            <div><label class="field-label">Keepalive timeout</label><input type="text" id="srvLightwayTimeout" placeholder="30s" class="field-input font-mono"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -1026,10 +1074,14 @@
         const isXray = mode === 'XRAY';
         const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
         const isOpenVpn = mode === 'OPENVPN' || mode === 'OVPN' || mode === 'OPENCONNECT';
-        const isSshLegacy = !isXray && !isXHttp && !isOpenVpn;
+        const isWireGuard = mode === 'WIREGUARD' || mode === 'WG';
+        const isLightway = mode === 'LIGHTWAY' || mode === 'EXPRESSVPN';
+        const isSshLegacy = !isXray && !isXHttp && !isOpenVpn && !isWireGuard && !isLightway;
         document.getElementById('ssh-section').classList.toggle('hidden', !isSshLegacy);
         document.getElementById('xhttp-section').classList.toggle('hidden', !isXHttp);
         document.getElementById('openvpn-section').classList.toggle('hidden', !isOpenVpn);
+        document.getElementById('wireguard-section').classList.toggle('hidden', !isWireGuard);
+        document.getElementById('lightway-section').classList.toggle('hidden', !isLightway);
         document.getElementById('xray-section').classList.toggle('hidden', !isXray);
         if (isXray) { onXrayNetworkChange(); onXraySecurityChange(); }
         if (isOpenVpn) onOpenVpnWssChange();
@@ -1113,6 +1165,35 @@
         document.getElementById('srvOpenvpnWssPayload').value = obj.wss_payload || obj.payload || obj.Payload || "";
         document.getElementById('srvOpenvpnWssTls').checked = obj.wss_tls === undefined ? true : !!obj.wss_tls;
         document.getElementById('srvOpenvpnWssLocalPort').value = obj.wss_local_port || obj.local_proxy_port || "9393";
+        const wg = obj.wireguard || {};
+        document.getElementById('srvWireguardConfig').value = wg.config || wg.wireguard_config || obj.wireguard_config || "";
+        document.getElementById('srvWireguardPrivateKey').value = wg.private_key || wg.privateKey || obj.private_key || "";
+        document.getElementById('srvWireguardAddress').value = wg.address || wg.addresses || obj.address || "";
+        document.getElementById('srvWireguardDns').value = wg.dns || obj.dns || "";
+        document.getElementById('srvWireguardListenPort').value = wg.listen_port || wg.listenPort || "";
+        document.getElementById('srvWireguardMtu').value = wg.mtu || wg.MTU || "";
+        document.getElementById('srvWireguardPeerPublicKey').value = wg.peer_public_key || wg.public_key || obj.peer_public_key || "";
+        document.getElementById('srvWireguardPresharedKey').value = wg.preshared_key || wg.pre_shared_key || "";
+        document.getElementById('srvWireguardEndpoint').value = wg.endpoint || obj.endpoint || "";
+        document.getElementById('srvWireguardAllowedIps').value = wg.allowed_ips || wg.allowedIPs || "0.0.0.0/0, ::/0";
+        document.getElementById('srvWireguardKeepalive').value = wg.keepalive || wg.persistent_keepalive || "";
+        const lw = obj.lightway || {};
+        document.getElementById('srvLightwayConfig').value = lw.config || lw.lightway_config || obj.lightway_config || "";
+        document.getElementById('srvLightwayServer').value = lw.server || lw.host || obj.server || "";
+        document.getElementById('srvLightwayPort').value = lw.port || obj.port || "443";
+        document.getElementById('srvLightwayMode').value = lw.mode || "tcp";
+        document.getElementById('srvLightwayServerDn').value = lw.server_dn || lw.sni || obj.server_dn || "";
+        document.getElementById('srvLightwayCipher').value = lw.cipher || "aes256";
+        document.getElementById('srvLightwayToken').value = lw.token || obj.token || "";
+        document.getElementById('srvLightwayUser').value = lw.user || lw.username || obj.user || obj.USER || "";
+        document.getElementById('srvLightwayPassword').value = lw.password || lw.pass || obj.password || obj.PASS || "";
+        document.getElementById('srvLightwayCa').value = lw.ca_cert || lw.ca || obj.ca_cert || obj.ca || "";
+        document.getElementById('srvLightwayTunLocal').value = lw.tun_local_ip || "100.64.0.6";
+        document.getElementById('srvLightwayTunPeer').value = lw.tun_peer_ip || "100.64.0.5";
+        document.getElementById('srvLightwayTunDns').value = lw.tun_dns_ip || "100.64.0.1";
+        document.getElementById('srvLightwayMtu').value = lw.outside_mtu || "";
+        document.getElementById('srvLightwayKeepalive').value = lw.keepalive_interval || "";
+        document.getElementById('srvLightwayTimeout').value = lw.keepalive_timeout || "";
         document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
         document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
         document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
@@ -1145,9 +1226,11 @@
         const isXray = mode === 'XRAY';
         const isXHttp = mode === 'XHTTP' || mode === 'SSHXHTTP';
         const isOpenVpn = mode === 'OPENVPN' || mode === 'OVPN' || mode === 'OPENCONNECT';
+        const isWireGuard = mode === 'WIREGUARD' || mode === 'WG';
+        const isLightway = mode === 'LIGHTWAY' || mode === 'EXPRESSVPN';
         const obj = {
             Name:      document.getElementById('srvName').value,
-            Info:      isOpenVpn ? 'OPENVPN' : (isXHttp ? 'XHTTP' : mode),
+            Info:      isOpenVpn ? 'OPENVPN' : (isWireGuard ? 'WIREGUARD' : (isLightway ? 'LIGHTWAY' : (isXHttp ? 'XHTTP' : mode))),
             Flag:      document.getElementById('srvFlag').value,
             FlagUrl:   document.getElementById('srvFlagUrl').value,
             CheckUser: document.getElementById('srvCheckUser').value
@@ -1199,6 +1282,49 @@
             }
             if (obj.wss && !obj.wss_host) {
                 showToast("Informe wss_host/bughost para usar WSS", "error");
+                return;
+            }
+        } else if (isWireGuard) {
+            const wg = {
+                config: document.getElementById('srvWireguardConfig').value.trim(),
+                private_key: document.getElementById('srvWireguardPrivateKey').value.trim(),
+                address: document.getElementById('srvWireguardAddress').value.trim(),
+                dns: document.getElementById('srvWireguardDns').value.trim(),
+                listen_port: document.getElementById('srvWireguardListenPort').value.trim(),
+                mtu: document.getElementById('srvWireguardMtu').value.trim(),
+                peer_public_key: document.getElementById('srvWireguardPeerPublicKey').value.trim(),
+                preshared_key: document.getElementById('srvWireguardPresharedKey').value.trim(),
+                endpoint: document.getElementById('srvWireguardEndpoint').value.trim(),
+                allowed_ips: document.getElementById('srvWireguardAllowedIps').value.trim() || '0.0.0.0/0, ::/0',
+                keepalive: document.getElementById('srvWireguardKeepalive').value.trim()
+            };
+            obj.wireguard = wg;
+            if (!wg.config && (!wg.private_key || !wg.address || !wg.peer_public_key || !wg.endpoint)) {
+                showToast('Informe o perfil WireGuard ou PrivateKey, Address, Peer PublicKey e Endpoint', 'error');
+                return;
+            }
+        } else if (isLightway) {
+            const lw = {
+                config: document.getElementById('srvLightwayConfig').value.trim(),
+                server: document.getElementById('srvLightwayServer').value.trim(),
+                port: document.getElementById('srvLightwayPort').value.trim() || '443',
+                mode: document.getElementById('srvLightwayMode').value,
+                server_dn: document.getElementById('srvLightwayServerDn').value.trim(),
+                cipher: document.getElementById('srvLightwayCipher').value.trim() || 'aes256',
+                token: document.getElementById('srvLightwayToken').value.trim(),
+                user: document.getElementById('srvLightwayUser').value.trim(),
+                password: document.getElementById('srvLightwayPassword').value,
+                ca_cert: document.getElementById('srvLightwayCa').value.trim(),
+                tun_local_ip: document.getElementById('srvLightwayTunLocal').value.trim() || '100.64.0.6',
+                tun_peer_ip: document.getElementById('srvLightwayTunPeer').value.trim() || '100.64.0.5',
+                tun_dns_ip: document.getElementById('srvLightwayTunDns').value.trim() || '100.64.0.1',
+                outside_mtu: document.getElementById('srvLightwayMtu').value.trim(),
+                keepalive_interval: document.getElementById('srvLightwayKeepalive').value.trim(),
+                keepalive_timeout: document.getElementById('srvLightwayTimeout').value.trim()
+            };
+            obj.lightway = lw;
+            if (!lw.config && !lw.server) {
+                showToast('Informe o YAML Lightway ou o servidor/endpoint', 'error');
                 return;
             }
         } else if (!isXray) {
@@ -1518,6 +1644,8 @@
         if (m === "XRAY") return `<span class="badge badge-xray">⚡ XRAY</span>`;
         if (m === "XHTTP" || m === "SSHXHTTP") return `<span class="badge badge-xhttp">🌐 XHTTP</span>`;
         if (m === "OPENVPN" || m === "OVPN" || m === "OPENCONNECT") return `<span class="badge badge-ssh">🛡️ OPENVPN</span>`;
+        if (m === "WIREGUARD" || m === "WG") return `<span class="badge badge-ssh">🔗 WIREGUARD</span>`;
+        if (m === "LIGHTWAY" || m === "EXPRESSVPN") return `<span class="badge badge-ssh">⚡ LIGHTWAY</span>`;
         if (["DIRECT","PROXY","SSL","TLSWS","WS","WSS"].includes(m))
             return `<span class="badge badge-ssh">🔒 SSH</span>`;
         return `<span class="badge badge-other">${m}</span>`;
