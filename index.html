@@ -706,6 +706,13 @@
                             <label class="field-label">Security (TLS)</label>
                             <select id="srvXraySecurity" class="field-input" onchange="onXraySecurityChange()"><option value="none">None</option><option value="tls">TLS</option><option value="reality">Reality</option></select>
                         </div>
+                        <div class="flex items-end">
+                            <label class="toggle-row" title="Ative somente quando o perfil exigir compatibilidade com certificado/SNI do outro app.">
+                                <input type="checkbox" id="srvXrayAllowInsecure">
+                                <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                                <span class="toggle-label">TLS allowInsecure</span>
+                            </label>
+                        </div>
                         <div><label class="field-label">Fingerprint</label><input type="text" id="srvXrayFingerprint" placeholder="chrome" class="field-input"></div>
                         <div id="xrayFlowWrap"><label class="field-label">Flow</label><input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision" class="field-input font-mono"></div>
                         <div id="xrayPbkWrap" class="hidden"><label class="field-label">Public key (pbk)</label><input type="text" id="srvXrayPbk" placeholder="Chave pública" class="field-input font-mono"></div>
@@ -1204,7 +1211,9 @@
         document.getElementById('srvXrayPath').value     = obj.xray_path     || "";
         document.getElementById('srvXrayMode').value     = obj.xray_mode     || "auto";
         const tlsFlag = !!obj.xray_tls;
+        const allowInsecure = obj.xray_tls_allow_insecure ?? obj.xray_allow_insecure ?? obj.tls_allow_insecure ?? obj.v2rTlsAllowInsecure ?? false;
         document.getElementById('srvXraySecurity').value    = obj.xray_security || (tlsFlag ? "tls" : "none");
+        document.getElementById('srvXrayAllowInsecure').checked = !!allowInsecure;
         document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || "chrome";
         document.getElementById('srvXraySni').value         = obj.xray_sni || obj.xray_host || "";
         document.getElementById('srvXrayXhttpHost').value   = obj.xray_xhttp_host || obj.xray_host || "";
@@ -1356,6 +1365,7 @@
                 const security = document.getElementById('srvXraySecurity').value;
                 obj.xray_security    = security;
                 obj.xray_tls         = security === 'tls' || security === 'reality';
+                obj.xray_tls_allow_insecure = document.getElementById('srvXrayAllowInsecure').checked;
                 obj.xray_fingerprint = document.getElementById('srvXrayFingerprint').value;
                 obj.xray_sni         = document.getElementById('srvXraySni').value;
                 obj.xray_xhttp_host  = document.getElementById('srvXrayXhttpHost').value;
