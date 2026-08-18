@@ -1,5 +1,5 @@
 {
-    "Version": "15.15.13",
+    "Version": "15.15.14",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -235,7 +235,7 @@
             "Name": "14 WireGuard ",
             "Info": "WIREGUARD",
             "Flag": "us",
-            "FlagUrl": "https://static.vecteezy.com/ti/vetor-gratis/p1/5719695-japan-flag-official-colors-and-proportions-national-japan-flag-gratis-vetor.jpg",
+            "FlagUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV5jtK6lJ02mg-W7wI0ukTu54OmMC57bx_qtgf-klXmGvnSEfvBmdfbFE&s=10",
             "CheckUser": "http://152.70.220.155:5656/checkUser",
             "Premium": false,
             "wireguard": {
