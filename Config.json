@@ -1,5 +1,5 @@
 {
-    "Version": "16.0.10",
+    "Version": "16.0.11",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -156,6 +156,7 @@
             "xray_security": "tls",
             "xray_tls": true,
             "xray_tls_allow_insecure": false,
+            "xray_pinned_cert": "0d9bfecea1489d8fcddbb2a66a83504895d23e23690d969521ec156337ad1a9c",
             "xray_fingerprint": "chrome",
             "xray_sni": "teste-ipv62.azion.app",
             "xray_xhttp_host": "br5.azion.app",
@@ -184,6 +185,7 @@
             "xray_security": "tls",
             "xray_tls": true,
             "xray_tls_allow_insecure": true,
+            "xray_pinned_cert": "0d9bfecea1489d8fcddbb2a66a83504895d23e23690d969521ec156337ad1a9c",
             "xray_fingerprint": "chrome",
             "xray_sni": "app.tim.com.br",
             "xray_xhttp_host": "br5.azion.app",
