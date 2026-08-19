@@ -707,12 +707,13 @@
                             <select id="srvXraySecurity" class="field-input" onchange="onXraySecurityChange()"><option value="none">None</option><option value="tls">TLS</option><option value="reality">Reality</option></select>
                         </div>
                         <div class="flex items-end">
-                            <label class="toggle-row" title="Ative somente quando o perfil exigir compatibilidade com certificado/SNI do outro app.">
+                            <label class="toggle-row" title="Campo legado do outro app; o core XRay 26.3.27 rejeita allowInsecure. Use SNI/certificado válido ou pin de certificado.">
                                 <input type="checkbox" id="srvXrayAllowInsecure">
                                 <span class="toggle-track"><span class="toggle-thumb"></span></span>
-                                <span class="toggle-label">TLS allowInsecure</span>
+                                <span class="toggle-label">TLS legado allowInsecure</span>
                             </label>
                         </div>
+                        <div><label class="field-label">Certificado pinado SHA-256</label><input type="text" id="srvXrayPinnedCert" placeholder="pinnedPeerCertSha256" class="field-input font-mono"></div>
                         <div><label class="field-label">Fingerprint</label><input type="text" id="srvXrayFingerprint" placeholder="chrome" class="field-input"></div>
                         <div id="xrayFlowWrap"><label class="field-label">Flow</label><input type="text" id="srvXrayFlow" placeholder="xtls-rprx-vision" class="field-input font-mono"></div>
                         <div id="xrayPbkWrap" class="hidden"><label class="field-label">Public key (pbk)</label><input type="text" id="srvXrayPbk" placeholder="Chave pública" class="field-input font-mono"></div>
@@ -1203,24 +1204,25 @@
         document.getElementById('srvLightwayMtu').value = lw.outside_mtu || "";
         document.getElementById('srvLightwayKeepalive').value = lw.keepalive_interval || "";
         document.getElementById('srvLightwayTimeout').value = lw.keepalive_timeout || "";
-        document.getElementById('srvXrayProtocol').value = obj.xray_protocol || "vmess";
-        document.getElementById('srvXrayAddress').value  = obj.xray_address  || "";
-        document.getElementById('srvXrayPort').value     = obj.xray_port     || "";
-        document.getElementById('srvXrayUuid').value     = obj.xray_uuid     || "";
-        document.getElementById('srvXrayNetwork').value  = obj.xray_network  || "tcp";
-        document.getElementById('srvXrayPath').value     = obj.xray_path     || "";
-        document.getElementById('srvXrayMode').value     = obj.xray_mode     || "auto";
-        const tlsFlag = !!obj.xray_tls;
+        document.getElementById('srvXrayProtocol').value = obj.xray_protocol || obj.v2rProtocol || "vmess";
+        document.getElementById('srvXrayAddress').value  = obj.xray_address || obj.v2rHost || "";
+        document.getElementById('srvXrayPort').value     = obj.xray_port || obj.v2rPort || "";
+        document.getElementById('srvXrayUuid').value     = obj.xray_uuid || obj.v2rUserId || "";
+        document.getElementById('srvXrayNetwork').value  = obj.xray_network || obj.v2rNetwork || "tcp";
+        document.getElementById('srvXrayPath').value     = obj.xray_path || obj.v2rHttpPath || "";
+        document.getElementById('srvXrayMode').value     = obj.xray_mode || obj.v2rMode || "auto";
+        const tlsFlag = !!obj.xray_tls || obj.v2rTleSecurityType === "tls" || obj.v2rTleSecurityType === "reality";
         const allowInsecure = obj.xray_tls_allow_insecure ?? obj.xray_allow_insecure ?? obj.tls_allow_insecure ?? obj.v2rTlsAllowInsecure ?? false;
-        document.getElementById('srvXraySecurity').value    = obj.xray_security || (tlsFlag ? "tls" : "none");
+        document.getElementById('srvXraySecurity').value    = obj.xray_security || obj.v2rTleSecurityType || (tlsFlag ? "tls" : "none");
         document.getElementById('srvXrayAllowInsecure').checked = !!allowInsecure;
-        document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || "chrome";
-        document.getElementById('srvXraySni').value         = obj.xray_sni || obj.xray_host || "";
-        document.getElementById('srvXrayXhttpHost').value   = obj.xray_xhttp_host || obj.xray_host || "";
-        document.getElementById('srvXrayFlow').value        = obj.xray_flow || "";
-        document.getElementById('srvXrayPbk').value         = obj.xray_pbk || "";
-        document.getElementById('srvXraySid').value         = obj.xray_sid || "";
-        document.getElementById('srvXrayMux').checked       = !!obj.xray_mux;
+        document.getElementById('srvXrayPinnedCert').value = obj.xray_pinned_cert || obj.xray_pinnedPeerCertSha256 || obj.pinnedPeerCertSha256 || "";
+        document.getElementById('srvXrayFingerprint').value = obj.xray_fingerprint || obj.v2rTleFingerprintType || "chrome";
+        document.getElementById('srvXraySni').value         = obj.xray_sni || obj.v2rTlsSni || obj.xray_host || "";
+        document.getElementById('srvXrayXhttpHost').value   = obj.xray_xhttp_host || obj.v2rHttpHost || obj.xray_host || "";
+        document.getElementById('srvXrayFlow').value        = obj.xray_flow || obj.v2rFlow || "";
+        document.getElementById('srvXrayPbk').value         = obj.xray_pbk || obj.v2rPublicKey || "";
+        document.getElementById('srvXraySid').value         = obj.xray_sid || obj.v2rShortId || "";
+        document.getElementById('srvXrayMux').checked       = !!obj.xray_mux || !!obj.v2rMuxEnabled;
         document.getElementById('srvXrayFakeDns').checked   = !!obj.use_fake_dns;
         document.getElementById('srvXrayFragmentPackets').value  = obj.xray_fragment_packets || "";
         document.getElementById('srvXrayFragmentLength').value   = obj.xray_fragment_length != null ? obj.xray_fragment_length : "";
@@ -1366,6 +1368,7 @@
                 obj.xray_security    = security;
                 obj.xray_tls         = security === 'tls' || security === 'reality';
                 obj.xray_tls_allow_insecure = document.getElementById('srvXrayAllowInsecure').checked;
+                obj.xray_pinned_cert = document.getElementById('srvXrayPinnedCert').value.trim();
                 obj.xray_fingerprint = document.getElementById('srvXrayFingerprint').value;
                 obj.xray_sni         = document.getElementById('srvXraySni').value;
                 obj.xray_xhttp_host  = document.getElementById('srvXrayXhttpHost').value;
