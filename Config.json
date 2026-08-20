@@ -1,5 +1,5 @@
 {
-    "Version": "16.0.11",
+    "Version": "16.0.12",
     "Ads": "off",
     "UIMode": "html",
     "NativeAnchor": "4affa1f54a40194f",
@@ -34,15 +34,15 @@
             "FlagUrl": "https://raw.githubusercontent.com/Klesyolira/Lugh-LT/refs/heads/main/tim.png",
             "CheckUser": "http://152.70.220.155:5656/checkUser",
             "Premium": false,
-            "ServerHost": "[app_host]",
+            "ServerHost": "g.gugu55.online",
             "ServerPort": "80",
             "SSLPort": "443",
             "ProxyHost": "[app_host]",
             "ProxyPort": "80",
             "USER": "gustavo35",
             "PASS": "341914",
-            "Sni": "152.70.220.155",
-            "Payload": "GET / HTTP/1.1[crlf]Host: [app_host][crlf]Upgrade: websocket[crlf][crlf]"
+            "Sni": "",
+            "Payload": "GET / HTTP/1.1[crlf]Host: g.gugu55.online[crlf]Upgrade: websocket[crlf][crlf]"
         },
         {
             "Name": "03 Yoru Ssl",
